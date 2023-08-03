@@ -26,8 +26,8 @@ let option = {
         "output": "function(err,data){blocklyinput.value=err?String(err):data;window?.trigger?.call(null,[err,data])}"
     },
     "target": {
-        // "type": "independentFile"
-        "type": "keepGrammar"
+        "type": "independentFile"
+        // "type": "keepGrammar"
     }
 }
 let converter = Converter.withOption(grammarFile, option)
