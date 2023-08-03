@@ -5,9 +5,9 @@ AttachmentTreeBlocks = {
         "variable",
         "variablenone"
     ],
-    "attachs": [
-        "attach",
-        "attachnone"
+    "attachments": [
+        "attachment",
+        "attachmentnone"
     ],
     "structures": [
         "structure",
@@ -88,8 +88,8 @@ Object.assign(AttachmentTreeBlocks,{
                 },
                 {
                     "type": "input_statement",
-                    "name": "attach",
-                    "check": AttachmentTreeBlocks.attachs
+                    "name": "attachment",
+                    "check": AttachmentTreeBlocks.attachments
                 }
             ],
             "tooltip": "",
@@ -98,13 +98,13 @@ Object.assign(AttachmentTreeBlocks,{
         },
         "generFunc": function(block) {
             var define = Blockly.JavaScript.statementToCode(block, 'define');
-            var attach = Blockly.JavaScript.statementToCode(block, 'attach');
+            var attachment = Blockly.JavaScript.statementToCode(block, 'attachment');
             var code = AttachmentTreeFunctions.defaultCode('root',eval('['+AttachmentTreeBlocks['root'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["define","attach"],
+        "args": ["define","attachment"],
         "argsType": ["statement","statement"],
-        "argsGrammarName": ["variables","attachs"],
+        "argsGrammarName": ["variables","attachments"],
         "omitted": [true,true],
         "multi": [true,true],
         "fieldDefault": function (keyOrIndex) {
@@ -200,10 +200,10 @@ Object.assign(AttachmentTreeBlocks,{
             return AttachmentTreeFunctions.xmlText('variablenone',inputs,next,isShadow,comment,attribute);
         }
     },
-    "attach": {
+    "attachment": {
         "type": "statement",
         "json": {
-            "type": "attach",
+            "type": "attachment",
             "message0": "%1 %2 %3",
             "args0": [
                 Object.assign({},AttachmentTreeBlocks.Side_List,{
@@ -221,14 +221,14 @@ Object.assign(AttachmentTreeBlocks,{
             "tooltip": "",
             "helpUrl": "",
             "colour": 300,
-            "previousStatement": "attach",
-            "nextStatement": AttachmentTreeBlocks.attachs
+            "previousStatement": "attachment",
+            "nextStatement": AttachmentTreeBlocks.attachments
         },
         "generFunc": function(block) {
             var side = block.getFieldValue('side');
-            side = AttachmentTreeFunctions.pre('Side_List')(side,block,'side','attach');
+            side = AttachmentTreeFunctions.pre('Side_List')(side,block,'side','attachment');
             var structure = Blockly.JavaScript.statementToCode(block, 'structure');
-            var code = AttachmentTreeFunctions.defaultCode('attach',eval('['+AttachmentTreeBlocks['attach'].args.join(',')+']'),block);
+            var code = AttachmentTreeFunctions.defaultCode('attachment',eval('['+AttachmentTreeBlocks['attachment'].args.join(',')+']'),block);
             return code;
         },
         "args": ["side","structure"],
@@ -237,28 +237,28 @@ Object.assign(AttachmentTreeBlocks,{
         "omitted": [false,true],
         "multi": [false,true],
         "fieldDefault": function (keyOrIndex) {
-            return AttachmentTreeFunctions.fieldDefault('attach',keyOrIndex);
+            return AttachmentTreeFunctions.fieldDefault('attachment',keyOrIndex);
         },
         "menu": [],
         "xmlText": function (inputs,next,isShadow,comment,attribute) {
-            return AttachmentTreeFunctions.xmlText('attach',inputs,next,isShadow,comment,attribute);
+            return AttachmentTreeFunctions.xmlText('attachment',inputs,next,isShadow,comment,attribute);
         }
     },
-    "attachnone": {
+    "attachmentnone": {
         "type": "statement",
         "json": {
-            "type": "attachnone",
+            "type": "attachmentnone",
             "message0": "none",
             "args0": [],
             "inputsInline": true,
             "tooltip": "",
             "helpUrl": "",
             "colour": 300,
-            "previousStatement": "attachnone",
-            "nextStatement": AttachmentTreeBlocks.attachs
+            "previousStatement": "attachmentnone",
+            "nextStatement": AttachmentTreeBlocks.attachments
         },
         "generFunc": function(block) {
-            var code = AttachmentTreeFunctions.defaultCode('attachnone',eval('['+AttachmentTreeBlocks['attachnone'].args.join(',')+']'),block);
+            var code = AttachmentTreeFunctions.defaultCode('attachmentnone',eval('['+AttachmentTreeBlocks['attachmentnone'].args.join(',')+']'),block);
             return code;
         },
         "args": [],
@@ -267,11 +267,11 @@ Object.assign(AttachmentTreeBlocks,{
         "omitted": [],
         "multi": [],
         "fieldDefault": function (keyOrIndex) {
-            return AttachmentTreeFunctions.fieldDefault('attachnone',keyOrIndex);
+            return AttachmentTreeFunctions.fieldDefault('attachmentnone',keyOrIndex);
         },
         "menu": [],
         "xmlText": function (inputs,next,isShadow,comment,attribute) {
-            return AttachmentTreeFunctions.xmlText('attachnone',inputs,next,isShadow,comment,attribute);
+            return AttachmentTreeFunctions.xmlText('attachmentnone',inputs,next,isShadow,comment,attribute);
         }
     },
     "structure": {
@@ -314,8 +314,8 @@ Object.assign(AttachmentTreeBlocks,{
                 },
                 {
                     "type": "input_statement",
-                    "name": "attach",
-                    "check": AttachmentTreeBlocks.attachs
+                    "name": "attachment",
+                    "check": AttachmentTreeBlocks.attachments
                 }
             ],
             "tooltip": "",
@@ -346,13 +346,13 @@ Object.assign(AttachmentTreeBlocks,{
             side = AttachmentTreeFunctions.pre('Side_List')(side,block,'side','structure');
             var collection = block.getFieldValue('collection');
             collection = AttachmentTreeFunctions.pre('Int')(collection,block,'collection','structure');
-            var attach = Blockly.JavaScript.statementToCode(block, 'attach');
+            var attachment = Blockly.JavaScript.statementToCode(block, 'attachment');
             var code = AttachmentTreeFunctions.defaultCode('structure',eval('['+AttachmentTreeBlocks['structure'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["shape","width","height","side","collection","attach"],
+        "args": ["shape","width","height","side","collection","attachment"],
         "argsType": ["statement","field","field","field","field","statement"],
-        "argsGrammarName": ["shapes","Evalstr","Evalstr","Side_List","Int","attachs"],
+        "argsGrammarName": ["shapes","Evalstr","Evalstr","Side_List","Int","attachments"],
         "omitted": [false,false,false,false,false,true],
         "multi": [false,false,false,false,false,true],
         "fieldDefault": function (keyOrIndex) {
@@ -675,8 +675,8 @@ MultiStatementError.prototype.constructor = MultiStatementError;
 AttachmentTreeFunctions={}
 
 AttachmentTreeFunctions.Evalstr_pre = function(str) {
-    if (~~str+''===str) {
-        return ~~str
+    if (!isNaN(parseFloat(str))) {
+        return parseFloat(str)
     } 
     return str;
 }
@@ -959,8 +959,8 @@ var toolbox = (function(){
             AttachmentTreeBlocks["root"].xmlText(),
             AttachmentTreeBlocks["variable"].xmlText(),
             AttachmentTreeBlocks["variablenone"].xmlText(),
-            AttachmentTreeBlocks["attach"].xmlText(),
-            AttachmentTreeBlocks["attachnone"].xmlText(),
+            AttachmentTreeBlocks["attachment"].xmlText(),
+            AttachmentTreeBlocks["attachmentnone"].xmlText(),
             AttachmentTreeBlocks["structure"].xmlText(),
             AttachmentTreeBlocks["structurenone"].xmlText(),
             AttachmentTreeBlocks["brush"].xmlText(),
@@ -1015,7 +1015,7 @@ var workspace = Blockly.inject('blocklyDiv',{
 AttachmentTreeFunctions.workspace = function(){return workspace}
 
     function omitedcheckUpdateFunction(event) {
-        var codeAreaFunc = function(err,data){blocklyinput.value=err?String(err):data};
+        var codeAreaFunc = function(err,data){blocklyinput.value=err?String(err):data;window?.trigger?.call(null,[err,data])}
         try {
             if (["delete","create","move","finished_loading"].indexOf(event.type)!==-1) return;
             var code = Blockly.JavaScript.workspaceToCode(workspace);

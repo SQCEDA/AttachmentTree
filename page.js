@@ -25,6 +25,7 @@ window.trigger = function(params) {
         localStorage.setItem('blocklyinput',document.querySelector('#blocklyinput').value)
     } catch (error) {
     }
-    // console.log(params[1])
-
+    console.log(params[1])
+    walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg()
 }
+

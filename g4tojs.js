@@ -35,7 +35,7 @@ let converter = Converter.withOption(grammarFile, option)
 function jsContent(params) {
     // ========== mark for split ==========
     function omitedcheckUpdateFunction(event) {
-        var codeAreaFunc = function(err,data){blocklyinput.value=err?String(err):data};
+        var codeAreaFunc = function(err,data){blocklyinput.value=err?String(err):data;window?.trigger?.call(null,[err,data])}
         try {
             if (["delete","create","move","finished_loading"].indexOf(event.type)!==-1) return;
             var code = Blockly.JavaScript.workspaceToCode(workspace);

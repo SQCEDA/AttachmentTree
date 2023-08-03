@@ -2,7 +2,7 @@ grammar AttachmentTree;
 
 root:   
     'define' BGNL define=variables* 
-    'leaves' BGNL attach=attachs* 
+    'leaves' BGNL attachment=attachments* 
 ;
 
 variables
@@ -18,9 +18,9 @@ colour : 20
 ;
 
 
-attachs
-    :   side=Side_List BGNL structure=structures* #attach
-    |   'none' #attachnone
+attachments
+    :   side=Side_List BGNL structure=structures* #attachment
+    |   'none' #attachmentnone
 ;
 
 structures
@@ -34,7 +34,7 @@ structure:
     'height' height=Evalstr BGNL
     'side' side=Side_List 
     'collection' collection=Int BGNL
-    'leaves' BGNL attach=attachs* 
+    'leaves' BGNL attachment=attachments* 
 /* structure
 defaultMap : {width:50000,height:50000,collection:1}
 colour : this.structureColor
@@ -128,8 +128,8 @@ this.evisitor.shapeColor=130;
 /* Insert_FunctionStart
 
 AttachmentTreeFunctions.Evalstr_pre = function(str) {
-    if (~~str+''===str) {
-        return ~~str
+    if (!isNaN(parseFloat(str))) {
+        return parseFloat(str)
     } 
     return str;
 }

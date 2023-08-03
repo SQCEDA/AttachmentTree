@@ -9,12 +9,15 @@
 </head>
 <body>
 
-<div id="blocklyDiv" style="height: 550px; width: 450px;"></div>
+<div style="float: left;"><div id="blocklyDiv" style="height: 550px; width: 450px;"></div></div>
+<div style="float: left;"><div id="svgoutput" style="transform: rotateX(180deg);"></div></div>
+<div style="clear: both;"></div>
 <textarea name="blocklyinput" id="blocklyinput" cols="60" rows="27" spellcheck="false"> 
 </textarea>
 
 <script src="antlr-blockly/Converter.bundle.min.js"></script>
 <script src="page.js"></script>
 <script src="AttachmentTree.js"></script>
+<script src="walker.js"></script>
 </body>
 </html>
