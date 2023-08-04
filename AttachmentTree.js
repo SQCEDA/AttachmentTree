@@ -88,8 +88,8 @@ Object.assign(AttachmentTreeBlocks,{
                 },
                 {
                     "type": "input_statement",
-                    "name": "attachment",
-                    "check": AttachmentTreeBlocks.attachments
+                    "name": "structure",
+                    "check": AttachmentTreeBlocks.structures
                 }
             ],
             "tooltip": "",
@@ -98,13 +98,13 @@ Object.assign(AttachmentTreeBlocks,{
         },
         "generFunc": function(block) {
             var define = Blockly.JavaScript.statementToCode(block, 'define');
-            var attachment = Blockly.JavaScript.statementToCode(block, 'attachment');
+            var structure = Blockly.JavaScript.statementToCode(block, 'structure');
             var code = AttachmentTreeFunctions.defaultCode('root',eval('['+AttachmentTreeBlocks['root'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["define","attachment"],
+        "args": ["define","structure"],
         "argsType": ["statement","statement"],
-        "argsGrammarName": ["variables","attachments"],
+        "argsGrammarName": ["variables","structures"],
         "omitted": [true,true],
         "multi": [true,true],
         "fieldDefault": function (keyOrIndex) {

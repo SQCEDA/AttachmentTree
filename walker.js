@@ -9,7 +9,7 @@ walkerType.prototype.viewbox='-100000 -100000 200000 200000'
 
 walkerType.prototype.import=function (root) {
     this.loadvars(root.define)
-    this.walk(root.attachment)
+    this.walk(root.structure)
     return this
 }
 
@@ -49,7 +49,7 @@ walkerType.prototype.addto=function (shape,collection) {
     this.collection[collection].push(shape)
 }
 
-walkerType.prototype.walk = function(attachments){
+walkerType.prototype.walk = function(structures){
     this.xx=0
     this.yy=0
     this.x1=0
@@ -57,7 +57,13 @@ walkerType.prototype.walk = function(attachments){
     this.x2=0
     this.y2=0
     this.collection={}
-    this.traversal(attachments)
+    this.traversal([
+        {
+            "type": "attachment",
+            "side": "ul",
+            "structure": structures
+        }
+    ])
 }
 
 walkerType.prototype.traversal = function(attachments){

@@ -2,7 +2,7 @@ grammar AttachmentTree;
 
 root:   
     'define' BGNL define=variables* 
-    'leaves' BGNL attachment=attachments* 
+    'leaves' BGNL structure=structures* 
 ;
 
 variables
