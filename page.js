@@ -9,7 +9,7 @@ window.buildBlocks=function(params) {
     // console.log('buildBlocks')
     try {
         AttachmentTreeFunctions.parse(eval('('+document.querySelector('#blocklyinput').value+')'))
-        walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg()
+        walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg();
     } catch (error) {
         if(error.message!=='AttachmentTreeFunctions is not defined')console.error(error)
     }
@@ -27,7 +27,7 @@ window.trigger = function(params) {
     } catch (error) {
     }
     // console.log(params[1])
-    walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg()
+    walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg();
 }
 
 // document.getElementById('blocklyDiv').onmousewheel = function(e){

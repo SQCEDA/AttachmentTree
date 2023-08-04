@@ -127,7 +127,7 @@ walkerType.prototype.buildshape = function(shape,width,height,collection){
                 [this.x1,this.y1],
             ]
             var ptsi=({"ul": 0, "ur": 1,"dr": 2,"dl":3}[shape.side])
-            pts=pts.splice(ptsi+3,4).map(v=>'L'+v.join(','))
+            pts=pts.splice(ptsi+1,4).map(v=>'L'+v.join(','))
             pts[0]=' '+pts[0].slice(1)
             pts[1]='Q'+pts[1].slice(1)
             pts[2]=' '+pts[2].slice(1)
