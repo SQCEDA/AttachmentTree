@@ -29,11 +29,11 @@ structures
     ;
 
 structure:  
-    'shape' BGNL shape=shapes
+    side=Side_List 
+    'collection' collection=Int
     'width' width=Evalstr
     'height' height=Evalstr BGNL
-    'side' side=Side_List 
-    'collection' collection=Int BGNL
+    shape=shapes
     'leaves' BGNL attachment=attachments* 
 /* structure
 defaultMap : {width:50000,height:50000,collection:1}

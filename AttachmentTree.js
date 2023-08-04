@@ -278,16 +278,15 @@ Object.assign(AttachmentTreeBlocks,{
         "type": "statement",
         "json": {
             "type": "structure",
-            "message0": "shape %1 %2 width %3 height %4 %5 side %6 collection %7 %8 leaves %9 %10",
+            "message0": "%1 collection %2 width %3 height %4 %5 %6 leaves %7 %8",
             "args0": [
-                {
-                    "type": "input_dummy"
-                },
-                {
-                    "type": "input_statement",
-                    "name": "shape",
-                    "check": AttachmentTreeBlocks.shapes
-                },
+                Object.assign({},AttachmentTreeBlocks.Side_List,{
+                    "name": "side"
+                }),
+                Object.assign({},AttachmentTreeBlocks.Int,{
+                    "name": "collection",
+                    "value": 1
+                }),
                 Object.assign({},AttachmentTreeBlocks.Evalstr,{
                     "name": "width",
                     "text": 50000
@@ -299,15 +298,10 @@ Object.assign(AttachmentTreeBlocks,{
                 {
                     "type": "input_dummy"
                 },
-                Object.assign({},AttachmentTreeBlocks.Side_List,{
-                    "name": "side"
-                }),
-                Object.assign({},AttachmentTreeBlocks.Int,{
-                    "name": "collection",
-                    "value": 1
-                }),
                 {
-                    "type": "input_dummy"
+                    "type": "input_statement",
+                    "name": "shape",
+                    "check": AttachmentTreeBlocks.shapes
                 },
                 {
                     "type": "input_dummy"
@@ -325,13 +319,10 @@ Object.assign(AttachmentTreeBlocks,{
             "nextStatement": AttachmentTreeBlocks.structures
         },
         "generFunc": function(block) {
-            var shape = Blockly.JavaScript.statementToCode(block, 'shape');
-            if(block.getInputTargetBlock('shape') && 
-                block.getInputTargetBlock('shape').getNextBlock())
-                throw new MultiStatementError(block,'shape','structure');
-            if (shape==='') {
-                throw new OmitedError(block,'shape','structure');
-            }
+            var side = block.getFieldValue('side');
+            side = AttachmentTreeFunctions.pre('Side_List')(side,block,'side','structure');
+            var collection = block.getFieldValue('collection');
+            collection = AttachmentTreeFunctions.pre('Int')(collection,block,'collection','structure');
             var width = block.getFieldValue('width');
             if (width==='') {
                 throw new OmitedError(block,'width','structure');
@@ -342,17 +333,20 @@ Object.assign(AttachmentTreeBlocks,{
                 throw new OmitedError(block,'height','structure');
             }
             height = AttachmentTreeFunctions.pre('Evalstr')(height,block,'height','structure');
-            var side = block.getFieldValue('side');
-            side = AttachmentTreeFunctions.pre('Side_List')(side,block,'side','structure');
-            var collection = block.getFieldValue('collection');
-            collection = AttachmentTreeFunctions.pre('Int')(collection,block,'collection','structure');
+            var shape = Blockly.JavaScript.statementToCode(block, 'shape');
+            if(block.getInputTargetBlock('shape') && 
+                block.getInputTargetBlock('shape').getNextBlock())
+                throw new MultiStatementError(block,'shape','structure');
+            if (shape==='') {
+                throw new OmitedError(block,'shape','structure');
+            }
             var attachment = Blockly.JavaScript.statementToCode(block, 'attachment');
             var code = AttachmentTreeFunctions.defaultCode('structure',eval('['+AttachmentTreeBlocks['structure'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["shape","width","height","side","collection","attachment"],
-        "argsType": ["statement","field","field","field","field","statement"],
-        "argsGrammarName": ["shapes","Evalstr","Evalstr","Side_List","Int","attachments"],
+        "args": ["side","collection","width","height","shape","attachment"],
+        "argsType": ["field","field","field","field","statement","statement"],
+        "argsGrammarName": ["Side_List","Int","Evalstr","Evalstr","shapes","attachments"],
         "omitted": [false,false,false,false,false,true],
         "multi": [false,false,false,false,false,true],
         "fieldDefault": function (keyOrIndex) {
