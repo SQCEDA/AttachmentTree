@@ -5,6 +5,8 @@ function walkerType(params) {
     
 }
 
+walkerType.prototype.viewbox='-100000 -100000 200000 200000'
+
 walkerType.prototype.import=function (root) {
     this.loadvars(root.define)
     this.walk(root.attachment)
@@ -16,11 +18,13 @@ walkerType.prototype.buildsvg=function (params) {
     for (const key in this.collection) {
         if (Object.hasOwnProperty.call(this.collection, key)) {
             const element = this.collection[key];
+            ret.push(`<g class='c${key}'>`)
             ret.push(element.join('\n'))
+            ret.push('</g>')
         }
     }
-    let svgstr=`<svg font-family="sans-serif" viewBox="-100000 -100000 200000 200000" xmlns:xlink="http://www.w3.org/1999/xlink" text-decoration="none"
-    font-style="normal" width="100%" xmlns="http://www.w3.org/2000/svg" font-size="15" version="1.1"
+    let svgstr=`<svg font-family="sans-serif" viewBox="${this.viewbox}" xmlns:xlink="http://www.w3.org/1999/xlink" text-decoration="none"
+    font-style="normal" width=300px xmlns="http://www.w3.org/2000/svg" font-size="1vw" version="1.1"
     font-weight="normal"><g>${ret.join('\n')}</g></svg>`
     this.svgstr=svgstr
     return svgstr
@@ -93,7 +97,7 @@ walkerType.prototype.traversal = function(attachments){
 walkerType.prototype.buildshape = function(shape,width,height,collection){
     switch (shape.type) {
         case 'brush':
-            var sstr=`'<text y="${this.y1/2+this.y2/2}" text-anchor="middle" x="${this.x1/2+this.x2/2}">${shape.id} ${this.eval(shape.angle)}</text><circle stroke="none" pointer-events="none" cy="${this.y1/2+this.y2/2}" cx="${this.x1/2+this.x2/2}" r="200" fill="#000"></circle>`
+            var sstr=`<circle stroke="none" pointer-events="none" cy="${this.y1/2+this.y2/2}" cx="${this.x1/2+this.x2/2}" r="3000" fill="#000"></circle>`
             break;
         case 'arc':
             var pts=[
@@ -105,16 +109,20 @@ walkerType.prototype.buildshape = function(shape,width,height,collection){
                 [this.x2,this.y2],
                 [this.x2,this.y1],
                 [this.x1,this.y1],
+                [this.x1,this.y2],
+                [this.x2,this.y2],
+                [this.x2,this.y1],
+                [this.x1,this.y1],
             ]
-            var ptsi=({"ul": 0, "ur": 1,"dr": 2,"dl":3}['ur'])['ur']
+            var ptsi=({"ul": 0, "ur": 1,"dr": 2,"dl":3}[shape.side])
             pts=pts.splice(ptsi+3,4).map(v=>'L'+v.join(','))
-            pts[0]='M'+pts[0].slice(1)
-            pts[1]='Q'+pts[0].slice(1)
-            pts[2]=' '+pts[0].slice(1)
-            var sstr=`<path fill-opacity="1.000" stroke="none" d="M${pts.join('')}Z" fill="#fce49d"/>`
+            pts[0]=' '+pts[0].slice(1)
+            pts[1]='Q'+pts[1].slice(1)
+            pts[2]=' '+pts[2].slice(1)
+            var sstr=`<path stroke="none" d="M${pts.join('')}Z" />`
             break;
         case 'quadrilateral':
-            var sstr=`<path fill-opacity="1.000" stroke="none" d="M${this.x1+this.eval(shape.ul)},${this.y2}l${width-this.eval(shape.ul)},${-this.eval(shape.ur)}l${-this.eval(shape.dr)},${-height+this.eval(shape.ur)}l${-width+this.eval(shape.dr)},${this.eval(shape.dl)}Z" fill="#fce49d"/>`
+            var sstr=`<path stroke="none" d="M${this.x1+this.eval(shape.ul)},${this.y2}l${width-this.eval(shape.ul)},${-this.eval(shape.ur)}l${-this.eval(shape.dr)},${-height+this.eval(shape.ur)}l${-width+this.eval(shape.dr)},${this.eval(shape.dl)}Z" />`
             break;
         case 'triangle':
             var pts=[
@@ -122,13 +130,23 @@ walkerType.prototype.buildshape = function(shape,width,height,collection){
                 [this.x2,this.y2],
                 [this.x2,this.y1],
                 [this.x1,this.y1],
+                [this.x1,this.y2],
+                [this.x2,this.y2],
+                [this.x2,this.y1],
+                [this.x1,this.y1],
+                [this.x1,this.y2],
+                [this.x2,this.y2],
+                [this.x2,this.y1],
+                [this.x1,this.y1],
             ]
-            pts.splice({"ul": 0, "ur": 1,"dr": 2,"dl":3}['ur'],1)
-            var sstr=`<path fill-opacity="1.000" stroke="none" d="M${pts.map(v=>v.join(',')).join('L')}Z" fill="#fce49d"/>`
+            var ptsi=({"ul": 0, "ur": 1,"dr": 2,"dl":3}[shape.side])
+            pts=pts.splice(ptsi+3,3).map(v=>'L'+v.join(','))
+            pts[0]=' '+pts[0].slice(1)
+            var sstr=`<path stroke="none" d="M${pts.join('')}Z" />`
             break;
     
         default:// 'rectangle'
-            var sstr=`<path fill-opacity="1.000" stroke="none" d="M${this.x1},${this.y2}l${width},0l0,${-height}l${-width},0Z" fill="#fce49d"/>`
+            var sstr=`<path stroke="none" d="M${this.x1},${this.y2}l${width},0l0,${-height}l${-width},0Z" />`
             break;
     }
     this.addto(sstr,collection)

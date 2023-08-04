@@ -999,21 +999,21 @@ var toolbox = (function(){
 
 
 
-var workspace = Blockly.inject('blocklyDiv',{
-    media: 'antlr-blockly/media/',
-    toolbox: toolbox,
-    zoom:{
-        controls: true,
-        wheel: true,//false
-        startScale: 1.0,
-        maxScale: 3,
-        minScale: 0.3,
-        scaleSpeed: 1.08
-    },
-    trashcan: false,
-});
-AttachmentTreeFunctions.workspace = function(){return workspace}
-
+    var workspace = Blockly.inject('blocklyDiv',{
+        media: 'antlr-blockly/media/',
+        toolbox: toolbox,
+        zoom:{
+            controls: true,
+            wheel: false,//false
+            startScale: 0.5,
+            maxScale: 1.2,
+            minScale: 0.2,
+            scaleSpeed: 1.08
+        },
+        trashcan: false,
+    });
+    AttachmentTreeFunctions.workspace = function(){return workspace}
+    
     function omitedcheckUpdateFunction(event) {
         var codeAreaFunc = function(err,data){blocklyinput.value=err?String(err):data;window?.trigger?.call(null,[err,data])}
         try {

@@ -1,23 +1,42 @@
 <!doctype html>
+
 <head>
-<meta charset="utf-8">
-<title>AttachmentTree --antlr-blockly</title>
-<script src="antlr-blockly/blockly_compressed.js"></script>
-<script src="antlr-blockly/blocks_compressed.js"></script>
-<script src="antlr-blockly/javascript_compressed.js"></script>
-<script src="antlr-blockly/zh-hans.js"></script>
+    <meta charset="utf-8">
+    <title>AttachmentTree</title>
+    <script src="antlr-blockly/blockly_compressed.js"></script>
+    <script src="antlr-blockly/blocks_compressed.js"></script>
+    <script src="antlr-blockly/javascript_compressed.js"></script>
+    <script src="antlr-blockly/zh-hans.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div style="float: left;"><div id="blocklyDiv" style="height: 550px; width: 450px;"></div></div>
-<div style="float: left;"><div id="svgoutput" style="transform: rotateX(180deg);"></div></div>
-<div style="clear: both;"></div>
-<textarea name="blocklyinput" id="blocklyinput" cols="60" rows="27" spellcheck="false"> 
-</textarea>
+    <div style="clear: both;"></div>
+    <div style="float: left;">
+        <div id="blocklyDiv" style="height: 550px; width: 450px;"></div>
+    </div>
+    <div style="float: left;">
+        <div id="svgoutput" style="transform: rotateX(180deg);"></div>
+    </div>
+    <div style="clear: both;"></div>
+    <p>Arcs are not real arc in preview. (Quadratic Bézier curve) <span class='pc0'>0</span><span
+            class='pc1'>1</span><span class='pc2'>2</span><span class='pc3'>3</span><span class='pc4'>4</span><span
+            class='pc5'>5</span><span class='pc6'>6</span><span class='pc7'>7</span><span class='pc8'>8</span><span
+            class='pc9'>9</span>
+    </p>
+    <p>
+        <button onclick="window.trigger([0,lastvalue[0]+' ']);window.buildBlocks()">import</button>
+        <input id="svgviewbox" type="text" style="width: 300px;" value="-100000 -100000 200000 200000">
+        <button onclick="walker.viewbox=svgviewbox.value;window.buildBlocks()">change viewbox</button>
+    </p>
+    <textarea name="blocklyinput" id="blocklyinput" cols="60" rows="27" spellcheck="false">
+    </textarea>
 
-<script src="antlr-blockly/Converter.bundle.min.js"></script>
-<script src="page.js"></script>
-<script src="AttachmentTree.js"></script>
-<script src="walker.js"></script>
+    <script src="antlr-blockly/Converter.bundle.min.js"></script>
+    <script src="walker.js"></script>
+    <script src="page.js"></script>
+    <script src="AttachmentTree.js"></script>
 </body>
+
 </html>

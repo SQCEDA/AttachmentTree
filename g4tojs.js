@@ -55,11 +55,27 @@ function jsContent(params) {
     // ========== mark for split ==========
     window.buildBlocks&&window.buildBlocks()
     // ========== mark for split ==========
+    var workspace = Blockly.inject('blocklyDiv',{
+        media: 'antlr-blockly/media/',
+        toolbox: toolbox,
+        zoom:{
+            controls: true,
+            wheel: false,//false
+            startScale: 0.5,
+            maxScale: 1.2,
+            minScale: 0.2,
+            scaleSpeed: 1.08
+        },
+        trashcan: false,
+    });
+    AttachmentTreeFunctions.workspace = function(){return workspace}
+    // ========== mark for split ==========
 }
 
 let jsContents = jsContent.toString().split('// ========== mark for split ==========')
 converter.js.checkUpdateFunction = jsContents[1]
 converter.js.alldone = jsContents[2]
+converter.js.BlocklyInject = jsContents[3]
 converter.js._text.push('alldone')
 
 // fs.writeFileSync('blockly.html', converter.html.text(), { encoding: 'utf8' })
