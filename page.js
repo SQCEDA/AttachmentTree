@@ -9,7 +9,7 @@ window.buildBlocks=function(params) {
     // console.log('buildBlocks')
     try {
         AttachmentTreeFunctions.parse(eval('('+document.querySelector('#blocklyinput').value+')'))
-        walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg();
+        walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg();svgsizefunc();
     } catch (error) {
         if(error.message!=='AttachmentTreeFunctions is not defined')console.error(error)
     }
@@ -27,9 +27,14 @@ window.trigger = function(params) {
     } catch (error) {
     }
     // console.log(params[1])
-    walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg();
+    walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg();svgsizefunc();
 }
 
+function autoresizesvg(params) {
+    bbox=svgoutput.children[0].getBBox();svgoutput.children[0].setAttribute("viewBox", `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
+}
+
+window.svgsizefunc=autoresizesvg
 // document.getElementById('blocklyDiv').onmousewheel = function(e){
 //     var workspace=AttachmentTreeFunctions.workspace()
 //     //console.log(e);

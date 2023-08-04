@@ -28,8 +28,8 @@
     <p>
         <button onclick="window.trigger([0,lastvalue[0]+' ']);window.buildBlocks()">import</button>
         <input id="svgviewbox" type="text" style="width: 300px;" value="-100000 -100000 200000 200000">
-        <button onclick="walker.viewbox=svgviewbox.value;window.buildBlocks()">change viewbox</button>
-        <button onclick='bbox=svgoutput.children[0].getBBox();svgoutput.children[0].setAttribute("viewBox", `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);'>auto viewbox</button>
+        <button onclick="window.svgsizefunc=()=>0;walker.viewbox=svgviewbox.value;window.buildBlocks()">fixed viewbox</button>
+        <button onclick='window.svgsizefunc=autoresizesvg;autoresizesvg()'>auto viewbox</button>
     </p>
     <textarea name="blocklyinput" id="blocklyinput" cols="60" rows="27" spellcheck="false">
     </textarea>
