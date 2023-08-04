@@ -11,6 +11,11 @@ variables
 defaultMap : {id:'armlength',value:50000,description:''}
 colour : 20
 */
+    |   'id' id=IdStr 'rule' value=Evalstr #innervariable
+/* innervariable
+defaultMap : {id:'armlengthtwice',value:'armlength*2'}
+colour : 20
+*/
     |   'none' #variablenone
 /* variablenone
 colour : 20

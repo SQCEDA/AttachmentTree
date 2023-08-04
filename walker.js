@@ -33,7 +33,13 @@ walkerType.prototype.buildsvg=function (params) {
 walkerType.prototype.loadvars=function (defineList) {
     this.vars={}
     defineList.forEach(element => {
-        this.vars[element.id]=element.value
+        if (element.type=='innervariable') {
+            
+            this.vars[element.id]=eval(element.value.replace(/[a-zA-Z_]+\w+/g,(ii)=>this.vars[ii]))
+        } else {
+            
+            this.vars[element.id]=element.value
+        }
     });
 }
 

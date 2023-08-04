@@ -3,6 +3,7 @@
 AttachmentTreeBlocks = {
     "variables": [
         "variable",
+        "innervariable",
         "variablenone"
     ],
     "attachments": [
@@ -168,6 +169,55 @@ Object.assign(AttachmentTreeBlocks,{
         "menu": [],
         "xmlText": function (inputs,next,isShadow,comment,attribute) {
             return AttachmentTreeFunctions.xmlText('variable',inputs,next,isShadow,comment,attribute);
+        }
+    },
+    "innervariable": {
+        "type": "statement",
+        "json": {
+            "type": "innervariable",
+            "message0": "id %1 rule %2",
+            "args0": [
+                Object.assign({},AttachmentTreeBlocks.IdStr,{
+                    "name": "id",
+                    "text": "armlengthtwice"
+                }),
+                Object.assign({},AttachmentTreeBlocks.Evalstr,{
+                    "name": "value",
+                    "text": "armlength*2"
+                })
+            ],
+            "inputsInline": true,
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 20,
+            "previousStatement": "innervariable",
+            "nextStatement": AttachmentTreeBlocks.variables
+        },
+        "generFunc": function(block) {
+            var id = block.getFieldValue('id');
+            if (id==='') {
+                throw new OmitedError(block,'id','innervariable');
+            }
+            id = AttachmentTreeFunctions.pre('IdStr')(id,block,'id','innervariable');
+            var value = block.getFieldValue('value');
+            if (value==='') {
+                throw new OmitedError(block,'value','innervariable');
+            }
+            value = AttachmentTreeFunctions.pre('Evalstr')(value,block,'value','innervariable');
+            var code = AttachmentTreeFunctions.defaultCode('innervariable',eval('['+AttachmentTreeBlocks['innervariable'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["id","value"],
+        "argsType": ["field","field"],
+        "argsGrammarName": ["IdStr","Evalstr"],
+        "omitted": [false,false],
+        "multi": [false,false],
+        "fieldDefault": function (keyOrIndex) {
+            return AttachmentTreeFunctions.fieldDefault('innervariable',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return AttachmentTreeFunctions.xmlText('innervariable',inputs,next,isShadow,comment,attribute);
         }
     },
     "variablenone": {
@@ -952,6 +1002,7 @@ var toolbox = (function(){
             // 所有语句块
             AttachmentTreeBlocks["root"].xmlText(),
             AttachmentTreeBlocks["variable"].xmlText(),
+            AttachmentTreeBlocks["innervariable"].xmlText(),
             AttachmentTreeBlocks["variablenone"].xmlText(),
             AttachmentTreeBlocks["attachment"].xmlText(),
             AttachmentTreeBlocks["attachmentnone"].xmlText(),
