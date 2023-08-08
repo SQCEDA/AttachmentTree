@@ -33,12 +33,10 @@ walkerType.prototype.buildsvg=function (params) {
 walkerType.prototype.loadvars=function (defineList) {
     this.vars={}
     defineList.forEach(element => {
-        if (element.type=='innervariable') {
-            
-            this.vars[element.id]=eval(element.value.replace(/[a-zA-Z_]+\w+/g,(ii)=>this.vars[ii]))
+        if (element.id in this.vars) {
+            return
         } else {
-            
-            this.vars[element.id]=element.value
+            this.vars[element.id]=this.eval(element.value)
         }
     });
 }
@@ -47,7 +45,7 @@ walkerType.prototype.eval=function (number){
     if (typeof number==='number') {
         return number
     }
-    return this.vars[number]
+    return eval(number.replace(/[a-zA-Z_]+\w+/g,(ii)=>this.vars[ii]))
 }
 
 walkerType.prototype.addto=function (shape,collection) {
