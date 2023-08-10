@@ -24,7 +24,7 @@ walkerType.prototype.buildsvg=function (params) {
         }
     }
     let svgstr=`<svg font-family="sans-serif" viewBox="${this.viewbox}" xmlns:xlink="http://www.w3.org/1999/xlink" text-decoration="none"
-    font-style="normal" width=300px xmlns="http://www.w3.org/2000/svg" font-size="1vw" version="1.1"
+    font-style="normal" width="100%" xmlns="http://www.w3.org/2000/svg" font-size="1vw" version="1.1"
     font-weight="normal"><g>${ret.join('\n')}</g></svg>`
     this.svgstr=svgstr
     return svgstr
