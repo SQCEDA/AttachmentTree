@@ -12,12 +12,14 @@ AttachmentTreeBlocks = {
     ],
     "structures": [
         "structure",
+        "structurefrompts",
         "structurenone"
     ],
     "shapes": [
         "brush",
         "arc",
         "quadrilateral",
+        "quadrilateraldagger",
         "triangle",
         "rectangle"
     ]
@@ -407,6 +409,78 @@ Object.assign(AttachmentTreeBlocks,{
             return AttachmentTreeFunctions.xmlText('structure',inputs,next,isShadow,comment,attribute);
         }
     },
+    "structurefrompts": {
+        "type": "statement",
+        "json": {
+            "type": "structurefrompts",
+            "message0": "collection %1 scale %2 absolute/relative (☑/☐) %3 %4 points %5 leaves %6 %7",
+            "args0": [
+                Object.assign({},AttachmentTreeBlocks.Int,{
+                    "name": "collection",
+                    "value": 1
+                }),
+                Object.assign({},AttachmentTreeBlocks.Evalstr,{
+                    "name": "scale",
+                    "text": 1000
+                }),
+                Object.assign({},AttachmentTreeBlocks.Bool,{
+                    "name": "absolute",
+                    "checked": true
+                }),
+                {
+                    "type": "input_dummy"
+                },
+                Object.assign({},AttachmentTreeBlocks.NormalStr,{
+                    "name": "points",
+                    "text": "0 0 100 0 200 200"
+                }),
+                {
+                    "type": "input_dummy"
+                },
+                {
+                    "type": "input_statement",
+                    "name": "attachment",
+                    "check": AttachmentTreeBlocks.attachments
+                }
+            ],
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 70,
+            "previousStatement": "structurefrompts",
+            "nextStatement": AttachmentTreeBlocks.structures
+        },
+        "generFunc": function(block) {
+            var collection = block.getFieldValue('collection');
+            collection = AttachmentTreeFunctions.pre('Int')(collection,block,'collection','structurefrompts');
+            var scale = block.getFieldValue('scale');
+            if (scale==='') {
+                throw new OmitedError(block,'scale','structurefrompts');
+            }
+            scale = AttachmentTreeFunctions.pre('Evalstr')(scale,block,'scale','structurefrompts');
+            var absolute = block.getFieldValue('absolute') === 'TRUE';
+            absolute = AttachmentTreeFunctions.pre('Bool')(absolute,block,'absolute','structurefrompts');
+            var points = block.getFieldValue('points');
+            if (points==='') {
+                throw new OmitedError(block,'points','structurefrompts');
+            }
+            points = AttachmentTreeFunctions.pre('NormalStr')(points,block,'points','structurefrompts');
+            var attachment = Blockly.JavaScript.statementToCode(block, 'attachment');
+            var code = AttachmentTreeFunctions.defaultCode('structurefrompts',eval('['+AttachmentTreeBlocks['structurefrompts'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["collection","scale","absolute","points","attachment"],
+        "argsType": ["field","field","field","field","statement"],
+        "argsGrammarName": ["Int","Evalstr","Bool","NormalStr","attachments"],
+        "omitted": [false,false,false,false,true],
+        "multi": [false,false,false,false,true],
+        "fieldDefault": function (keyOrIndex) {
+            return AttachmentTreeFunctions.fieldDefault('structurefrompts',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return AttachmentTreeFunctions.xmlText('structurefrompts',inputs,next,isShadow,comment,attribute);
+        }
+    },
     "structurenone": {
         "type": "statement",
         "json": {
@@ -441,11 +515,15 @@ Object.assign(AttachmentTreeBlocks,{
         "type": "statement",
         "json": {
             "type": "brush",
-            "message0": "brush (id,widout,widin,angle) %1 %2 %3 %4",
+            "message0": "brush (id,angle,widout,widin) %1 %2 %3 %4",
             "args0": [
                 Object.assign({},AttachmentTreeBlocks.IdStr,{
                     "name": "brushid",
                     "text": "brush1"
+                }),
+                Object.assign({},AttachmentTreeBlocks.Evalstr,{
+                    "name": "angle",
+                    "text": 0
                 }),
                 Object.assign({},AttachmentTreeBlocks.Evalstr,{
                     "name": "widout",
@@ -454,10 +532,6 @@ Object.assign(AttachmentTreeBlocks,{
                 Object.assign({},AttachmentTreeBlocks.Evalstr,{
                     "name": "widin",
                     "text": 4000
-                }),
-                Object.assign({},AttachmentTreeBlocks.Evalstr,{
-                    "name": "angle",
-                    "text": 0
                 })
             ],
             "inputsInline": true,
@@ -473,6 +547,11 @@ Object.assign(AttachmentTreeBlocks,{
                 throw new OmitedError(block,'brushid','brush');
             }
             brushid = AttachmentTreeFunctions.pre('IdStr')(brushid,block,'brushid','brush');
+            var angle = block.getFieldValue('angle');
+            if (angle==='') {
+                throw new OmitedError(block,'angle','brush');
+            }
+            angle = AttachmentTreeFunctions.pre('Evalstr')(angle,block,'angle','brush');
             var widout = block.getFieldValue('widout');
             if (widout==='') {
                 throw new OmitedError(block,'widout','brush');
@@ -483,15 +562,10 @@ Object.assign(AttachmentTreeBlocks,{
                 throw new OmitedError(block,'widin','brush');
             }
             widin = AttachmentTreeFunctions.pre('Evalstr')(widin,block,'widin','brush');
-            var angle = block.getFieldValue('angle');
-            if (angle==='') {
-                throw new OmitedError(block,'angle','brush');
-            }
-            angle = AttachmentTreeFunctions.pre('Evalstr')(angle,block,'angle','brush');
             var code = AttachmentTreeFunctions.defaultCode('brush',eval('['+AttachmentTreeBlocks['brush'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["brushid","widout","widin","angle"],
+        "args": ["brushid","angle","widout","widin"],
         "argsType": ["field","field","field","field"],
         "argsGrammarName": ["IdStr","Evalstr","Evalstr","Evalstr"],
         "omitted": [false,false,false,false],
@@ -605,6 +679,73 @@ Object.assign(AttachmentTreeBlocks,{
         "menu": [],
         "xmlText": function (inputs,next,isShadow,comment,attribute) {
             return AttachmentTreeFunctions.xmlText('quadrilateral',inputs,next,isShadow,comment,attribute);
+        }
+    },
+    "quadrilateraldagger": {
+        "type": "statement",
+        "json": {
+            "type": "quadrilateraldagger",
+            "message0": "▱ (←,↑,→,↓) %1 %2 %3 %4",
+            "args0": [
+                Object.assign({},AttachmentTreeBlocks.Evalstr,{
+                    "name": "ur",
+                    "text": 0
+                }),
+                Object.assign({},AttachmentTreeBlocks.Evalstr,{
+                    "name": "dr",
+                    "text": 0
+                }),
+                Object.assign({},AttachmentTreeBlocks.Evalstr,{
+                    "name": "dl",
+                    "text": 0
+                }),
+                Object.assign({},AttachmentTreeBlocks.Evalstr,{
+                    "name": "ul",
+                    "text": 0
+                })
+            ],
+            "inputsInline": true,
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 130,
+            "previousStatement": "quadrilateraldagger",
+            "nextStatement": AttachmentTreeBlocks.shapes
+        },
+        "generFunc": function(block) {
+            var ur = block.getFieldValue('ur');
+            if (ur==='') {
+                throw new OmitedError(block,'ur','quadrilateraldagger');
+            }
+            ur = AttachmentTreeFunctions.pre('Evalstr')(ur,block,'ur','quadrilateraldagger');
+            var dr = block.getFieldValue('dr');
+            if (dr==='') {
+                throw new OmitedError(block,'dr','quadrilateraldagger');
+            }
+            dr = AttachmentTreeFunctions.pre('Evalstr')(dr,block,'dr','quadrilateraldagger');
+            var dl = block.getFieldValue('dl');
+            if (dl==='') {
+                throw new OmitedError(block,'dl','quadrilateraldagger');
+            }
+            dl = AttachmentTreeFunctions.pre('Evalstr')(dl,block,'dl','quadrilateraldagger');
+            var ul = block.getFieldValue('ul');
+            if (ul==='') {
+                throw new OmitedError(block,'ul','quadrilateraldagger');
+            }
+            ul = AttachmentTreeFunctions.pre('Evalstr')(ul,block,'ul','quadrilateraldagger');
+            var code = AttachmentTreeFunctions.defaultCode('quadrilateraldagger',eval('['+AttachmentTreeBlocks['quadrilateraldagger'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["ur","dr","dl","ul"],
+        "argsType": ["field","field","field","field"],
+        "argsGrammarName": ["Evalstr","Evalstr","Evalstr","Evalstr"],
+        "omitted": [false,false,false,false],
+        "multi": [false,false,false,false],
+        "fieldDefault": function (keyOrIndex) {
+            return AttachmentTreeFunctions.fieldDefault('quadrilateraldagger',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return AttachmentTreeFunctions.xmlText('quadrilateraldagger',inputs,next,isShadow,comment,attribute);
         }
     },
     "triangle": {
@@ -1007,10 +1148,12 @@ var toolbox = (function(){
             AttachmentTreeBlocks["attachment"].xmlText(),
             AttachmentTreeBlocks["attachmentnone"].xmlText(),
             AttachmentTreeBlocks["structure"].xmlText(),
+            AttachmentTreeBlocks["structurefrompts"].xmlText(),
             AttachmentTreeBlocks["structurenone"].xmlText(),
             AttachmentTreeBlocks["brush"].xmlText(),
             AttachmentTreeBlocks["arc"].xmlText(),
             AttachmentTreeBlocks["quadrilateral"].xmlText(),
+            AttachmentTreeBlocks["quadrilateraldagger"].xmlText(),
             AttachmentTreeBlocks["triangle"].xmlText(),
             AttachmentTreeBlocks["rectangle"].xmlText(),
         ],

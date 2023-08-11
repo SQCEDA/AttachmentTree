@@ -81,19 +81,45 @@ walkerType.prototype.traversal = function(attachments){
         walker.xx = attachment.side[1]=='l'?walker.x1:walker.x2 
         walker.yy = attachment.side[0]=='d'?walker.y1:walker.y2 
         attachment.structure.forEach(structure =>{
-            if (structure.type!='structure') {
+            if (structure.type=='structurenone') {
                 return
             }
             let pos12=[walker.x1,walker.y1,walker.x2,walker.y2]
-            let width=walker.eval(structure.width)
-            let height=walker.eval(structure.height)
+            if (structure.type=='structure') {
+                let width=walker.eval(structure.width)
+                let height=walker.eval(structure.height)
+    
+                walker.x1=structure.side[1]=='l'?walker.xx-width:walker.xx
+                walker.y1=structure.side[0]=='d'?walker.yy-height:walker.yy
+                walker.x2=walker.x1+width
+                walker.y2=walker.y1+height
+    
+                walker.buildshape(structure.shape,width,height,structure.collection)
+            } else { // structure.type=='structurefrompts'
+                let ptsstr=structure.points.split(/[\s,]+/g)
+                let pts=[]
+                walker.x1=walker.y1=Infinity
+                walker.x2=walker.y2=-Infinity
+                let scale=walker.eval(structure.scale)
+                while (ptsstr.length) {
+                    let xx=walker.xx+scale*walker.eval(ptsstr.shift())
+                    let yy=walker.yy+scale*walker.eval(ptsstr.shift())
+                    walker.x1=Math.min(walker.x1,xx)
+                    walker.x2=Math.max(walker.x2,xx)
+                    walker.y1=Math.min(walker.y1,yy)
+                    walker.y2=Math.max(walker.y2,yy)
+                    if (!structure.absolute) {
+                        walker.xx=xx
+                        walker.yy=yy
+                    }
+                    pts.push([xx,yy])
+                }
+                pts=pts.map(v=>'L'+v.join(','))
+                pts[0]=' '+pts[0].slice(1)
+                var sstr=`<path stroke="none" d="M${pts.join('')}Z" />`
+                walker.addto(sstr,structure.collection)
+            }
 
-            walker.x1=structure.side[1]=='l'?walker.xx-width:walker.xx
-            walker.y1=structure.side[0]=='d'?walker.yy-height:walker.yy
-            walker.x2=walker.x1+width
-            walker.y2=walker.y1+height
-
-            walker.buildshape(structure.shape,width,height,structure.collection)
             walker.traversal(structure.attachment)
             
             ;[walker.x1,walker.y1,walker.x2,walker.y2]=pos12;
@@ -133,6 +159,9 @@ walkerType.prototype.buildshape = function(shape,width,height,collection){
             break;
         case 'quadrilateral':
             var sstr=`<path stroke="none" d="M${this.x1+this.eval(shape.ul)},${this.y2}l${width-this.eval(shape.ul)},${-this.eval(shape.ur)}l${-this.eval(shape.dr)},${-height+this.eval(shape.ur)}l${-width+this.eval(shape.dr)},${this.eval(shape.dl)}Z" />`
+            break;
+        case 'quadrilateraldagger':
+            var sstr=`<path stroke="none" d="M${this.x2-this.eval(shape.ur)},${this.y2}l${this.eval(shape.ur)},${this.eval(shape.dr)-height}l${this.eval(shape.dl)-width},${-this.eval(shape.dr)}l${-this.eval(shape.dl)},${height-this.eval(shape.ul)}Z" />`
             break;
         case 'triangle':
             var pts=[

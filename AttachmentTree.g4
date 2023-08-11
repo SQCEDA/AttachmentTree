@@ -30,6 +30,7 @@ attachments
 
 structures
     :   structure
+    |   structurefrompts
     |   structurenone
     ;
 
@@ -45,6 +46,17 @@ defaultMap : {width:50000,height:50000,collection:1}
 colour : this.structureColor
 */;
 
+structurefrompts:  
+    'collection' collection=Int
+    'scale' scale=Evalstr
+    'absolute/relative (☑/☐)' absolute=Bool BGNL
+    'points' points=NormalStr 
+    'leaves' BGNL attachment=attachments* 
+/* structurefrompts
+defaultMap : {absolute:true,collection:1,scale:1000,points:"0 0 100 0 200 200"}
+colour : this.structureColor
+*/;
+
 structurenone:  'none'
 /* structurenone
 colour : this.structureColor
@@ -54,13 +66,14 @@ shapes
     :   brush
     |   arc
     |   quadrilateral
+    |   quadrilateraldagger
     |   triangle
     |   rectangle
 ;
 
-brush: 'brush (id,widout,widin,angle)' brushid=IdStr widout=Evalstr widin=Evalstr angle=Evalstr 
+brush: 'brush (id,angle,widout,widin)' brushid=IdStr angle=Evalstr widout=Evalstr widin=Evalstr 
 /* brush
-default : ['brush1',8000,4000,0]
+default : ['brush1',0,8000,4000]
 colour : this.shapeColor
 */;
 
@@ -71,6 +84,12 @@ colour : this.shapeColor
 
 quadrilateral: '▱ (→,↓,←,↑)' ul=Evalstr ur=Evalstr dr=Evalstr dl=Evalstr 
 /* quadrilateral
+default : [0,0,0,0]
+colour : this.shapeColor
+*/;
+
+quadrilateraldagger: '▱ (←,↑,→,↓)' ur=Evalstr dr=Evalstr dl=Evalstr ul=Evalstr  
+/* quadrilateraldagger
 default : [0,0,0,0]
 colour : this.shapeColor
 */;
