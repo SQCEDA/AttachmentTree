@@ -46,6 +46,10 @@ Object.assign(AttachmentTreeBlocks,{
         "type": "field_input",
         "text": "NormalStr_default"
     },
+    "TryIntStr": {
+        "type": "field_input",
+        "text": "TryIntStr_default"
+    },
     "Evalstr": {
         "type": "field_input",
         "text": "Evalstr_default"
@@ -335,7 +339,7 @@ Object.assign(AttachmentTreeBlocks,{
                 Object.assign({},AttachmentTreeBlocks.Side_List,{
                     "name": "side"
                 }),
-                Object.assign({},AttachmentTreeBlocks.Evalstr,{
+                Object.assign({},AttachmentTreeBlocks.TryIntStr,{
                     "name": "collection",
                     "text": 1
                 }),
@@ -377,7 +381,7 @@ Object.assign(AttachmentTreeBlocks,{
             if (collection==='') {
                 throw new OmitedError(block,'collection','structure');
             }
-            collection = AttachmentTreeFunctions.pre('Evalstr')(collection,block,'collection','structure');
+            collection = AttachmentTreeFunctions.pre('TryIntStr')(collection,block,'collection','structure');
             var width = block.getFieldValue('width');
             if (width==='') {
                 throw new OmitedError(block,'width','structure');
@@ -401,7 +405,7 @@ Object.assign(AttachmentTreeBlocks,{
         },
         "args": ["side","collection","width","height","shape","attachment"],
         "argsType": ["field","field","field","field","statement","statement"],
-        "argsGrammarName": ["Side_List","Evalstr","Evalstr","Evalstr","shapes","attachments"],
+        "argsGrammarName": ["Side_List","TryIntStr","Evalstr","Evalstr","shapes","attachments"],
         "omitted": [false,false,false,false,false,true],
         "multi": [false,false,false,false,false,true],
         "fieldDefault": function (keyOrIndex) {
@@ -418,7 +422,7 @@ Object.assign(AttachmentTreeBlocks,{
             "type": "structurefrompts",
             "message0": "collection %1 scale %2 absolute/relative (☑/☐) %3 %4 points %5 leaves %6 %7",
             "args0": [
-                Object.assign({},AttachmentTreeBlocks.Evalstr,{
+                Object.assign({},AttachmentTreeBlocks.TryIntStr,{
                     "name": "collection",
                     "text": 1
                 }),
@@ -457,7 +461,7 @@ Object.assign(AttachmentTreeBlocks,{
             if (collection==='') {
                 throw new OmitedError(block,'collection','structurefrompts');
             }
-            collection = AttachmentTreeFunctions.pre('Evalstr')(collection,block,'collection','structurefrompts');
+            collection = AttachmentTreeFunctions.pre('TryIntStr')(collection,block,'collection','structurefrompts');
             var scale = block.getFieldValue('scale');
             if (scale==='') {
                 throw new OmitedError(block,'scale','structurefrompts');
@@ -476,7 +480,7 @@ Object.assign(AttachmentTreeBlocks,{
         },
         "args": ["collection","scale","absolute","points","attachment"],
         "argsType": ["field","field","field","field","statement"],
-        "argsGrammarName": ["Evalstr","Evalstr","Bool","NormalStr","attachments"],
+        "argsGrammarName": ["TryIntStr","Evalstr","Bool","NormalStr","attachments"],
         "omitted": [false,false,false,false,true],
         "multi": [false,false,false,false,true],
         "fieldDefault": function (keyOrIndex) {
@@ -868,6 +872,13 @@ AttachmentTreeFunctions={}
 AttachmentTreeFunctions.Evalstr_pre = function(str) {
     if (!isNaN(parseFloat(str))) {
         return parseFloat(str)
+    } 
+    return str;
+}
+
+AttachmentTreeFunctions.TryIntStr_pre = function(str) {
+    if (parseInt(str)+''===str) {
+        return parseInt(str)
     } 
     return str;
 }

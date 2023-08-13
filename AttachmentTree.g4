@@ -36,7 +36,7 @@ structures
 
 structure:  
     side=Side_List 
-    'collection' collection=Evalstr
+    'collection' collection=TryIntStr
     'width' width=Evalstr
     'height' height=Evalstr BGNL
     shape=shapes
@@ -47,7 +47,7 @@ colour : this.structureColor
 */;
 
 structurefrompts:  
-    'collection' collection=Evalstr
+    'collection' collection=TryIntStr
     'scale' scale=Evalstr
     'absolute/relative (☑/☐)' absolute=Bool BGNL
     'points' points=NormalStr 
@@ -114,6 +114,8 @@ IdStr
     :   'varfas'+ ;
 NormalStr
     :   'varfass'+ ;
+TryIntStr
+    :   'varfass'+ ;
 Evalstr
     :   'varfass'+ ;
 
@@ -154,6 +156,13 @@ this.evisitor.shapeColor=130;
 AttachmentTreeFunctions.Evalstr_pre = function(str) {
     if (!isNaN(parseFloat(str))) {
         return parseFloat(str)
+    } 
+    return str;
+}
+
+AttachmentTreeFunctions.TryIntStr_pre = function(str) {
+    if (parseInt(str)+''===str) {
+        return parseInt(str)
     } 
     return str;
 }
