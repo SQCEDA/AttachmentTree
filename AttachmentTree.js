@@ -335,9 +335,9 @@ Object.assign(AttachmentTreeBlocks,{
                 Object.assign({},AttachmentTreeBlocks.Side_List,{
                     "name": "side"
                 }),
-                Object.assign({},AttachmentTreeBlocks.Int,{
+                Object.assign({},AttachmentTreeBlocks.Evalstr,{
                     "name": "collection",
-                    "value": 1
+                    "text": 1
                 }),
                 Object.assign({},AttachmentTreeBlocks.Evalstr,{
                     "name": "width",
@@ -374,7 +374,10 @@ Object.assign(AttachmentTreeBlocks,{
             var side = block.getFieldValue('side');
             side = AttachmentTreeFunctions.pre('Side_List')(side,block,'side','structure');
             var collection = block.getFieldValue('collection');
-            collection = AttachmentTreeFunctions.pre('Int')(collection,block,'collection','structure');
+            if (collection==='') {
+                throw new OmitedError(block,'collection','structure');
+            }
+            collection = AttachmentTreeFunctions.pre('Evalstr')(collection,block,'collection','structure');
             var width = block.getFieldValue('width');
             if (width==='') {
                 throw new OmitedError(block,'width','structure');
@@ -398,7 +401,7 @@ Object.assign(AttachmentTreeBlocks,{
         },
         "args": ["side","collection","width","height","shape","attachment"],
         "argsType": ["field","field","field","field","statement","statement"],
-        "argsGrammarName": ["Side_List","Int","Evalstr","Evalstr","shapes","attachments"],
+        "argsGrammarName": ["Side_List","Evalstr","Evalstr","Evalstr","shapes","attachments"],
         "omitted": [false,false,false,false,false,true],
         "multi": [false,false,false,false,false,true],
         "fieldDefault": function (keyOrIndex) {
@@ -415,9 +418,9 @@ Object.assign(AttachmentTreeBlocks,{
             "type": "structurefrompts",
             "message0": "collection %1 scale %2 absolute/relative (☑/☐) %3 %4 points %5 leaves %6 %7",
             "args0": [
-                Object.assign({},AttachmentTreeBlocks.Int,{
+                Object.assign({},AttachmentTreeBlocks.Evalstr,{
                     "name": "collection",
-                    "value": 1
+                    "text": 1
                 }),
                 Object.assign({},AttachmentTreeBlocks.Evalstr,{
                     "name": "scale",
@@ -451,7 +454,10 @@ Object.assign(AttachmentTreeBlocks,{
         },
         "generFunc": function(block) {
             var collection = block.getFieldValue('collection');
-            collection = AttachmentTreeFunctions.pre('Int')(collection,block,'collection','structurefrompts');
+            if (collection==='') {
+                throw new OmitedError(block,'collection','structurefrompts');
+            }
+            collection = AttachmentTreeFunctions.pre('Evalstr')(collection,block,'collection','structurefrompts');
             var scale = block.getFieldValue('scale');
             if (scale==='') {
                 throw new OmitedError(block,'scale','structurefrompts');
@@ -470,7 +476,7 @@ Object.assign(AttachmentTreeBlocks,{
         },
         "args": ["collection","scale","absolute","points","attachment"],
         "argsType": ["field","field","field","field","statement"],
-        "argsGrammarName": ["Int","Evalstr","Bool","NormalStr","attachments"],
+        "argsGrammarName": ["Evalstr","Evalstr","Bool","NormalStr","attachments"],
         "omitted": [false,false,false,false,true],
         "multi": [false,false,false,false,true],
         "fieldDefault": function (keyOrIndex) {

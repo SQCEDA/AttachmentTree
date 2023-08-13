@@ -15,10 +15,12 @@ walkerType.prototype.import=function (root) {
 
 walkerType.prototype.buildsvg=function (params) {
     let ret=[]
+    let cnum=[0]
     for (const key in this.collection) {
         if (Object.hasOwnProperty.call(this.collection, key)) {
             const element = this.collection[key];
-            ret.push(`<g class='c${key}'>`)
+            ret.push(`<g class='c${cnum[0]} cn${key}'>`)
+            cnum[0]+=1
             ret.push(element.join('\n'))
             ret.push('</g>')
         }

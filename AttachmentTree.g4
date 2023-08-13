@@ -36,7 +36,7 @@ structures
 
 structure:  
     side=Side_List 
-    'collection' collection=Int
+    'collection' collection=Evalstr
     'width' width=Evalstr
     'height' height=Evalstr BGNL
     shape=shapes
@@ -47,7 +47,7 @@ colour : this.structureColor
 */;
 
 structurefrompts:  
-    'collection' collection=Int
+    'collection' collection=Evalstr
     'scale' scale=Evalstr
     'absolute/relative (☑/☐)' absolute=Bool BGNL
     'points' points=NormalStr 
