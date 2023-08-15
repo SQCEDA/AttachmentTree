@@ -1,27 +1,27 @@
 grammar Combiner;
 
-root:   
+combiner:   
     statement=statements* 
 ;
 
 statements
-    :   variabledefine
-    |   tracedefine
+    :   variableDefine
+    |   traceDefine
     |   dispatch
-    |   evalstatement
-    |   structure
+    |   evalStatement
+    |   structureAt
     ;
 
-variabledefine
+variableDefine
     :   'id' id=IdStr 'default' value=Evalstr 'description' description=NormalStr? 
-/* variabledefine
+/* variableDefine
 defaultMap : {id:'armlength',value:50000,description:''}
 */
 ;
 
-tracedefine
+traceDefine
     :   'id' id=IdStr 'default' value=Evalstr 'description' description=NormalStr? 
-/* tracedefine
+/* traceDefine
 defaultMap : {id:'trace1',value:'s armlength',description:''}
 */
 ;
@@ -29,24 +29,23 @@ defaultMap : {id:'trace1',value:'s armlength',description:''}
 dispatch
     :   'from' id=IdStr 'to' value=Evalstr
 /* dispatch
-defaultMap : {id:'trace1',value:'s armlength'}
+defaultMap : {id:'ab',value:'bdf.ab'}
 */
 ;
 
-evalstatement
+evalStatement
     :   'eval' content=NormalStr
-/* evalstatement
+/* evalStatement
 defaultMap : {content:'print(self.vars["abc"])'}
 */
 ;
 
-structure:  
+structureAt:  
     'id' id=IdStr 
-    'at' place=place
-    content=contents
-/* structure
+    'at' BGNL place=place
+    'content' BGNL content=contents
+/* structureAt
 defaultMap : {}
-colour : this.structureColor
 */;
 
 
@@ -112,7 +111,7 @@ this.evisitor.statementColor=300;
 
 // this.evisitor.idstring_eColor=310;
 this.evisitor.gateArgsColor=220;
-this.evisitor.structureColor=70;
+this.evisitor.structureAtColor=70;
 this.evisitor.shapeColor=130;
 // this.evisitor.eventColor=220;
 // this.evisitor.soundColor=20;
@@ -139,9 +138,5 @@ CombinerFunctions.TryIntStr_pre = function(str) {
     } 
     return str;
 }
-
-CombinerBlocks.shapes.forEach(blockname => {
-    CombinerBlocks[blockname].json.nextStatement=undefined
-})
 
 */

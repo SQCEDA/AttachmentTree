@@ -76,10 +76,10 @@ Object.assign(AttachmentTreeBlocks,{
 
 // 所有方块的实际内容
 Object.assign(AttachmentTreeBlocks,{
-    "root": {
+    "attachmentTree": {
         "type": "statement",
         "json": {
-            "type": "root",
+            "type": "attachmentTree",
             "message0": "define %1 %2 leaves %3 %4",
             "args0": [
                 {
@@ -106,7 +106,7 @@ Object.assign(AttachmentTreeBlocks,{
         "generFunc": function(block) {
             var define = Blockly.JavaScript.statementToCode(block, 'define');
             var structure = Blockly.JavaScript.statementToCode(block, 'structure');
-            var code = AttachmentTreeFunctions.defaultCode('root',eval('['+AttachmentTreeBlocks['root'].args.join(',')+']'),block);
+            var code = AttachmentTreeFunctions.defaultCode('attachmentTree',eval('['+AttachmentTreeBlocks['attachmentTree'].args.join(',')+']'),block);
             return code;
         },
         "args": ["define","structure"],
@@ -115,11 +115,11 @@ Object.assign(AttachmentTreeBlocks,{
         "omitted": [true,true],
         "multi": [true,true],
         "fieldDefault": function (keyOrIndex) {
-            return AttachmentTreeFunctions.fieldDefault('root',keyOrIndex);
+            return AttachmentTreeFunctions.fieldDefault('attachmentTree',keyOrIndex);
         },
         "menu": [],
         "xmlText": function (inputs,next,isShadow,comment,attribute) {
-            return AttachmentTreeFunctions.xmlText('root',inputs,next,isShadow,comment,attribute);
+            return AttachmentTreeFunctions.xmlText('attachmentTree',inputs,next,isShadow,comment,attribute);
         }
     },
     "variable": {
@@ -1158,7 +1158,7 @@ var toolbox = (function(){
         // 每个键值对作为一页
         "statement": [
             // 所有语句块
-            AttachmentTreeBlocks["root"].xmlText(),
+            AttachmentTreeBlocks["attachmentTree"].xmlText(),
             AttachmentTreeBlocks["variable"].xmlText(),
             AttachmentTreeBlocks["innervariable"].xmlText(),
             AttachmentTreeBlocks["variablenone"].xmlText(),
