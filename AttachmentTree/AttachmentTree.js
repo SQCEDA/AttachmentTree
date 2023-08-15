@@ -1205,7 +1205,7 @@ var toolbox = (function(){
 
 
     var workspace = Blockly.inject('blocklyDiv',{
-        media: 'antlr-blockly/media/',
+        media: '../antlr-blockly/media/',
         toolbox: toolbox,
         zoom:{
             controls: true,

@@ -1,6 +1,6 @@
-if (localStorage.getItem('blocklyinput')!=null) {
+if (localStorage.getItem('AttachmentTree')!=null) {
     try {
-        document.querySelector('#blocklyinput').value=localStorage.getItem('blocklyinput')
+        document.querySelector('#blocklyinput').value=localStorage.getItem('AttachmentTree')
     } catch (error) {
     }
 }
@@ -23,7 +23,7 @@ window.trigger = function(params) {
     }
     lastvalue[0]=params[1]
     try {
-        localStorage.setItem('blocklyinput',document.querySelector('#blocklyinput').value)
+        localStorage.setItem('AttachmentTree',document.querySelector('#blocklyinput').value)
     } catch (error) {
     }
     // console.log(params[1])

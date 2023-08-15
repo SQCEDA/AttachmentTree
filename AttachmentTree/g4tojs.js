@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { Converter } = require('./antlr-blockly')
+const { Converter } = require('../antlr-blockly')
 
 let grammarFile = fs.readFileSync('./AttachmentTree.g4', { encoding: 'utf-8' })
 let option = {
@@ -7,7 +7,7 @@ let option = {
     "defaultGenerating": "JSON",
     "blocklyRuntime": {
         "type": "blocklyRuntimeStatement",
-        "path": "antlr-blockly/",
+        "path": "../antlr-blockly/",
         "files": "blockly_compressed.js, blocks_compressed.js, javascript_compressed.js, zh-hans.js"
     },
     "blocklyDiv": {
@@ -56,7 +56,7 @@ function jsContent(params) {
     window.buildBlocks&&window.buildBlocks()
     // ========== mark for split ==========
     var workspace = Blockly.inject('blocklyDiv',{
-        media: 'antlr-blockly/media/',
+        media: '../antlr-blockly/media/',
         toolbox: toolbox,
         zoom:{
             controls: true,
