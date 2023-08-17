@@ -41,11 +41,11 @@ defaultMap : {content:'print(self.vars["abc"])'}
 ;
 
 structureAt:  
-    'structure id' id=IdStr 
+    'structure output ids' id=IdsStr? 
     'at' BGNL place=place
     'content' BGNL content=contents
 /* structureAt
-defaultMap : {id:'readout1'}
+defaultMap : {id:'brush1,brush2'}
 */;
 
 
@@ -83,15 +83,15 @@ linkBrush:
 ;
 
 trace:
-    'trace' traceid=IdStr 'output brush' brushout=IdStr
+    'trace' traceid=IdStr
 /* trace
-defaultMap : {brushout:'brush2',traceid:'trace1',using:'x,y,z'}
+defaultMap : {traceid:'trace1'}
 */;
 
 component:
-    componentType=Component_List BGNL 'output brush' brushout=IdsStr? BGNL 'args' args=Evalstr? 'using' using=IdsStr?
+    componentType=Component_List 'collection' collection=TryIntStr BGNL 'args' args=Evalstr? BGNL 'using' using=IdsStr?
 /* component
-defaultMap : {brushout:'brush2,brush3',args:'{"x":x,"y":x+y,"z":x+y+z}',using:'x,y,z'}
+defaultMap : {collection:1,args:'{"x":x,"y":x+y,"z":x+y+z}',using:'x,y,z'}
 */;
 
 statExprSplit : '=== statement ^ === expression v ===' ;

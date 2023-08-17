@@ -354,11 +354,11 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "structureAt",
-            "message0": "structure id %1 at %2 %3 content %4 %5",
+            "message0": "structure output ids %1 at %2 %3 content %4 %5",
             "args0": [
-                Object.assign({},CombinerBlocks.IdStr,{
+                Object.assign({},CombinerBlocks.IdsStr,{
                     "name": "id",
-                    "text": "readout1"
+                    "text": "brush1,brush2"
                 }),
                 {
                     "type": "input_dummy"
@@ -385,10 +385,7 @@ Object.assign(CombinerBlocks,{
         },
         "generFunc": function(block) {
             var id = block.getFieldValue('id');
-            if (id==='') {
-                throw new OmitedError(block,'id','structureAt');
-            }
-            id = CombinerFunctions.pre('IdStr')(id,block,'id','structureAt');
+            id = CombinerFunctions.pre('IdsStr')(id,block,'id','structureAt');
             var place = Blockly.JavaScript.statementToCode(block, 'place');
             if(block.getInputTargetBlock('place') && 
                 block.getInputTargetBlock('place').getNextBlock())
@@ -408,8 +405,8 @@ Object.assign(CombinerBlocks,{
         },
         "args": ["id","place","content"],
         "argsType": ["field","statement","statement"],
-        "argsGrammarName": ["IdStr","place","contents"],
-        "omitted": [false,false,false],
+        "argsGrammarName": ["IdsStr","place","contents"],
+        "omitted": [true,false,false],
         "multi": [false,false,false],
         "fieldDefault": function (keyOrIndex) {
             return CombinerFunctions.fieldDefault('structureAt',keyOrIndex);
@@ -656,15 +653,11 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "trace",
-            "message0": "trace %1 output brush %2",
+            "message0": "trace %1",
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
                     "name": "traceid",
                     "text": "trace1"
-                }),
-                Object.assign({},CombinerBlocks.IdStr,{
-                    "name": "brushout",
-                    "text": "brush2"
                 })
             ],
             "inputsInline": true,
@@ -680,19 +673,14 @@ Object.assign(CombinerBlocks,{
                 throw new OmitedError(block,'traceid','trace');
             }
             traceid = CombinerFunctions.pre('IdStr')(traceid,block,'traceid','trace');
-            var brushout = block.getFieldValue('brushout');
-            if (brushout==='') {
-                throw new OmitedError(block,'brushout','trace');
-            }
-            brushout = CombinerFunctions.pre('IdStr')(brushout,block,'brushout','trace');
             var code = CombinerFunctions.defaultCode('trace',eval('['+CombinerBlocks['trace'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["traceid","brushout"],
-        "argsType": ["field","field"],
-        "argsGrammarName": ["IdStr","IdStr"],
-        "omitted": [false,false],
-        "multi": [false,false],
+        "args": ["traceid"],
+        "argsType": ["field"],
+        "argsGrammarName": ["IdStr"],
+        "omitted": [false],
+        "multi": [false],
         "fieldDefault": function (keyOrIndex) {
             return CombinerFunctions.fieldDefault('trace',keyOrIndex);
         },
@@ -705,17 +693,14 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "component",
-            "message0": "%1 %2 output brush %3 %4 args %5 using %6",
+            "message0": "%1 collection %2 %3 args %4 %5 using %6",
             "args0": [
                 Object.assign({},CombinerBlocks.Component_List,{
                     "name": "componentType"
                 }),
-                {
-                    "type": "input_dummy"
-                },
-                Object.assign({},CombinerBlocks.IdsStr,{
-                    "name": "brushout",
-                    "text": "brush2,brush3"
+                Object.assign({},CombinerBlocks.TryIntStr,{
+                    "name": "collection",
+                    "text": 1
                 }),
                 {
                     "type": "input_dummy"
@@ -724,6 +709,9 @@ Object.assign(CombinerBlocks,{
                     "name": "args",
                     "text": "{\"x\":x,\"y\":x+y,\"z\":x+y+z}"
                 }),
+                {
+                    "type": "input_dummy"
+                },
                 Object.assign({},CombinerBlocks.IdsStr,{
                     "name": "using",
                     "text": "x,y,z"
@@ -738,8 +726,11 @@ Object.assign(CombinerBlocks,{
         "generFunc": function(block) {
             var componentType = block.getFieldValue('componentType');
             componentType = CombinerFunctions.pre('Component_List')(componentType,block,'componentType','component');
-            var brushout = block.getFieldValue('brushout');
-            brushout = CombinerFunctions.pre('IdsStr')(brushout,block,'brushout','component');
+            var collection = block.getFieldValue('collection');
+            if (collection==='') {
+                throw new OmitedError(block,'collection','component');
+            }
+            collection = CombinerFunctions.pre('TryIntStr')(collection,block,'collection','component');
             var args = block.getFieldValue('args');
             args = CombinerFunctions.pre('Evalstr')(args,block,'args','component');
             var using = block.getFieldValue('using');
@@ -747,10 +738,10 @@ Object.assign(CombinerBlocks,{
             var code = CombinerFunctions.defaultCode('component',eval('['+CombinerBlocks['component'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["componentType","brushout","args","using"],
+        "args": ["componentType","collection","args","using"],
         "argsType": ["field","field","field","field"],
-        "argsGrammarName": ["Component_List","IdsStr","Evalstr","IdsStr"],
-        "omitted": [false,true,true,true],
+        "argsGrammarName": ["Component_List","TryIntStr","Evalstr","IdsStr"],
+        "omitted": [false,false,true,true],
         "multi": [false,false,false,false],
         "fieldDefault": function (keyOrIndex) {
             return CombinerFunctions.fieldDefault('component',keyOrIndex);
