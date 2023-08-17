@@ -8,28 +8,28 @@ statements
     :   variableDefine
     |   traceDefine
     |   dispatch
-    |   evalStatement
     |   structureAt
+    |   evalStatement
     ;
 
 variableDefine
-    :   'id' id=IdStr 'default' value=Evalstr 'description' description=NormalStr? 
+    :   'variable define id' id=IdStr 'default' value=Evalstr 'description' description=NormalStr? 
 /* variableDefine
 defaultMap : {id:'armlength',value:50000,description:''}
 */
 ;
 
 traceDefine
-    :   'id' id=IdStr 'default' value=Evalstr 'description' description=NormalStr? 
+    :   'trace define id' id=IdStr 'default' value=Evalstr 'using' using=IdsStr? 'description' description=NormalStr? 
 /* traceDefine
-defaultMap : {id:'trace1',value:'s armlength',description:''}
+defaultMap : {id:'trace1',value:'s x r y,z',using:'x,y,z',description:''}
 */
 ;
 
 dispatch
-    :   'from' id=IdStr 'to' value=Evalstr
+    :   'dispatch' keytype=Keytype_List 'from' id=IdsStr 'to' value=Evalstr
 /* dispatch
-defaultMap : {id:'ab',value:'bdf.ab'}
+defaultMap : {id:'ab,cd',value:'bdf.ab,bdf.cd'}
 */
 ;
 
@@ -41,48 +41,69 @@ defaultMap : {content:'print(self.vars["abc"])'}
 ;
 
 structureAt:  
-    'id' id=IdStr 
+    'structure id' id=IdStr 
     'at' BGNL place=place
     'content' BGNL content=contents
 /* structureAt
-defaultMap : {}
+defaultMap : {id:'readout1'}
 */;
 
 
 place
-    :   'brush' id=IdStr #brushplace
-    |   'position' x=Evalstr y=Evalstr angle=Evalstr #positionplace
-    ;
+    :   'position' x=Evalstr y=Evalstr angle=Evalstr #positionplace
+/* positionplace
+defaultMap : {x:50000,y:40000,angle:45}
+colour: 20
+*/
+    |   'brush' id=IdStr 'reverse' reverse=Bool #brushplace
+/* brushplace
+defaultMap : {id:'brush1',reverse:false}
+colour: 20
+*/;
 
 contents
     :   attachmentTree
     |   gdsLoader
     |   linkBrush
+    |   trace
     |   component
     ;
 
 attachmentTree:
-    'id' id=IdStr
+    'AttachmentTree id' id=IdStr
 ;
 
 gdsLoader:
-    'id' id=IdStr
+    'GDSLoader id' id=IdStr
 ;
 
 linkBrush:
-    'brush1' brush1=IdStr 'reverse' reverse1=Bool BGNL
+    'link' linktype=Linktype_List BGNL
     'brush2' brush2=IdStr 'reverse' reverse2=Bool
 ;
 
+trace:
+    'trace' traceid=IdStr 'output brush' brushout=IdStr
+/* trace
+defaultMap : {brushout:'brush2',traceid:'trace1',using:'x,y,z'}
+*/;
+
 component:
-    'contortion' 'Electrode' 'Connection' 'narrow' 'trace' 'etc.' 'InterdigitedCapacitor'
-;
+    componentType=Component_List BGNL 'output brush' brushout=IdsStr? BGNL 'args' args=Evalstr? 'using' using=IdsStr?
+/* component
+defaultMap : {brushout:'brush2,brush3',args:'{"x":x,"y":x+y,"z":x+y+z}',using:'x,y,z'}
+*/;
 
 statExprSplit : '=== statement ^ === expression v ===' ;
 
 Side_List : '⇖'|'⇗'|'⇘'|'⇙' /*Side_List ['ul','ur','dr','dl']*/ ;
+Keytype_List : 'variable'|'trace.length'|'brush'|'collection'|'trace' ;
+Linktype_List : '45'|'any' ;
+Component_List : 'Electrode'|'contortion'|'Connection'|'narrow'|'InterdigitedCapacitor' ;
 
 IdStr
+    :   'varfas'+ ;
+IdsStr
     :   'varfas'+ ;
 NormalStr
     :   'varfass'+ ;
@@ -121,6 +142,9 @@ this.evisitor.shapeColor=130;
 // this.block('prog').inputsInline=true;
 // this.block('idString_1_e').output='idString_e';
 // this.block('idString_2_e').output='idString_e';
+this.evisitor.statementRules['contents'].check.forEach(blockname => {
+    this.block(blockname).colour=220;
+})
 */
 
 /* Insert_FunctionStart

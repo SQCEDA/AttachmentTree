@@ -5,17 +5,18 @@ CombinerBlocks = {
         "variableDefine",
         "traceDefine",
         "dispatch",
-        "evalStatement",
-        "structureAt"
+        "structureAt",
+        "evalStatement"
     ],
     "place": [
-        "brushplace",
-        "positionplace"
+        "positionplace",
+        "brushplace"
     ],
     "contents": [
         "attachmentTree",
         "gdsLoader",
         "linkBrush",
+        "trace",
         "component"
     ]
 }
@@ -33,9 +34,43 @@ Object.assign(CombinerBlocks,{
         ],
         "default": "ul"
     },
+    "Keytype_List": {
+        "type": "field_dropdown",
+        "options": [
+            ["variable","variable"],
+            ["trace.length","trace.length"],
+            ["brush","brush"],
+            ["collection","collection"],
+            ["trace","trace"]
+        ],
+        "default": "variable"
+    },
+    "Linktype_List": {
+        "type": "field_dropdown",
+        "options": [
+            ["45","45"],
+            ["any","any"]
+        ],
+        "default": "45"
+    },
+    "Component_List": {
+        "type": "field_dropdown",
+        "options": [
+            ["Electrode","Electrode"],
+            ["contortion","contortion"],
+            ["Connection","Connection"],
+            ["narrow","narrow"],
+            ["InterdigitedCapacitor","InterdigitedCapacitor"]
+        ],
+        "default": "Electrode"
+    },
     "IdStr": {
         "type": "field_input",
         "text": "IdStr_default"
+    },
+    "IdsStr": {
+        "type": "field_input",
+        "text": "IdsStr_default"
     },
     "NormalStr": {
         "type": "field_input",
@@ -109,7 +144,7 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "variableDefine",
-            "message0": "id %1 default %2 description %3",
+            "message0": "variable define id %1 default %2 description %3",
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
                     "name": "id",
@@ -164,7 +199,7 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "traceDefine",
-            "message0": "id %1 default %2 description %3",
+            "message0": "trace define id %1 default %2 using %3 description %4",
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
                     "name": "id",
@@ -172,7 +207,11 @@ Object.assign(CombinerBlocks,{
                 }),
                 Object.assign({},CombinerBlocks.Evalstr,{
                     "name": "value",
-                    "text": "s armlength"
+                    "text": "s x r y,z"
+                }),
+                Object.assign({},CombinerBlocks.IdsStr,{
+                    "name": "using",
+                    "text": "x,y,z"
                 }),
                 Object.assign({},CombinerBlocks.NormalStr,{
                     "name": "description",
@@ -197,16 +236,18 @@ Object.assign(CombinerBlocks,{
                 throw new OmitedError(block,'value','traceDefine');
             }
             value = CombinerFunctions.pre('Evalstr')(value,block,'value','traceDefine');
+            var using = block.getFieldValue('using');
+            using = CombinerFunctions.pre('IdsStr')(using,block,'using','traceDefine');
             var description = block.getFieldValue('description');
             description = CombinerFunctions.pre('NormalStr')(description,block,'description','traceDefine');
             var code = CombinerFunctions.defaultCode('traceDefine',eval('['+CombinerBlocks['traceDefine'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["id","value","description"],
-        "argsType": ["field","field","field"],
-        "argsGrammarName": ["IdStr","Evalstr","NormalStr"],
-        "omitted": [false,false,true],
-        "multi": [false,false,false],
+        "args": ["id","value","using","description"],
+        "argsType": ["field","field","field","field"],
+        "argsGrammarName": ["IdStr","Evalstr","IdsStr","NormalStr"],
+        "omitted": [false,false,true,true],
+        "multi": [false,false,false,false],
         "fieldDefault": function (keyOrIndex) {
             return CombinerFunctions.fieldDefault('traceDefine',keyOrIndex);
         },
@@ -219,15 +260,18 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "dispatch",
-            "message0": "from %1 to %2",
+            "message0": "dispatch %1 from %2 to %3",
             "args0": [
-                Object.assign({},CombinerBlocks.IdStr,{
+                Object.assign({},CombinerBlocks.Keytype_List,{
+                    "name": "keytype"
+                }),
+                Object.assign({},CombinerBlocks.IdsStr,{
                     "name": "id",
-                    "text": "ab"
+                    "text": "ab,cd"
                 }),
                 Object.assign({},CombinerBlocks.Evalstr,{
                     "name": "value",
-                    "text": "bdf.ab"
+                    "text": "bdf.ab,bdf.cd"
                 })
             ],
             "inputsInline": true,
@@ -238,11 +282,13 @@ Object.assign(CombinerBlocks,{
             "nextStatement": CombinerBlocks.statements
         },
         "generFunc": function(block) {
+            var keytype = block.getFieldValue('keytype');
+            keytype = CombinerFunctions.pre('Keytype_List')(keytype,block,'keytype','dispatch');
             var id = block.getFieldValue('id');
             if (id==='') {
                 throw new OmitedError(block,'id','dispatch');
             }
-            id = CombinerFunctions.pre('IdStr')(id,block,'id','dispatch');
+            id = CombinerFunctions.pre('IdsStr')(id,block,'id','dispatch');
             var value = block.getFieldValue('value');
             if (value==='') {
                 throw new OmitedError(block,'value','dispatch');
@@ -251,11 +297,11 @@ Object.assign(CombinerBlocks,{
             var code = CombinerFunctions.defaultCode('dispatch',eval('['+CombinerBlocks['dispatch'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["id","value"],
-        "argsType": ["field","field"],
-        "argsGrammarName": ["IdStr","Evalstr"],
-        "omitted": [false,false],
-        "multi": [false,false],
+        "args": ["keytype","id","value"],
+        "argsType": ["field","field","field"],
+        "argsGrammarName": ["Keytype_List","IdsStr","Evalstr"],
+        "omitted": [false,false,false],
+        "multi": [false,false,false],
         "fieldDefault": function (keyOrIndex) {
             return CombinerFunctions.fieldDefault('dispatch',keyOrIndex);
         },
@@ -308,10 +354,11 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "structureAt",
-            "message0": "id %1 at %2 %3 content %4 %5",
+            "message0": "structure id %1 at %2 %3 content %4 %5",
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
-                    "name": "id"
+                    "name": "id",
+                    "text": "readout1"
                 }),
                 {
                     "type": "input_dummy"
@@ -372,45 +419,6 @@ Object.assign(CombinerBlocks,{
             return CombinerFunctions.xmlText('structureAt',inputs,next,isShadow,comment,attribute);
         }
     },
-    "brushplace": {
-        "type": "statement",
-        "json": {
-            "type": "brushplace",
-            "message0": "brush %1",
-            "args0": [
-                Object.assign({},CombinerBlocks.IdStr,{
-                    "name": "id"
-                })
-            ],
-            "inputsInline": true,
-            "tooltip": "",
-            "helpUrl": "",
-            "colour": 300,
-            "previousStatement": "brushplace",
-            "nextStatement": CombinerBlocks.place
-        },
-        "generFunc": function(block) {
-            var id = block.getFieldValue('id');
-            if (id==='') {
-                throw new OmitedError(block,'id','brushplace');
-            }
-            id = CombinerFunctions.pre('IdStr')(id,block,'id','brushplace');
-            var code = CombinerFunctions.defaultCode('brushplace',eval('['+CombinerBlocks['brushplace'].args.join(',')+']'),block);
-            return code;
-        },
-        "args": ["id"],
-        "argsType": ["field"],
-        "argsGrammarName": ["IdStr"],
-        "omitted": [false],
-        "multi": [false],
-        "fieldDefault": function (keyOrIndex) {
-            return CombinerFunctions.fieldDefault('brushplace',keyOrIndex);
-        },
-        "menu": [],
-        "xmlText": function (inputs,next,isShadow,comment,attribute) {
-            return CombinerFunctions.xmlText('brushplace',inputs,next,isShadow,comment,attribute);
-        }
-    },
     "positionplace": {
         "type": "statement",
         "json": {
@@ -418,19 +426,22 @@ Object.assign(CombinerBlocks,{
             "message0": "position %1 %2 %3",
             "args0": [
                 Object.assign({},CombinerBlocks.Evalstr,{
-                    "name": "x"
+                    "name": "x",
+                    "text": 50000
                 }),
                 Object.assign({},CombinerBlocks.Evalstr,{
-                    "name": "y"
+                    "name": "y",
+                    "text": 40000
                 }),
                 Object.assign({},CombinerBlocks.Evalstr,{
-                    "name": "angle"
+                    "name": "angle",
+                    "text": 45
                 })
             ],
             "inputsInline": true,
             "tooltip": "",
             "helpUrl": "",
-            "colour": 300,
+            "colour": 20,
             "previousStatement": "positionplace",
             "nextStatement": CombinerBlocks.place
         },
@@ -466,11 +477,57 @@ Object.assign(CombinerBlocks,{
             return CombinerFunctions.xmlText('positionplace',inputs,next,isShadow,comment,attribute);
         }
     },
+    "brushplace": {
+        "type": "statement",
+        "json": {
+            "type": "brushplace",
+            "message0": "brush %1 reverse %2",
+            "args0": [
+                Object.assign({},CombinerBlocks.IdStr,{
+                    "name": "id",
+                    "text": "brush1"
+                }),
+                Object.assign({},CombinerBlocks.Bool,{
+                    "name": "reverse",
+                    "checked": false
+                })
+            ],
+            "inputsInline": true,
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 20,
+            "previousStatement": "brushplace",
+            "nextStatement": CombinerBlocks.place
+        },
+        "generFunc": function(block) {
+            var id = block.getFieldValue('id');
+            if (id==='') {
+                throw new OmitedError(block,'id','brushplace');
+            }
+            id = CombinerFunctions.pre('IdStr')(id,block,'id','brushplace');
+            var reverse = block.getFieldValue('reverse') === 'TRUE';
+            reverse = CombinerFunctions.pre('Bool')(reverse,block,'reverse','brushplace');
+            var code = CombinerFunctions.defaultCode('brushplace',eval('['+CombinerBlocks['brushplace'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["id","reverse"],
+        "argsType": ["field","field"],
+        "argsGrammarName": ["IdStr","Bool"],
+        "omitted": [false,false],
+        "multi": [false,false],
+        "fieldDefault": function (keyOrIndex) {
+            return CombinerFunctions.fieldDefault('brushplace',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return CombinerFunctions.xmlText('brushplace',inputs,next,isShadow,comment,attribute);
+        }
+    },
     "attachmentTree": {
         "type": "statement",
         "json": {
             "type": "attachmentTree",
-            "message0": "id %1",
+            "message0": "AttachmentTree id %1",
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
                     "name": "id"
@@ -479,7 +536,7 @@ Object.assign(CombinerBlocks,{
             "inputsInline": true,
             "tooltip": "",
             "helpUrl": "",
-            "colour": 300,
+            "colour": 220,
             "previousStatement": "attachmentTree",
             "nextStatement": CombinerBlocks.contents
         },
@@ -509,7 +566,7 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "gdsLoader",
-            "message0": "id %1",
+            "message0": "GDSLoader id %1",
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
                     "name": "id"
@@ -518,7 +575,7 @@ Object.assign(CombinerBlocks,{
             "inputsInline": true,
             "tooltip": "",
             "helpUrl": "",
-            "colour": 300,
+            "colour": 220,
             "previousStatement": "gdsLoader",
             "nextStatement": CombinerBlocks.contents
         },
@@ -548,13 +605,10 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "linkBrush",
-            "message0": "brush1 %1 reverse %2 %3 brush2 %4 reverse %5",
+            "message0": "link %1 %2 brush2 %3 reverse %4",
             "args0": [
-                Object.assign({},CombinerBlocks.IdStr,{
-                    "name": "brush1"
-                }),
-                Object.assign({},CombinerBlocks.Bool,{
-                    "name": "reverse1"
+                Object.assign({},CombinerBlocks.Linktype_List,{
+                    "name": "linktype"
                 }),
                 {
                     "type": "input_dummy"
@@ -568,18 +622,13 @@ Object.assign(CombinerBlocks,{
             ],
             "tooltip": "",
             "helpUrl": "",
-            "colour": 300,
+            "colour": 220,
             "previousStatement": "linkBrush",
             "nextStatement": CombinerBlocks.contents
         },
         "generFunc": function(block) {
-            var brush1 = block.getFieldValue('brush1');
-            if (brush1==='') {
-                throw new OmitedError(block,'brush1','linkBrush');
-            }
-            brush1 = CombinerFunctions.pre('IdStr')(brush1,block,'brush1','linkBrush');
-            var reverse1 = block.getFieldValue('reverse1') === 'TRUE';
-            reverse1 = CombinerFunctions.pre('Bool')(reverse1,block,'reverse1','linkBrush');
+            var linktype = block.getFieldValue('linktype');
+            linktype = CombinerFunctions.pre('Linktype_List')(linktype,block,'linktype','linkBrush');
             var brush2 = block.getFieldValue('brush2');
             if (brush2==='') {
                 throw new OmitedError(block,'brush2','linkBrush');
@@ -590,11 +639,11 @@ Object.assign(CombinerBlocks,{
             var code = CombinerFunctions.defaultCode('linkBrush',eval('['+CombinerBlocks['linkBrush'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["brush1","reverse1","brush2","reverse2"],
-        "argsType": ["field","field","field","field"],
-        "argsGrammarName": ["IdStr","Bool","IdStr","Bool"],
-        "omitted": [false,false,false,false],
-        "multi": [false,false,false,false],
+        "args": ["linktype","brush2","reverse2"],
+        "argsType": ["field","field","field"],
+        "argsGrammarName": ["Linktype_List","IdStr","Bool"],
+        "omitted": [false,false,false],
+        "multi": [false,false,false],
         "fieldDefault": function (keyOrIndex) {
             return CombinerFunctions.fieldDefault('linkBrush',keyOrIndex);
         },
@@ -603,28 +652,106 @@ Object.assign(CombinerBlocks,{
             return CombinerFunctions.xmlText('linkBrush',inputs,next,isShadow,comment,attribute);
         }
     },
+    "trace": {
+        "type": "statement",
+        "json": {
+            "type": "trace",
+            "message0": "trace %1 output brush %2",
+            "args0": [
+                Object.assign({},CombinerBlocks.IdStr,{
+                    "name": "traceid",
+                    "text": "trace1"
+                }),
+                Object.assign({},CombinerBlocks.IdStr,{
+                    "name": "brushout",
+                    "text": "brush2"
+                })
+            ],
+            "inputsInline": true,
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 220,
+            "previousStatement": "trace",
+            "nextStatement": CombinerBlocks.contents
+        },
+        "generFunc": function(block) {
+            var traceid = block.getFieldValue('traceid');
+            if (traceid==='') {
+                throw new OmitedError(block,'traceid','trace');
+            }
+            traceid = CombinerFunctions.pre('IdStr')(traceid,block,'traceid','trace');
+            var brushout = block.getFieldValue('brushout');
+            if (brushout==='') {
+                throw new OmitedError(block,'brushout','trace');
+            }
+            brushout = CombinerFunctions.pre('IdStr')(brushout,block,'brushout','trace');
+            var code = CombinerFunctions.defaultCode('trace',eval('['+CombinerBlocks['trace'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["traceid","brushout"],
+        "argsType": ["field","field"],
+        "argsGrammarName": ["IdStr","IdStr"],
+        "omitted": [false,false],
+        "multi": [false,false],
+        "fieldDefault": function (keyOrIndex) {
+            return CombinerFunctions.fieldDefault('trace',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return CombinerFunctions.xmlText('trace',inputs,next,isShadow,comment,attribute);
+        }
+    },
     "component": {
         "type": "statement",
         "json": {
             "type": "component",
-            "message0": "contortion Electrode Connection narrow trace etc. InterdigitedCapacitor",
-            "args0": [],
-            "inputsInline": true,
+            "message0": "%1 %2 output brush %3 %4 args %5 using %6",
+            "args0": [
+                Object.assign({},CombinerBlocks.Component_List,{
+                    "name": "componentType"
+                }),
+                {
+                    "type": "input_dummy"
+                },
+                Object.assign({},CombinerBlocks.IdsStr,{
+                    "name": "brushout",
+                    "text": "brush2,brush3"
+                }),
+                {
+                    "type": "input_dummy"
+                },
+                Object.assign({},CombinerBlocks.Evalstr,{
+                    "name": "args",
+                    "text": "{\"x\":x,\"y\":x+y,\"z\":x+y+z}"
+                }),
+                Object.assign({},CombinerBlocks.IdsStr,{
+                    "name": "using",
+                    "text": "x,y,z"
+                })
+            ],
             "tooltip": "",
             "helpUrl": "",
-            "colour": 300,
+            "colour": 220,
             "previousStatement": "component",
             "nextStatement": CombinerBlocks.contents
         },
         "generFunc": function(block) {
+            var componentType = block.getFieldValue('componentType');
+            componentType = CombinerFunctions.pre('Component_List')(componentType,block,'componentType','component');
+            var brushout = block.getFieldValue('brushout');
+            brushout = CombinerFunctions.pre('IdsStr')(brushout,block,'brushout','component');
+            var args = block.getFieldValue('args');
+            args = CombinerFunctions.pre('Evalstr')(args,block,'args','component');
+            var using = block.getFieldValue('using');
+            using = CombinerFunctions.pre('IdsStr')(using,block,'using','component');
             var code = CombinerFunctions.defaultCode('component',eval('['+CombinerBlocks['component'].args.join(',')+']'),block);
             return code;
         },
-        "args": [],
-        "argsType": [],
-        "argsGrammarName": [],
-        "omitted": [],
-        "multi": [],
+        "args": ["componentType","brushout","args","using"],
+        "argsType": ["field","field","field","field"],
+        "argsGrammarName": ["Component_List","IdsStr","Evalstr","IdsStr"],
+        "omitted": [false,true,true,true],
+        "multi": [false,false,false,false],
         "fieldDefault": function (keyOrIndex) {
             return CombinerFunctions.fieldDefault('component',keyOrIndex);
         },
@@ -969,11 +1096,12 @@ var toolbox = (function(){
             CombinerBlocks["dispatch"].xmlText(),
             CombinerBlocks["evalStatement"].xmlText(),
             CombinerBlocks["structureAt"].xmlText(),
-            CombinerBlocks["brushplace"].xmlText(),
             CombinerBlocks["positionplace"].xmlText(),
+            CombinerBlocks["brushplace"].xmlText(),
             CombinerBlocks["attachmentTree"].xmlText(),
             CombinerBlocks["gdsLoader"].xmlText(),
             CombinerBlocks["linkBrush"].xmlText(),
+            CombinerBlocks["trace"].xmlText(),
             CombinerBlocks["component"].xmlText(),
         ],
         "value": [
