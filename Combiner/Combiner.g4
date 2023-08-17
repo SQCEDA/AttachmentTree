@@ -71,21 +71,27 @@ contents
 
 attachmentTree:
     'AttachmentTree id' id=IdStr
-;
+/* attachmentTree
+defaultMap : {id:'qubit1'}
+*/;
 
 gdsLoader:
     'GDSLoader id' id=IdStr
-;
+/* gdsLoader
+defaultMap : {id:'arm1'}
+*/;
 
 linkBrush:
     'link' linktype=Linktype_List BGNL
-    'brush2' brush2=IdStr 'reverse' reverse2=Bool
-;
+    'brush2' id=IdStr 'reverse' reverse2=Bool
+/* linkBrush
+defaultMap : {id:'brush2',reverse:false}
+*/;
 
 trace:
-    'trace' traceid=IdStr
+    'trace' traceid=IdStr 'reverse' reverse=Bool 'mirror' mirror=Bool
 /* trace
-defaultMap : {traceid:'trace1'}
+defaultMap : {traceid:'trace1',reverse:false,mirror:false}
 */;
 
 component:

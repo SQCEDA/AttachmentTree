@@ -527,7 +527,8 @@ Object.assign(CombinerBlocks,{
             "message0": "AttachmentTree id %1",
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
-                    "name": "id"
+                    "name": "id",
+                    "text": "qubit1"
                 })
             ],
             "inputsInline": true,
@@ -566,7 +567,8 @@ Object.assign(CombinerBlocks,{
             "message0": "GDSLoader id %1",
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
-                    "name": "id"
+                    "name": "id",
+                    "text": "arm1"
                 })
             ],
             "inputsInline": true,
@@ -611,7 +613,8 @@ Object.assign(CombinerBlocks,{
                     "type": "input_dummy"
                 },
                 Object.assign({},CombinerBlocks.IdStr,{
-                    "name": "brush2"
+                    "name": "id",
+                    "text": "brush2"
                 }),
                 Object.assign({},CombinerBlocks.Bool,{
                     "name": "reverse2"
@@ -626,17 +629,17 @@ Object.assign(CombinerBlocks,{
         "generFunc": function(block) {
             var linktype = block.getFieldValue('linktype');
             linktype = CombinerFunctions.pre('Linktype_List')(linktype,block,'linktype','linkBrush');
-            var brush2 = block.getFieldValue('brush2');
-            if (brush2==='') {
-                throw new OmitedError(block,'brush2','linkBrush');
+            var id = block.getFieldValue('id');
+            if (id==='') {
+                throw new OmitedError(block,'id','linkBrush');
             }
-            brush2 = CombinerFunctions.pre('IdStr')(brush2,block,'brush2','linkBrush');
+            id = CombinerFunctions.pre('IdStr')(id,block,'id','linkBrush');
             var reverse2 = block.getFieldValue('reverse2') === 'TRUE';
             reverse2 = CombinerFunctions.pre('Bool')(reverse2,block,'reverse2','linkBrush');
             var code = CombinerFunctions.defaultCode('linkBrush',eval('['+CombinerBlocks['linkBrush'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["linktype","brush2","reverse2"],
+        "args": ["linktype","id","reverse2"],
         "argsType": ["field","field","field"],
         "argsGrammarName": ["Linktype_List","IdStr","Bool"],
         "omitted": [false,false,false],
@@ -653,11 +656,19 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "trace",
-            "message0": "trace %1",
+            "message0": "trace %1 reverse %2 mirror %3",
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
                     "name": "traceid",
                     "text": "trace1"
+                }),
+                Object.assign({},CombinerBlocks.Bool,{
+                    "name": "reverse",
+                    "checked": false
+                }),
+                Object.assign({},CombinerBlocks.Bool,{
+                    "name": "mirror",
+                    "checked": false
                 })
             ],
             "inputsInline": true,
@@ -673,14 +684,18 @@ Object.assign(CombinerBlocks,{
                 throw new OmitedError(block,'traceid','trace');
             }
             traceid = CombinerFunctions.pre('IdStr')(traceid,block,'traceid','trace');
+            var reverse = block.getFieldValue('reverse') === 'TRUE';
+            reverse = CombinerFunctions.pre('Bool')(reverse,block,'reverse','trace');
+            var mirror = block.getFieldValue('mirror') === 'TRUE';
+            mirror = CombinerFunctions.pre('Bool')(mirror,block,'mirror','trace');
             var code = CombinerFunctions.defaultCode('trace',eval('['+CombinerBlocks['trace'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["traceid"],
-        "argsType": ["field"],
-        "argsGrammarName": ["IdStr"],
-        "omitted": [false],
-        "multi": [false],
+        "args": ["traceid","reverse","mirror"],
+        "argsType": ["field","field","field"],
+        "argsGrammarName": ["IdStr","Bool","Bool"],
+        "omitted": [false,false,false],
+        "multi": [false,false,false],
         "fieldDefault": function (keyOrIndex) {
             return CombinerFunctions.fieldDefault('trace',keyOrIndex);
         },
