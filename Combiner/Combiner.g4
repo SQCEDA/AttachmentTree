@@ -59,7 +59,7 @@ defaultMap : {id:'brush2,brush3',brushid:'brush1',reverse:false}
 contents
     :   attachmentTree
     |   gdsLoader
-    |   combiner
+    |   combinercontent
     |   linkBrush
     |   trace
     |   component
@@ -77,9 +77,9 @@ gdsLoader:
 defaultMap : {id:'arm1'}
 */;
 
-combiner:
+combinercontent:
     'Combiner id' id=IdStr
-/* combiner
+/* combinercontent
 defaultMap : {id:'combiner1'}
 */;
 

@@ -12,7 +12,7 @@ CombinerBlocks = {
     "contents": [
         "attachmentTree",
         "gdsLoader",
-        "combiner",
+        "combinercontent",
         "linkBrush",
         "trace",
         "component"
@@ -107,34 +107,28 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "combiner",
-            "message0": "Combiner id %1",
+            "message0": "%1",
             "args0": [
-                Object.assign({},CombinerBlocks.IdStr,{
-                    "name": "id",
-                    "text": "combiner1"
-                })
+                {
+                    "type": "input_statement",
+                    "name": "statement",
+                    "check": CombinerBlocks.statements
+                }
             ],
-            "inputsInline": true,
             "tooltip": "",
             "helpUrl": "",
-            "colour": 220,
-            "previousStatement": "combiner",
-            "nextStatement": CombinerBlocks.contents
+            "colour": 260
         },
         "generFunc": function(block) {
-            var id = block.getFieldValue('id');
-            if (id==='') {
-                throw new OmitedError(block,'id','combiner');
-            }
-            id = CombinerFunctions.pre('IdStr')(id,block,'id','combiner');
+            var statement = Blockly.JavaScript.statementToCode(block, 'statement');
             var code = CombinerFunctions.defaultCode('combiner',eval('['+CombinerBlocks['combiner'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["id"],
-        "argsType": ["field"],
-        "argsGrammarName": ["IdStr"],
-        "omitted": [false],
-        "multi": [false],
+        "args": ["statement"],
+        "argsType": ["statement"],
+        "argsGrammarName": ["statements"],
+        "omitted": [true],
+        "multi": [true],
         "fieldDefault": function (keyOrIndex) {
             return CombinerFunctions.fieldDefault('combiner',keyOrIndex);
         },
@@ -582,6 +576,46 @@ Object.assign(CombinerBlocks,{
         "menu": [],
         "xmlText": function (inputs,next,isShadow,comment,attribute) {
             return CombinerFunctions.xmlText('gdsLoader',inputs,next,isShadow,comment,attribute);
+        }
+    },
+    "combinercontent": {
+        "type": "statement",
+        "json": {
+            "type": "combinercontent",
+            "message0": "Combiner id %1",
+            "args0": [
+                Object.assign({},CombinerBlocks.IdStr,{
+                    "name": "id",
+                    "text": "combiner1"
+                })
+            ],
+            "inputsInline": true,
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 220,
+            "previousStatement": "combinercontent",
+            "nextStatement": CombinerBlocks.contents
+        },
+        "generFunc": function(block) {
+            var id = block.getFieldValue('id');
+            if (id==='') {
+                throw new OmitedError(block,'id','combinercontent');
+            }
+            id = CombinerFunctions.pre('IdStr')(id,block,'id','combinercontent');
+            var code = CombinerFunctions.defaultCode('combinercontent',eval('['+CombinerBlocks['combinercontent'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["id"],
+        "argsType": ["field"],
+        "argsGrammarName": ["IdStr"],
+        "omitted": [false],
+        "multi": [false],
+        "fieldDefault": function (keyOrIndex) {
+            return CombinerFunctions.fieldDefault('combinercontent',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return CombinerFunctions.xmlText('combinercontent',inputs,next,isShadow,comment,attribute);
         }
     },
     "linkBrush": {
@@ -1090,6 +1124,7 @@ var toolbox = (function(){
             CombinerBlocks["structureAt"].xmlText(),
             CombinerBlocks["attachmentTree"].xmlText(),
             CombinerBlocks["gdsLoader"].xmlText(),
+            CombinerBlocks["combinercontent"].xmlText(),
             CombinerBlocks["linkBrush"].xmlText(),
             CombinerBlocks["trace"].xmlText(),
             CombinerBlocks["component"].xmlText(),
