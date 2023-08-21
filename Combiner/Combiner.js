@@ -12,6 +12,7 @@ CombinerBlocks = {
     "contents": [
         "attachmentTree",
         "gdsLoader",
+        "combiner",
         "linkBrush",
         "trace",
         "component"
@@ -54,9 +55,8 @@ Object.assign(CombinerBlocks,{
         "type": "field_dropdown",
         "options": [
             ["Electrode","Electrode"],
-            ["contortion","contortion"],
             ["Connection","Connection"],
-            ["narrow","narrow"],
+            ["Narrow","Narrow"],
             ["InterdigitedCapacitor","InterdigitedCapacitor"]
         ],
         "default": "Electrode"
@@ -107,28 +107,34 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "combiner",
-            "message0": "%1",
+            "message0": "Combiner id %1",
             "args0": [
-                {
-                    "type": "input_statement",
-                    "name": "statement",
-                    "check": CombinerBlocks.statements
-                }
+                Object.assign({},CombinerBlocks.IdStr,{
+                    "name": "id",
+                    "text": "combiner1"
+                })
             ],
+            "inputsInline": true,
             "tooltip": "",
             "helpUrl": "",
-            "colour": 260
+            "colour": 220,
+            "previousStatement": "combiner",
+            "nextStatement": CombinerBlocks.contents
         },
         "generFunc": function(block) {
-            var statement = Blockly.JavaScript.statementToCode(block, 'statement');
+            var id = block.getFieldValue('id');
+            if (id==='') {
+                throw new OmitedError(block,'id','combiner');
+            }
+            id = CombinerFunctions.pre('IdStr')(id,block,'id','combiner');
             var code = CombinerFunctions.defaultCode('combiner',eval('['+CombinerBlocks['combiner'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["statement"],
-        "argsType": ["statement"],
-        "argsGrammarName": ["statements"],
-        "omitted": [true],
-        "multi": [true],
+        "args": ["id"],
+        "argsType": ["field"],
+        "argsGrammarName": ["IdStr"],
+        "omitted": [false],
+        "multi": [false],
         "fieldDefault": function (keyOrIndex) {
             return CombinerFunctions.fieldDefault('combiner',keyOrIndex);
         },

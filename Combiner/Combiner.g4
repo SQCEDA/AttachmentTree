@@ -59,6 +59,7 @@ defaultMap : {id:'brush2,brush3',brushid:'brush1',reverse:false}
 contents
     :   attachmentTree
     |   gdsLoader
+    |   combiner
     |   linkBrush
     |   trace
     |   component
@@ -74,6 +75,12 @@ gdsLoader:
     'GDSLoader id' id=IdStr
 /* gdsLoader
 defaultMap : {id:'arm1'}
+*/;
+
+combiner:
+    'Combiner id' id=IdStr
+/* combiner
+defaultMap : {id:'combiner1'}
 */;
 
 linkBrush:
@@ -100,7 +107,7 @@ statExprSplit : '=== statement ^ === expression v ===' ;
 Side_List : '⇖'|'⇗'|'⇘'|'⇙' /*Side_List ['ul','ur','dr','dl']*/ ;
 Keytype_List : 'variable'|'trace.length'|'brush'|'collection'|'trace' ;
 Linktype_List : '45'|'any' ;
-Component_List : 'Electrode'|'contortion'|'Connection'|'narrow'|'InterdigitedCapacitor' ;
+Component_List : 'Electrode'|'Connection'|'Narrow'|'InterdigitedCapacitor' ;
 
 IdStr
     :   'varfas'+ ;
