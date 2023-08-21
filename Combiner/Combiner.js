@@ -3,14 +3,11 @@
 CombinerBlocks = {
     "statements": [
         "variableDefine",
+        "brushDefine",
         "traceDefine",
         "dispatch",
         "structureAt",
         "evalStatement"
-    ],
-    "place": [
-        "positionplace",
-        "brushplace"
     ],
     "contents": [
         "attachmentTree",
@@ -195,6 +192,90 @@ Object.assign(CombinerBlocks,{
             return CombinerFunctions.xmlText('variableDefine',inputs,next,isShadow,comment,attribute);
         }
     },
+    "brushDefine": {
+        "type": "statement",
+        "json": {
+            "type": "brushDefine",
+            "message0": "brush define (id,x,y,z,angle,widout,widin) %1 %2 %3 %4 %5 %6 description %7",
+            "args0": [
+                Object.assign({},CombinerBlocks.IdStr,{
+                    "name": "id"
+                }),
+                Object.assign({},CombinerBlocks.Evalstr,{
+                    "name": "x"
+                }),
+                Object.assign({},CombinerBlocks.Evalstr,{
+                    "name": "y"
+                }),
+                Object.assign({},CombinerBlocks.Evalstr,{
+                    "name": "angle"
+                }),
+                Object.assign({},CombinerBlocks.Evalstr,{
+                    "name": "widout"
+                }),
+                Object.assign({},CombinerBlocks.Evalstr,{
+                    "name": "widin"
+                }),
+                Object.assign({},CombinerBlocks.NormalStr,{
+                    "name": "description"
+                })
+            ],
+            "inputsInline": true,
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 300,
+            "previousStatement": "brushDefine",
+            "nextStatement": CombinerBlocks.statements
+        },
+        "generFunc": function(block) {
+            var id = block.getFieldValue('id');
+            if (id==='') {
+                throw new OmitedError(block,'id','brushDefine');
+            }
+            id = CombinerFunctions.pre('IdStr')(id,block,'id','brushDefine');
+            var x = block.getFieldValue('x');
+            if (x==='') {
+                throw new OmitedError(block,'x','brushDefine');
+            }
+            x = CombinerFunctions.pre('Evalstr')(x,block,'x','brushDefine');
+            var y = block.getFieldValue('y');
+            if (y==='') {
+                throw new OmitedError(block,'y','brushDefine');
+            }
+            y = CombinerFunctions.pre('Evalstr')(y,block,'y','brushDefine');
+            var angle = block.getFieldValue('angle');
+            if (angle==='') {
+                throw new OmitedError(block,'angle','brushDefine');
+            }
+            angle = CombinerFunctions.pre('Evalstr')(angle,block,'angle','brushDefine');
+            var widout = block.getFieldValue('widout');
+            if (widout==='') {
+                throw new OmitedError(block,'widout','brushDefine');
+            }
+            widout = CombinerFunctions.pre('Evalstr')(widout,block,'widout','brushDefine');
+            var widin = block.getFieldValue('widin');
+            if (widin==='') {
+                throw new OmitedError(block,'widin','brushDefine');
+            }
+            widin = CombinerFunctions.pre('Evalstr')(widin,block,'widin','brushDefine');
+            var description = block.getFieldValue('description');
+            description = CombinerFunctions.pre('NormalStr')(description,block,'description','brushDefine');
+            var code = CombinerFunctions.defaultCode('brushDefine',eval('['+CombinerBlocks['brushDefine'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["id","x","y","angle","widout","widin","description"],
+        "argsType": ["field","field","field","field","field","field","field"],
+        "argsGrammarName": ["IdStr","Evalstr","Evalstr","Evalstr","Evalstr","Evalstr","NormalStr"],
+        "omitted": [false,false,false,false,false,false,true],
+        "multi": [false,false,false,false,false,false,false],
+        "fieldDefault": function (keyOrIndex) {
+            return CombinerFunctions.fieldDefault('brushDefine',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return CombinerFunctions.xmlText('brushDefine',inputs,next,isShadow,comment,attribute);
+        }
+    },
     "traceDefine": {
         "type": "statement",
         "json": {
@@ -203,15 +284,13 @@ Object.assign(CombinerBlocks,{
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
                     "name": "id",
-                    "text": "trace1"
+                    "text": "brush1"
                 }),
                 Object.assign({},CombinerBlocks.Evalstr,{
-                    "name": "value",
-                    "text": "s x r y,z"
+                    "name": "value"
                 }),
                 Object.assign({},CombinerBlocks.IdsStr,{
-                    "name": "using",
-                    "text": "x,y,z"
+                    "name": "using"
                 }),
                 Object.assign({},CombinerBlocks.NormalStr,{
                     "name": "description",
@@ -269,7 +348,7 @@ Object.assign(CombinerBlocks,{
                     "name": "id",
                     "text": "ab,cd"
                 }),
-                Object.assign({},CombinerBlocks.Evalstr,{
+                Object.assign({},CombinerBlocks.IdsStr,{
                     "name": "value",
                     "text": "bdf.ab,bdf.cd"
                 })
@@ -293,13 +372,13 @@ Object.assign(CombinerBlocks,{
             if (value==='') {
                 throw new OmitedError(block,'value','dispatch');
             }
-            value = CombinerFunctions.pre('Evalstr')(value,block,'value','dispatch');
+            value = CombinerFunctions.pre('IdsStr')(value,block,'value','dispatch');
             var code = CombinerFunctions.defaultCode('dispatch',eval('['+CombinerBlocks['dispatch'].args.join(',')+']'),block);
             return code;
         },
         "args": ["keytype","id","value"],
         "argsType": ["field","field","field"],
-        "argsGrammarName": ["Keytype_List","IdsStr","Evalstr"],
+        "argsGrammarName": ["Keytype_List","IdsStr","IdsStr"],
         "omitted": [false,false,false],
         "multi": [false,false,false],
         "fieldDefault": function (keyOrIndex) {
@@ -354,19 +433,22 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "structureAt",
-            "message0": "structure output ids %1 at %2 %3 content %4 %5",
+            "message0": "structure output ids %1 at brush %2 reverse %3 %4 content %5 %6",
             "args0": [
                 Object.assign({},CombinerBlocks.IdsStr,{
                     "name": "id",
-                    "text": "brush1,brush2"
+                    "text": "brush2,brush3"
+                }),
+                Object.assign({},CombinerBlocks.IdStr,{
+                    "name": "brushid",
+                    "text": "brush1"
+                }),
+                Object.assign({},CombinerBlocks.Bool,{
+                    "name": "reverse",
+                    "checked": false
                 }),
                 {
                     "type": "input_dummy"
-                },
-                {
-                    "type": "input_statement",
-                    "name": "place",
-                    "check": CombinerBlocks.place
                 },
                 {
                     "type": "input_dummy"
@@ -386,13 +468,13 @@ Object.assign(CombinerBlocks,{
         "generFunc": function(block) {
             var id = block.getFieldValue('id');
             id = CombinerFunctions.pre('IdsStr')(id,block,'id','structureAt');
-            var place = Blockly.JavaScript.statementToCode(block, 'place');
-            if(block.getInputTargetBlock('place') && 
-                block.getInputTargetBlock('place').getNextBlock())
-                throw new MultiStatementError(block,'place','structureAt');
-            if (place==='') {
-                throw new OmitedError(block,'place','structureAt');
+            var brushid = block.getFieldValue('brushid');
+            if (brushid==='') {
+                throw new OmitedError(block,'brushid','structureAt');
             }
+            brushid = CombinerFunctions.pre('IdStr')(brushid,block,'brushid','structureAt');
+            var reverse = block.getFieldValue('reverse') === 'TRUE';
+            reverse = CombinerFunctions.pre('Bool')(reverse,block,'reverse','structureAt');
             var content = Blockly.JavaScript.statementToCode(block, 'content');
             if(block.getInputTargetBlock('content') && 
                 block.getInputTargetBlock('content').getNextBlock())
@@ -403,121 +485,17 @@ Object.assign(CombinerBlocks,{
             var code = CombinerFunctions.defaultCode('structureAt',eval('['+CombinerBlocks['structureAt'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["id","place","content"],
-        "argsType": ["field","statement","statement"],
-        "argsGrammarName": ["IdsStr","place","contents"],
-        "omitted": [true,false,false],
-        "multi": [false,false,false],
+        "args": ["id","brushid","reverse","content"],
+        "argsType": ["field","field","field","statement"],
+        "argsGrammarName": ["IdsStr","IdStr","Bool","contents"],
+        "omitted": [true,false,false,false],
+        "multi": [false,false,false,false],
         "fieldDefault": function (keyOrIndex) {
             return CombinerFunctions.fieldDefault('structureAt',keyOrIndex);
         },
         "menu": [],
         "xmlText": function (inputs,next,isShadow,comment,attribute) {
             return CombinerFunctions.xmlText('structureAt',inputs,next,isShadow,comment,attribute);
-        }
-    },
-    "positionplace": {
-        "type": "statement",
-        "json": {
-            "type": "positionplace",
-            "message0": "position %1 %2 %3",
-            "args0": [
-                Object.assign({},CombinerBlocks.Evalstr,{
-                    "name": "x",
-                    "text": 50000
-                }),
-                Object.assign({},CombinerBlocks.Evalstr,{
-                    "name": "y",
-                    "text": 40000
-                }),
-                Object.assign({},CombinerBlocks.Evalstr,{
-                    "name": "angle",
-                    "text": 45
-                })
-            ],
-            "inputsInline": true,
-            "tooltip": "",
-            "helpUrl": "",
-            "colour": 20,
-            "previousStatement": "positionplace",
-            "nextStatement": CombinerBlocks.place
-        },
-        "generFunc": function(block) {
-            var x = block.getFieldValue('x');
-            if (x==='') {
-                throw new OmitedError(block,'x','positionplace');
-            }
-            x = CombinerFunctions.pre('Evalstr')(x,block,'x','positionplace');
-            var y = block.getFieldValue('y');
-            if (y==='') {
-                throw new OmitedError(block,'y','positionplace');
-            }
-            y = CombinerFunctions.pre('Evalstr')(y,block,'y','positionplace');
-            var angle = block.getFieldValue('angle');
-            if (angle==='') {
-                throw new OmitedError(block,'angle','positionplace');
-            }
-            angle = CombinerFunctions.pre('Evalstr')(angle,block,'angle','positionplace');
-            var code = CombinerFunctions.defaultCode('positionplace',eval('['+CombinerBlocks['positionplace'].args.join(',')+']'),block);
-            return code;
-        },
-        "args": ["x","y","angle"],
-        "argsType": ["field","field","field"],
-        "argsGrammarName": ["Evalstr","Evalstr","Evalstr"],
-        "omitted": [false,false,false],
-        "multi": [false,false,false],
-        "fieldDefault": function (keyOrIndex) {
-            return CombinerFunctions.fieldDefault('positionplace',keyOrIndex);
-        },
-        "menu": [],
-        "xmlText": function (inputs,next,isShadow,comment,attribute) {
-            return CombinerFunctions.xmlText('positionplace',inputs,next,isShadow,comment,attribute);
-        }
-    },
-    "brushplace": {
-        "type": "statement",
-        "json": {
-            "type": "brushplace",
-            "message0": "brush %1 reverse %2",
-            "args0": [
-                Object.assign({},CombinerBlocks.IdStr,{
-                    "name": "id",
-                    "text": "brush1"
-                }),
-                Object.assign({},CombinerBlocks.Bool,{
-                    "name": "reverse",
-                    "checked": false
-                })
-            ],
-            "inputsInline": true,
-            "tooltip": "",
-            "helpUrl": "",
-            "colour": 20,
-            "previousStatement": "brushplace",
-            "nextStatement": CombinerBlocks.place
-        },
-        "generFunc": function(block) {
-            var id = block.getFieldValue('id');
-            if (id==='') {
-                throw new OmitedError(block,'id','brushplace');
-            }
-            id = CombinerFunctions.pre('IdStr')(id,block,'id','brushplace');
-            var reverse = block.getFieldValue('reverse') === 'TRUE';
-            reverse = CombinerFunctions.pre('Bool')(reverse,block,'reverse','brushplace');
-            var code = CombinerFunctions.defaultCode('brushplace',eval('['+CombinerBlocks['brushplace'].args.join(',')+']'),block);
-            return code;
-        },
-        "args": ["id","reverse"],
-        "argsType": ["field","field"],
-        "argsGrammarName": ["IdStr","Bool"],
-        "omitted": [false,false],
-        "multi": [false,false],
-        "fieldDefault": function (keyOrIndex) {
-            return CombinerFunctions.fieldDefault('brushplace',keyOrIndex);
-        },
-        "menu": [],
-        "xmlText": function (inputs,next,isShadow,comment,attribute) {
-            return CombinerFunctions.xmlText('brushplace',inputs,next,isShadow,comment,attribute);
         }
     },
     "attachmentTree": {
@@ -617,7 +595,8 @@ Object.assign(CombinerBlocks,{
                     "text": "brush2"
                 }),
                 Object.assign({},CombinerBlocks.Bool,{
-                    "name": "reverse2"
+                    "name": "reverse",
+                    "checked": false
                 })
             ],
             "tooltip": "",
@@ -634,12 +613,12 @@ Object.assign(CombinerBlocks,{
                 throw new OmitedError(block,'id','linkBrush');
             }
             id = CombinerFunctions.pre('IdStr')(id,block,'id','linkBrush');
-            var reverse2 = block.getFieldValue('reverse2') === 'TRUE';
-            reverse2 = CombinerFunctions.pre('Bool')(reverse2,block,'reverse2','linkBrush');
+            var reverse = block.getFieldValue('reverse') === 'TRUE';
+            reverse = CombinerFunctions.pre('Bool')(reverse,block,'reverse','linkBrush');
             var code = CombinerFunctions.defaultCode('linkBrush',eval('['+CombinerBlocks['linkBrush'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["linktype","id","reverse2"],
+        "args": ["linktype","id","reverse"],
         "argsType": ["field","field","field"],
         "argsGrammarName": ["Linktype_List","IdStr","Bool"],
         "omitted": [false,false,false],
@@ -1098,12 +1077,11 @@ var toolbox = (function(){
             // 所有语句块
             CombinerBlocks["combiner"].xmlText(),
             CombinerBlocks["variableDefine"].xmlText(),
+            CombinerBlocks["brushDefine"].xmlText(),
             CombinerBlocks["traceDefine"].xmlText(),
             CombinerBlocks["dispatch"].xmlText(),
             CombinerBlocks["evalStatement"].xmlText(),
             CombinerBlocks["structureAt"].xmlText(),
-            CombinerBlocks["positionplace"].xmlText(),
-            CombinerBlocks["brushplace"].xmlText(),
             CombinerBlocks["attachmentTree"].xmlText(),
             CombinerBlocks["gdsLoader"].xmlText(),
             CombinerBlocks["linkBrush"].xmlText(),

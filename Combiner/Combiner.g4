@@ -6,6 +6,7 @@ combiner:
 
 statements
     :   variableDefine
+    |   brushDefine
     |   traceDefine
     |   dispatch
     |   structureAt
@@ -19,15 +20,22 @@ defaultMap : {id:'armlength',value:50000,description:''}
 */
 ;
 
+brushDefine
+    :   'brush define (id,x,y,z,angle,widout,widin)' id=IdStr x=Evalstr y=Evalstr angle=Evalstr widout=Evalstr widin=Evalstr 'description' description=NormalStr? 
+/* traceDefine
+defaultMap : {id:'brush1',x:50000,y:40000,angle:90,widout:8000,widin:4000,description:''}
+*/
+;
+
 traceDefine
     :   'trace define id' id=IdStr 'default' value=Evalstr 'using' using=IdsStr? 'description' description=NormalStr? 
 /* traceDefine
-defaultMap : {id:'trace1',value:'s x r y,z',using:'x,y,z',description:''}
+defaultMap : {id:'trace2',value:'s x r y,z trace1 s x',using:'x,y,z,trace1',description:''}
 */
 ;
 
 dispatch
-    :   'dispatch' keytype=Keytype_List 'from' id=IdsStr 'to' value=Evalstr
+    :   'dispatch' keytype=Keytype_List 'from' id=IdsStr 'to' value=IdsStr
 /* dispatch
 defaultMap : {id:'ab,cd',value:'bdf.ab,bdf.cd'}
 */
@@ -42,23 +50,10 @@ defaultMap : {content:'print(self.vars["abc"])'}
 
 structureAt:  
     'structure output ids' id=IdsStr? 
-    'at' BGNL place=place
+    'at brush' brushid=IdStr 'reverse' reverse=Bool BGNL
     'content' BGNL content=contents
 /* structureAt
-defaultMap : {id:'brush1,brush2'}
-*/;
-
-
-place
-    :   'position' x=Evalstr y=Evalstr angle=Evalstr #positionplace
-/* positionplace
-defaultMap : {x:50000,y:40000,angle:45}
-colour: 20
-*/
-    |   'brush' id=IdStr 'reverse' reverse=Bool #brushplace
-/* brushplace
-defaultMap : {id:'brush1',reverse:false}
-colour: 20
+defaultMap : {id:'brush2,brush3',brushid:'brush1',reverse:false}
 */;
 
 contents
@@ -83,7 +78,7 @@ defaultMap : {id:'arm1'}
 
 linkBrush:
     'link' linktype=Linktype_List BGNL
-    'brush2' id=IdStr 'reverse' reverse2=Bool
+    'brush2' id=IdStr 'reverse' reverse=Bool
 /* linkBrush
 defaultMap : {id:'brush2',reverse:false}
 */;
