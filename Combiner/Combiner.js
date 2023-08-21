@@ -196,28 +196,35 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "brushDefine",
-            "message0": "brush define (id,x,y,z,angle,widout,widin) %1 %2 %3 %4 %5 %6 description %7",
+            "message0": "brush define (id,x,y,angle,widout,widin) %1 %2 %3 %4 %5 %6 description %7",
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
-                    "name": "id"
+                    "name": "id",
+                    "text": "brush1"
                 }),
                 Object.assign({},CombinerBlocks.Evalstr,{
-                    "name": "x"
+                    "name": "x",
+                    "text": 50000
                 }),
                 Object.assign({},CombinerBlocks.Evalstr,{
-                    "name": "y"
+                    "name": "y",
+                    "text": 40000
                 }),
                 Object.assign({},CombinerBlocks.Evalstr,{
-                    "name": "angle"
+                    "name": "angle",
+                    "text": 90
                 }),
                 Object.assign({},CombinerBlocks.Evalstr,{
-                    "name": "widout"
+                    "name": "widout",
+                    "text": 8000
                 }),
                 Object.assign({},CombinerBlocks.Evalstr,{
-                    "name": "widin"
+                    "name": "widin",
+                    "text": 4000
                 }),
                 Object.assign({},CombinerBlocks.NormalStr,{
-                    "name": "description"
+                    "name": "description",
+                    "text": ""
                 })
             ],
             "inputsInline": true,
@@ -284,13 +291,15 @@ Object.assign(CombinerBlocks,{
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
                     "name": "id",
-                    "text": "brush1"
+                    "text": "trace2"
                 }),
                 Object.assign({},CombinerBlocks.Evalstr,{
-                    "name": "value"
+                    "name": "value",
+                    "text": "s x r y,z trace1 s x"
                 }),
                 Object.assign({},CombinerBlocks.IdsStr,{
-                    "name": "using"
+                    "name": "using",
+                    "text": "x,y,z,trace1"
                 }),
                 Object.assign({},CombinerBlocks.NormalStr,{
                     "name": "description",
@@ -843,6 +852,10 @@ CombinerFunctions.TryIntStr_pre = function(str) {
     } 
     return str;
 }
+
+CombinerBlocks.contents.forEach(blockname => {
+    CombinerBlocks[blockname].json.nextStatement=undefined
+})
 CombinerFunctions.Int_pre = function(intstr) {
     return parseInt(intstr);
 }

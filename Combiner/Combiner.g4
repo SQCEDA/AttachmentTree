@@ -21,8 +21,8 @@ defaultMap : {id:'armlength',value:50000,description:''}
 ;
 
 brushDefine
-    :   'brush define (id,x,y,z,angle,widout,widin)' id=IdStr x=Evalstr y=Evalstr angle=Evalstr widout=Evalstr widin=Evalstr 'description' description=NormalStr? 
-/* traceDefine
+    :   'brush define (id,x,y,angle,widout,widin)' id=IdStr x=Evalstr y=Evalstr angle=Evalstr widout=Evalstr widin=Evalstr 'description' description=NormalStr? 
+/* brushDefine
 defaultMap : {id:'brush1',x:50000,y:40000,angle:90,widout:8000,widin:4000,description:''}
 */
 ;
@@ -171,4 +171,7 @@ CombinerFunctions.TryIntStr_pre = function(str) {
     return str;
 }
 
+CombinerBlocks.contents.forEach(blockname => {
+    CombinerBlocks[blockname].json.nextStatement=undefined
+})
 */
