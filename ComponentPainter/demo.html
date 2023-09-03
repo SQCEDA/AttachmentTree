@@ -1,0 +1,34 @@
+<!doctype html>
+
+<head>
+    <meta charset="utf-8">
+    <title>ComponentPainter</title>
+    <script src="../antlr-blockly/blockly_compressed.js"></script>
+    <script src="../antlr-blockly/blocks_compressed.js"></script>
+    <script src="../antlr-blockly/javascript_compressed.js"></script>
+    <script src="../antlr-blockly/zh-hans.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div style="clear: both;"></div>
+    <div style="float: left;">
+        <div id="blocklyDiv" style="height: 550px; width: 450px;"></div>
+    </div>
+    <div style="float: left;width:calc(95vw - 450px);margin-left: 0.3vw;">
+        <div id="svgoutput" style="transform: rotateX(180deg);"></div>
+    </div>
+    <div style="clear: both;"></div>
+    <p>
+        <button onclick="window.trigger([0,lastvalue[0]+' ']);window.buildBlocks()">import</button>
+    </p>
+    <textarea name="blocklyinput" id="blocklyinput" cols="60" rows="27" spellcheck="false">
+    </textarea>
+
+    <script src="../antlr-blockly/Converter.bundle.min.js"></script>
+    <script src="page.js"></script>
+    <script src="ComponentPainter.js"></script>
+</body>
+
+</html>
