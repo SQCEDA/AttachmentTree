@@ -105,7 +105,7 @@ defaultMap : {collection:"10_0",args:'{"x":x,"y":x+y,"z":x+y+z}',using:'x,y,z'}
 statExprSplit : '=== statement ^ === expression v ===' ;
 
 Side_List : '⇖'|'⇗'|'⇘'|'⇙' /*Side_List ['ul','ur','dr','dl']*/ ;
-Keytype_List : 'variable'|'trace.length'|'brush'|'collection'|'trace' ;
+Keytype_List : 'variable'|'trace.length'|'brush'|'collection'|'trace'|'collection.merge'|'marks.merge'|'centerlines.merge' ;
 Linktype_List : '45'|'any' ;
 Component_List : 'Electrode'|'Connection'|'Narrow'|'InterdigitedCapacitor' ;
 

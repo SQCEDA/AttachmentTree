@@ -39,7 +39,10 @@ Object.assign(CombinerBlocks,{
             ["trace.length","trace.length"],
             ["brush","brush"],
             ["collection","collection"],
-            ["trace","trace"]
+            ["trace","trace"],
+            ["collection.merge","collection.merge"],
+            ["marks.merge","marks.merge"],
+            ["centerlines.merge","centerlines.merge"]
         ],
         "default": "variable"
     },
