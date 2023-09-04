@@ -97,9 +97,9 @@ defaultMap : {traceid:'trace1',reverse:false,mirror:false}
 */;
 
 component:
-    componentType=Component_List 'collection' collection=TryIntStr BGNL 'args' args=Evalstr? BGNL 'using' using=IdsStr?
+    componentType=Component_List 'collection' collection=NormalStr BGNL 'args' args=Evalstr? BGNL 'using' using=IdsStr?
 /* component
-defaultMap : {collection:1,args:'{"x":x,"y":x+y,"z":x+y+z}',using:'x,y,z'}
+defaultMap : {collection:"10_0",args:'{"x":x,"y":x+y,"z":x+y+z}',using:'x,y,z'}
 */;
 
 statExprSplit : '=== statement ^ === expression v ===' ;

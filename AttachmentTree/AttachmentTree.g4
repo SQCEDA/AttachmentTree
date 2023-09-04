@@ -36,24 +36,24 @@ structures
 
 structure:  
     side=Side_List 
-    'collection' collection=TryIntStr
+    'collection' collection=NormalStr
     'width' width=Evalstr
     'height' height=Evalstr BGNL
     shape=shapes
     'leaves' BGNL attachment=attachments* 
 /* structure
-defaultMap : {width:50000,height:50000,collection:1}
+defaultMap : {width:50000,height:50000,collection:"10_0"}
 colour : this.structureColor
 */;
 
 structurefrompts:  
-    'collection' collection=TryIntStr
+    'collection' collection=NormalStr
     'scale' scale=Evalstr
     'absolute/relative (☑/☐)' absolute=Bool BGNL
     'points' points=NormalStr 
     'leaves' BGNL attachment=attachments* 
 /* structurefrompts
-defaultMap : {absolute:true,collection:1,scale:1000,points:"0 0 100 0 200 200"}
+defaultMap : {absolute:true,collection:"10_0",scale:1000,points:"0 0 100 0 200 200"}
 colour : this.structureColor
 */;
 

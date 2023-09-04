@@ -741,9 +741,9 @@ Object.assign(CombinerBlocks,{
                 Object.assign({},CombinerBlocks.Component_List,{
                     "name": "componentType"
                 }),
-                Object.assign({},CombinerBlocks.TryIntStr,{
+                Object.assign({},CombinerBlocks.NormalStr,{
                     "name": "collection",
-                    "text": 1
+                    "text": "10_0"
                 }),
                 {
                     "type": "input_dummy"
@@ -773,7 +773,7 @@ Object.assign(CombinerBlocks,{
             if (collection==='') {
                 throw new OmitedError(block,'collection','component');
             }
-            collection = CombinerFunctions.pre('TryIntStr')(collection,block,'collection','component');
+            collection = CombinerFunctions.pre('NormalStr')(collection,block,'collection','component');
             var args = block.getFieldValue('args');
             args = CombinerFunctions.pre('Evalstr')(args,block,'args','component');
             var using = block.getFieldValue('using');
@@ -783,7 +783,7 @@ Object.assign(CombinerBlocks,{
         },
         "args": ["componentType","collection","args","using"],
         "argsType": ["field","field","field","field"],
-        "argsGrammarName": ["Component_List","TryIntStr","Evalstr","IdsStr"],
+        "argsGrammarName": ["Component_List","NormalStr","Evalstr","IdsStr"],
         "omitted": [false,false,true,true],
         "multi": [false,false,false,false],
         "fieldDefault": function (keyOrIndex) {
