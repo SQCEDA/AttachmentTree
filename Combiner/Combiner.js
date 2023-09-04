@@ -359,7 +359,7 @@ Object.assign(CombinerBlocks,{
                 }),
                 Object.assign({},CombinerBlocks.IdsStr,{
                     "name": "value",
-                    "text": "bdf.ab,bdf.cd"
+                    "text": "bdf@ab,bdf@cd"
                 })
             ],
             "inputsInline": true,

@@ -37,7 +37,7 @@ defaultMap : {id:'trace2',value:'s x r y,z trace1 s x',using:'x,y,z,trace1',desc
 dispatch
     :   'dispatch' keytype=Keytype_List 'from' id=IdsStr 'to' value=IdsStr
 /* dispatch
-defaultMap : {id:'ab,cd',value:'bdf.ab,bdf.cd'}
+defaultMap : {id:'ab,cd',value:'bdf@ab,bdf@cd'}
 */
 ;
 
