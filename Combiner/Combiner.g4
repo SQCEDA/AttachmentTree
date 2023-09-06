@@ -68,21 +68,21 @@ contents
     ;
 
 attachmentTree:
-    'AttachmentTree id' id=IdStr
+    'AttachmentTree id' id=IdStr 'description' description=NormalStr? 
 /* attachmentTree
-defaultMap : {id:'qubit1'}
+defaultMap : {id:'qubit1',description:''}
 */;
 
 gdsLoader:
-    'GDSLoader id' id=IdStr
+    'GDSLoader id' id=IdStr 'description' description=NormalStr? 
 /* gdsLoader
-defaultMap : {id:'arm1'}
+defaultMap : {id:'arm1',description:''}
 */;
 
 combinercontent:
-    'Combiner id' id=IdStr
+    'Combiner id' id=IdStr 'description' description=NormalStr? 
 /* combinercontent
-defaultMap : {id:'combiner1'}
+defaultMap : {id:'combiner1',description:''}
 */;
 
 linkBrush:
@@ -165,7 +165,7 @@ this.evisitor.statementRules['contents'].check.forEach(blockname => {
 /* Insert_FunctionStart
 
 CombinerFunctions.Evalstr_pre = function(str) {
-    if (!isNaN(parseFloat(str))) {
+    if (parseFloat(str)+''===str) {
         return parseFloat(str)
     } 
     return str;

@@ -530,11 +530,15 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "attachmentTree",
-            "message0": "AttachmentTree id %1",
+            "message0": "AttachmentTree id %1 description %2",
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
                     "name": "id",
                     "text": "qubit1"
+                }),
+                Object.assign({},CombinerBlocks.NormalStr,{
+                    "name": "description",
+                    "text": ""
                 })
             ],
             "inputsInline": true,
@@ -550,14 +554,16 @@ Object.assign(CombinerBlocks,{
                 throw new OmitedError(block,'id','attachmentTree');
             }
             id = CombinerFunctions.pre('IdStr')(id,block,'id','attachmentTree');
+            var description = block.getFieldValue('description');
+            description = CombinerFunctions.pre('NormalStr')(description,block,'description','attachmentTree');
             var code = CombinerFunctions.defaultCode('attachmentTree',eval('['+CombinerBlocks['attachmentTree'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["id"],
-        "argsType": ["field"],
-        "argsGrammarName": ["IdStr"],
-        "omitted": [false],
-        "multi": [false],
+        "args": ["id","description"],
+        "argsType": ["field","field"],
+        "argsGrammarName": ["IdStr","NormalStr"],
+        "omitted": [false,true],
+        "multi": [false,false],
         "fieldDefault": function (keyOrIndex) {
             return CombinerFunctions.fieldDefault('attachmentTree',keyOrIndex);
         },
@@ -570,11 +576,15 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "gdsLoader",
-            "message0": "GDSLoader id %1",
+            "message0": "GDSLoader id %1 description %2",
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
                     "name": "id",
                     "text": "arm1"
+                }),
+                Object.assign({},CombinerBlocks.NormalStr,{
+                    "name": "description",
+                    "text": ""
                 })
             ],
             "inputsInline": true,
@@ -590,14 +600,16 @@ Object.assign(CombinerBlocks,{
                 throw new OmitedError(block,'id','gdsLoader');
             }
             id = CombinerFunctions.pre('IdStr')(id,block,'id','gdsLoader');
+            var description = block.getFieldValue('description');
+            description = CombinerFunctions.pre('NormalStr')(description,block,'description','gdsLoader');
             var code = CombinerFunctions.defaultCode('gdsLoader',eval('['+CombinerBlocks['gdsLoader'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["id"],
-        "argsType": ["field"],
-        "argsGrammarName": ["IdStr"],
-        "omitted": [false],
-        "multi": [false],
+        "args": ["id","description"],
+        "argsType": ["field","field"],
+        "argsGrammarName": ["IdStr","NormalStr"],
+        "omitted": [false,true],
+        "multi": [false,false],
         "fieldDefault": function (keyOrIndex) {
             return CombinerFunctions.fieldDefault('gdsLoader',keyOrIndex);
         },
@@ -610,11 +622,15 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "combinercontent",
-            "message0": "Combiner id %1",
+            "message0": "Combiner id %1 description %2",
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
                     "name": "id",
                     "text": "combiner1"
+                }),
+                Object.assign({},CombinerBlocks.NormalStr,{
+                    "name": "description",
+                    "text": ""
                 })
             ],
             "inputsInline": true,
@@ -630,14 +646,16 @@ Object.assign(CombinerBlocks,{
                 throw new OmitedError(block,'id','combinercontent');
             }
             id = CombinerFunctions.pre('IdStr')(id,block,'id','combinercontent');
+            var description = block.getFieldValue('description');
+            description = CombinerFunctions.pre('NormalStr')(description,block,'description','combinercontent');
             var code = CombinerFunctions.defaultCode('combinercontent',eval('['+CombinerBlocks['combinercontent'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["id"],
-        "argsType": ["field"],
-        "argsGrammarName": ["IdStr"],
-        "omitted": [false],
-        "multi": [false],
+        "args": ["id","description"],
+        "argsType": ["field","field"],
+        "argsGrammarName": ["IdStr","NormalStr"],
+        "omitted": [false,true],
+        "multi": [false,false],
         "fieldDefault": function (keyOrIndex) {
             return CombinerFunctions.fieldDefault('combinercontent',keyOrIndex);
         },
@@ -873,7 +891,7 @@ MultiStatementError.prototype.constructor = MultiStatementError;
 CombinerFunctions={}
 
 CombinerFunctions.Evalstr_pre = function(str) {
-    if (!isNaN(parseFloat(str))) {
+    if (parseFloat(str)+''===str) {
         return parseFloat(str)
     } 
     return str;

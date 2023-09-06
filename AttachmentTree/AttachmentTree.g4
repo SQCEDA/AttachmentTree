@@ -154,7 +154,7 @@ this.evisitor.shapeColor=130;
 /* Insert_FunctionStart
 
 AttachmentTreeFunctions.Evalstr_pre = function(str) {
-    if (!isNaN(parseFloat(str))) {
+    if (parseFloat(str)+''===str) {
         return parseFloat(str)
     } 
     return str;
