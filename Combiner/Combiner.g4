@@ -21,16 +21,18 @@ defaultMap : {id:'armlength',value:50000,description:''}
 ;
 
 brushDefine
-    :   'brush define (id,x,y,angle,widout,widin)' id=IdStr x=Evalstr y=Evalstr angle=Evalstr widout=Evalstr widin=Evalstr 'description' description=NormalStr? 
+    :   'brush define (id,x,y,angle,widout,widin)' BGNL 
+        id=IdStr x=Evalstr y=Evalstr angle=Evalstr widout=Evalstr widin=Evalstr 'description' description=NormalStr? 
 /* brushDefine
 defaultMap : {id:'brush1',x:50000,y:40000,angle:90,widout:8000,widin:4000,description:''}
 */
 ;
 
 traceDefine
-    :   'trace define id' id=IdStr 'default' value=Evalstr 'using' using=IdsStr? 'description' description=NormalStr? 
+    :   'trace define id' id=IdStr 'default' value=Evalstr BGNL
+        'using' using=IdsStr? 'reverse' reverse=Bool 'mirror' mirror=Bool 'description' description=NormalStr? 
 /* traceDefine
-defaultMap : {id:'trace2',value:'s x r y,z trace1 s x',using:'x,y,z,trace1',description:''}
+defaultMap : {id:'trace2',value:'s x r y,z trace1 s x',using:'x,y,z,trace1',reverse:false,mirror:false,description:''}
 */
 ;
 
@@ -84,14 +86,19 @@ defaultMap : {id:'combiner1'}
 */;
 
 linkBrush:
-    'link' linktype=Linktype_List BGNL
-    'brush2' id=IdStr 'reverse' reverse=Bool
+    'link' linktype=Linktype_List 'brush2' id=IdStr 'reverse' reverse=Bool BGNL
+    'output ids, using "" to skip output' BGNL 
+    '(trace, collection out, collection in,' BGNL 
+    'centerlines, marks, length)'
 /* linkBrush
 defaultMap : {id:'brush2',reverse:false}
 */;
 
 trace:
-    'trace' traceid=IdStr 'reverse' reverse=Bool 'mirror' mirror=Bool
+    'trace' traceid=IdStr 'reverse' reverse=Bool 'mirror' mirror=Bool BGNL
+    'output ids, using "" to skip output' BGNL 
+    '(brush, collection out, collection in,' BGNL
+    'centerlines, marks, length)'
 /* trace
 defaultMap : {traceid:'trace1',reverse:false,mirror:false}
 */;

@@ -199,8 +199,11 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "brushDefine",
-            "message0": "brush define (id,x,y,angle,widout,widin) %1 %2 %3 %4 %5 %6 description %7",
+            "message0": "brush define (id,x,y,angle,widout,widin) %1 %2 %3 %4 %5 %6 %7 description %8",
             "args0": [
+                {
+                    "type": "input_dummy"
+                },
                 Object.assign({},CombinerBlocks.IdStr,{
                     "name": "id",
                     "text": "brush1"
@@ -230,7 +233,6 @@ Object.assign(CombinerBlocks,{
                     "text": ""
                 })
             ],
-            "inputsInline": true,
             "tooltip": "",
             "helpUrl": "",
             "colour": 300,
@@ -290,7 +292,7 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "traceDefine",
-            "message0": "trace define id %1 default %2 using %3 description %4",
+            "message0": "trace define id %1 default %2 %3 using %4 reverse %5 mirror %6 description %7",
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
                     "name": "id",
@@ -300,16 +302,26 @@ Object.assign(CombinerBlocks,{
                     "name": "value",
                     "text": "s x r y,z trace1 s x"
                 }),
+                {
+                    "type": "input_dummy"
+                },
                 Object.assign({},CombinerBlocks.IdsStr,{
                     "name": "using",
                     "text": "x,y,z,trace1"
+                }),
+                Object.assign({},CombinerBlocks.Bool,{
+                    "name": "reverse",
+                    "checked": false
+                }),
+                Object.assign({},CombinerBlocks.Bool,{
+                    "name": "mirror",
+                    "checked": false
                 }),
                 Object.assign({},CombinerBlocks.NormalStr,{
                     "name": "description",
                     "text": ""
                 })
             ],
-            "inputsInline": true,
             "tooltip": "",
             "helpUrl": "",
             "colour": 300,
@@ -329,16 +341,20 @@ Object.assign(CombinerBlocks,{
             value = CombinerFunctions.pre('Evalstr')(value,block,'value','traceDefine');
             var using = block.getFieldValue('using');
             using = CombinerFunctions.pre('IdsStr')(using,block,'using','traceDefine');
+            var reverse = block.getFieldValue('reverse') === 'TRUE';
+            reverse = CombinerFunctions.pre('Bool')(reverse,block,'reverse','traceDefine');
+            var mirror = block.getFieldValue('mirror') === 'TRUE';
+            mirror = CombinerFunctions.pre('Bool')(mirror,block,'mirror','traceDefine');
             var description = block.getFieldValue('description');
             description = CombinerFunctions.pre('NormalStr')(description,block,'description','traceDefine');
             var code = CombinerFunctions.defaultCode('traceDefine',eval('['+CombinerBlocks['traceDefine'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["id","value","using","description"],
-        "argsType": ["field","field","field","field"],
-        "argsGrammarName": ["IdStr","Evalstr","IdsStr","NormalStr"],
-        "omitted": [false,false,true,true],
-        "multi": [false,false,false,false],
+        "args": ["id","value","using","reverse","mirror","description"],
+        "argsType": ["field","field","field","field","field","field"],
+        "argsGrammarName": ["IdStr","Evalstr","IdsStr","Bool","Bool","NormalStr"],
+        "omitted": [false,false,true,false,false,true],
+        "multi": [false,false,false,false,false,false],
         "fieldDefault": function (keyOrIndex) {
             return CombinerFunctions.fieldDefault('traceDefine',keyOrIndex);
         },
@@ -634,14 +650,11 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "linkBrush",
-            "message0": "link %1 %2 brush2 %3 reverse %4",
+            "message0": "link %1 brush2 %2 reverse %3 %4 output ids, using \"\" to skip output %5 (trace, collection out, collection in, %6 centerlines, marks, length)",
             "args0": [
                 Object.assign({},CombinerBlocks.Linktype_List,{
                     "name": "linktype"
                 }),
-                {
-                    "type": "input_dummy"
-                },
                 Object.assign({},CombinerBlocks.IdStr,{
                     "name": "id",
                     "text": "brush2"
@@ -649,7 +662,16 @@ Object.assign(CombinerBlocks,{
                 Object.assign({},CombinerBlocks.Bool,{
                     "name": "reverse",
                     "checked": false
-                })
+                }),
+                {
+                    "type": "input_dummy"
+                },
+                {
+                    "type": "input_dummy"
+                },
+                {
+                    "type": "input_dummy"
+                }
             ],
             "tooltip": "",
             "helpUrl": "",
@@ -687,7 +709,7 @@ Object.assign(CombinerBlocks,{
         "type": "statement",
         "json": {
             "type": "trace",
-            "message0": "trace %1 reverse %2 mirror %3",
+            "message0": "trace %1 reverse %2 mirror %3 %4 output ids, using \"\" to skip output %5 (brush, collection out, collection in, %6 centerlines, marks, length)",
             "args0": [
                 Object.assign({},CombinerBlocks.IdStr,{
                     "name": "traceid",
@@ -700,9 +722,17 @@ Object.assign(CombinerBlocks,{
                 Object.assign({},CombinerBlocks.Bool,{
                     "name": "mirror",
                     "checked": false
-                })
+                }),
+                {
+                    "type": "input_dummy"
+                },
+                {
+                    "type": "input_dummy"
+                },
+                {
+                    "type": "input_dummy"
+                }
             ],
-            "inputsInline": true,
             "tooltip": "",
             "helpUrl": "",
             "colour": 220,
