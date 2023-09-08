@@ -5,23 +5,17 @@ componentPainter:
 ;
 
 statements
-    :   collectionAction
-    |   exportSimulation
-    |   drawAirBridge
+    :   exportSimulation
     |   drawCollection
+    |   drawAirBridgeOnCenterlines
+    |   drawAirBridgeOnMarks
+    |   drawContinueAirBridge
+    |   drawBrush
     |   evalStatement
     ;
 
-collectionAction
-    :   'collectionAction'
-;
-
 exportSimulation
     :   'exportSimulation'
-;
-
-drawAirBridge
-    :   'drawAirBridge'
 ;
 
 drawCollection
@@ -30,10 +24,41 @@ drawCollection
 defaultMap : {op:'regex',collection:'(\\d+)_(\\d+)',cell:'TOP',l1:'$1',l2:'$2'}
 */;
 
+drawAirBridgeOnCenterlines
+    :   'drawAirBridgeOnCenterlines' BGNL 
+        'filename' filename=NormalStr 'centerlines' centerlines=NormalStr 'cell' cell=NormalStr BGNL 
+        'newcellname' newcellname=NormalStr 'airbridgedistance' airbridgedistance=Evalstr 'args' args=NormalStr?
+/* drawAirBridgeOnCenterlines
+defaultMap : {filename:'ab.gds',centerlines:'cl_50_.*',newcellname:'ab_50',cell:'TOP',airbridgedistance:50000,args:''}
+*/;
+
+drawAirBridgeOnMarks
+    :   'drawAirBridgeOnMarks' BGNL 
+        'filename' filename=NormalStr 'marks' marks=NormalStr 'cell' cell=NormalStr BGNL 
+        'match' match=NormalStr 'newcellname' newcellname=NormalStr 'args' args=NormalStr?
+/* drawAirBridgeOnMarks
+defaultMap : {filename:'ab.gds',marks:'marks_ab_.*',newcellname:'ab_marks',cell:'TOP',match:'ab',args:''}
+*/;
+
+drawContinueAirBridge
+    :   'drawContinueAirBridge' BGNL 
+        'centerlines' centerlines=NormalStr 'cell' cell=NormalStr BGNL 
+        'layerup' layerup=TryIntStr 'layerdown' layerdown=TryIntStr 'using' using=IdsStr? BGNL 
+        'args' args=NormalStr?
+/* drawContinueAirBridge
+defaultMap : {centerlines:'cl_continue_(.*)',cell:'ab_continue',layerup:'4_0',layerdown:'6_0',args:'{"s1": 300000, "s2": 308500, "e1": length_continue_$1-15000, "e2": length_continue_$1-15000-8500, "w1": 20000, "w2": 30000, "w3": 40000, "l1": 28000, "l2": 22000, "cnum": 9, "rounded": 0, "roundedNum": 256}',using:'length_continue_$1'}
+*/;
+
+drawBrush
+    :   'drawBrush' brush=NormalStr 'as name' name=NormalStr
+/* drawBrush
+defaultMap : {brush:'brush\\d+',name:'$0'}
+*/;
+
 evalStatement
     :   'eval' content=NormalStr
 /* evalStatement
-defaultMap : {content:'print(self.vars["abc"])'}
+defaultMap : {content:'print("readoutlength:",self.vars["readoutlength"])'}
 */
 ;
 
@@ -41,8 +66,6 @@ statExprSplit : '=== statement ^ === expression v ===' ;
 
 Actiontype_List : 'operation'|'regex' ;
 Side_List : '⇖'|'⇗'|'⇘'|'⇙' /*Side_List ['ul','ur','dr','dl']*/ ;
-Keytype_List : 'variable'|'trace.length'|'brush'|'collection'|'trace' ;
-Component_List : 'Electrode'|'Connection'|'Narrow'|'InterdigitedCapacitor' ;
 
 IdStr
     :   'varfas'+ ;

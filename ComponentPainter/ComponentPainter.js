@@ -2,10 +2,12 @@
 // 语句集合和表达式集合
 ComponentPainterBlocks = {
     "statements": [
-        "collectionAction",
         "exportSimulation",
-        "drawAirBridge",
         "drawCollection",
+        "drawAirBridgeOnCenterlines",
+        "drawAirBridgeOnMarks",
+        "drawContinueAirBridge",
+        "drawBrush",
         "evalStatement"
     ]
 }
@@ -30,27 +32,6 @@ Object.assign(ComponentPainterBlocks,{
             ["⇙","dl"]
         ],
         "default": "ul"
-    },
-    "Keytype_List": {
-        "type": "field_dropdown",
-        "options": [
-            ["variable","variable"],
-            ["trace.length","trace.length"],
-            ["brush","brush"],
-            ["collection","collection"],
-            ["trace","trace"]
-        ],
-        "default": "variable"
-    },
-    "Component_List": {
-        "type": "field_dropdown",
-        "options": [
-            ["Electrode","Electrode"],
-            ["Connection","Connection"],
-            ["Narrow","Narrow"],
-            ["InterdigitedCapacitor","InterdigitedCapacitor"]
-        ],
-        "default": "Electrode"
     },
     "IdStr": {
         "type": "field_input",
@@ -128,36 +109,6 @@ Object.assign(ComponentPainterBlocks,{
             return ComponentPainterFunctions.xmlText('componentPainter',inputs,next,isShadow,comment,attribute);
         }
     },
-    "collectionAction": {
-        "type": "statement",
-        "json": {
-            "type": "collectionAction",
-            "message0": "collectionAction",
-            "args0": [],
-            "inputsInline": true,
-            "tooltip": "",
-            "helpUrl": "",
-            "colour": 300,
-            "previousStatement": "collectionAction",
-            "nextStatement": ComponentPainterBlocks.statements
-        },
-        "generFunc": function(block) {
-            var code = ComponentPainterFunctions.defaultCode('collectionAction',eval('['+ComponentPainterBlocks['collectionAction'].args.join(',')+']'),block);
-            return code;
-        },
-        "args": [],
-        "argsType": [],
-        "argsGrammarName": [],
-        "omitted": [],
-        "multi": [],
-        "fieldDefault": function (keyOrIndex) {
-            return ComponentPainterFunctions.fieldDefault('collectionAction',keyOrIndex);
-        },
-        "menu": [],
-        "xmlText": function (inputs,next,isShadow,comment,attribute) {
-            return ComponentPainterFunctions.xmlText('collectionAction',inputs,next,isShadow,comment,attribute);
-        }
-    },
     "exportSimulation": {
         "type": "statement",
         "json": {
@@ -186,36 +137,6 @@ Object.assign(ComponentPainterBlocks,{
         "menu": [],
         "xmlText": function (inputs,next,isShadow,comment,attribute) {
             return ComponentPainterFunctions.xmlText('exportSimulation',inputs,next,isShadow,comment,attribute);
-        }
-    },
-    "drawAirBridge": {
-        "type": "statement",
-        "json": {
-            "type": "drawAirBridge",
-            "message0": "drawAirBridge",
-            "args0": [],
-            "inputsInline": true,
-            "tooltip": "",
-            "helpUrl": "",
-            "colour": 300,
-            "previousStatement": "drawAirBridge",
-            "nextStatement": ComponentPainterBlocks.statements
-        },
-        "generFunc": function(block) {
-            var code = ComponentPainterFunctions.defaultCode('drawAirBridge',eval('['+ComponentPainterBlocks['drawAirBridge'].args.join(',')+']'),block);
-            return code;
-        },
-        "args": [],
-        "argsType": [],
-        "argsGrammarName": [],
-        "omitted": [],
-        "multi": [],
-        "fieldDefault": function (keyOrIndex) {
-            return ComponentPainterFunctions.fieldDefault('drawAirBridge',keyOrIndex);
-        },
-        "menu": [],
-        "xmlText": function (inputs,next,isShadow,comment,attribute) {
-            return ComponentPainterFunctions.xmlText('drawAirBridge',inputs,next,isShadow,comment,attribute);
         }
     },
     "drawCollection": {
@@ -291,6 +212,316 @@ Object.assign(ComponentPainterBlocks,{
             return ComponentPainterFunctions.xmlText('drawCollection',inputs,next,isShadow,comment,attribute);
         }
     },
+    "drawAirBridgeOnCenterlines": {
+        "type": "statement",
+        "json": {
+            "type": "drawAirBridgeOnCenterlines",
+            "message0": "drawAirBridgeOnCenterlines %1 filename %2 centerlines %3 cell %4 %5 newcellname %6 airbridgedistance %7 args %8",
+            "args0": [
+                {
+                    "type": "input_dummy"
+                },
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "filename",
+                    "text": "ab.gds"
+                }),
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "centerlines",
+                    "text": "cl_50_.*"
+                }),
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "cell",
+                    "text": "TOP"
+                }),
+                {
+                    "type": "input_dummy"
+                },
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "newcellname",
+                    "text": "ab_50"
+                }),
+                Object.assign({},ComponentPainterBlocks.Evalstr,{
+                    "name": "airbridgedistance",
+                    "text": 50000
+                }),
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "args",
+                    "text": ""
+                })
+            ],
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 300,
+            "previousStatement": "drawAirBridgeOnCenterlines",
+            "nextStatement": ComponentPainterBlocks.statements
+        },
+        "generFunc": function(block) {
+            var filename = block.getFieldValue('filename');
+            if (filename==='') {
+                throw new OmitedError(block,'filename','drawAirBridgeOnCenterlines');
+            }
+            filename = ComponentPainterFunctions.pre('NormalStr')(filename,block,'filename','drawAirBridgeOnCenterlines');
+            var centerlines = block.getFieldValue('centerlines');
+            if (centerlines==='') {
+                throw new OmitedError(block,'centerlines','drawAirBridgeOnCenterlines');
+            }
+            centerlines = ComponentPainterFunctions.pre('NormalStr')(centerlines,block,'centerlines','drawAirBridgeOnCenterlines');
+            var cell = block.getFieldValue('cell');
+            if (cell==='') {
+                throw new OmitedError(block,'cell','drawAirBridgeOnCenterlines');
+            }
+            cell = ComponentPainterFunctions.pre('NormalStr')(cell,block,'cell','drawAirBridgeOnCenterlines');
+            var newcellname = block.getFieldValue('newcellname');
+            if (newcellname==='') {
+                throw new OmitedError(block,'newcellname','drawAirBridgeOnCenterlines');
+            }
+            newcellname = ComponentPainterFunctions.pre('NormalStr')(newcellname,block,'newcellname','drawAirBridgeOnCenterlines');
+            var airbridgedistance = block.getFieldValue('airbridgedistance');
+            if (airbridgedistance==='') {
+                throw new OmitedError(block,'airbridgedistance','drawAirBridgeOnCenterlines');
+            }
+            airbridgedistance = ComponentPainterFunctions.pre('Evalstr')(airbridgedistance,block,'airbridgedistance','drawAirBridgeOnCenterlines');
+            var args = block.getFieldValue('args');
+            args = ComponentPainterFunctions.pre('NormalStr')(args,block,'args','drawAirBridgeOnCenterlines');
+            var code = ComponentPainterFunctions.defaultCode('drawAirBridgeOnCenterlines',eval('['+ComponentPainterBlocks['drawAirBridgeOnCenterlines'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["filename","centerlines","cell","newcellname","airbridgedistance","args"],
+        "argsType": ["field","field","field","field","field","field"],
+        "argsGrammarName": ["NormalStr","NormalStr","NormalStr","NormalStr","Evalstr","NormalStr"],
+        "omitted": [false,false,false,false,false,true],
+        "multi": [false,false,false,false,false,false],
+        "fieldDefault": function (keyOrIndex) {
+            return ComponentPainterFunctions.fieldDefault('drawAirBridgeOnCenterlines',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return ComponentPainterFunctions.xmlText('drawAirBridgeOnCenterlines',inputs,next,isShadow,comment,attribute);
+        }
+    },
+    "drawAirBridgeOnMarks": {
+        "type": "statement",
+        "json": {
+            "type": "drawAirBridgeOnMarks",
+            "message0": "drawAirBridgeOnMarks %1 filename %2 marks %3 cell %4 %5 match %6 newcellname %7 args %8",
+            "args0": [
+                {
+                    "type": "input_dummy"
+                },
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "filename",
+                    "text": "ab.gds"
+                }),
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "marks",
+                    "text": "marks_ab_.*"
+                }),
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "cell",
+                    "text": "TOP"
+                }),
+                {
+                    "type": "input_dummy"
+                },
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "match",
+                    "text": "ab"
+                }),
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "newcellname",
+                    "text": "ab_marks"
+                }),
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "args",
+                    "text": ""
+                })
+            ],
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 300,
+            "previousStatement": "drawAirBridgeOnMarks",
+            "nextStatement": ComponentPainterBlocks.statements
+        },
+        "generFunc": function(block) {
+            var filename = block.getFieldValue('filename');
+            if (filename==='') {
+                throw new OmitedError(block,'filename','drawAirBridgeOnMarks');
+            }
+            filename = ComponentPainterFunctions.pre('NormalStr')(filename,block,'filename','drawAirBridgeOnMarks');
+            var marks = block.getFieldValue('marks');
+            if (marks==='') {
+                throw new OmitedError(block,'marks','drawAirBridgeOnMarks');
+            }
+            marks = ComponentPainterFunctions.pre('NormalStr')(marks,block,'marks','drawAirBridgeOnMarks');
+            var cell = block.getFieldValue('cell');
+            if (cell==='') {
+                throw new OmitedError(block,'cell','drawAirBridgeOnMarks');
+            }
+            cell = ComponentPainterFunctions.pre('NormalStr')(cell,block,'cell','drawAirBridgeOnMarks');
+            var match = block.getFieldValue('match');
+            if (match==='') {
+                throw new OmitedError(block,'match','drawAirBridgeOnMarks');
+            }
+            match = ComponentPainterFunctions.pre('NormalStr')(match,block,'match','drawAirBridgeOnMarks');
+            var newcellname = block.getFieldValue('newcellname');
+            if (newcellname==='') {
+                throw new OmitedError(block,'newcellname','drawAirBridgeOnMarks');
+            }
+            newcellname = ComponentPainterFunctions.pre('NormalStr')(newcellname,block,'newcellname','drawAirBridgeOnMarks');
+            var args = block.getFieldValue('args');
+            args = ComponentPainterFunctions.pre('NormalStr')(args,block,'args','drawAirBridgeOnMarks');
+            var code = ComponentPainterFunctions.defaultCode('drawAirBridgeOnMarks',eval('['+ComponentPainterBlocks['drawAirBridgeOnMarks'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["filename","marks","cell","match","newcellname","args"],
+        "argsType": ["field","field","field","field","field","field"],
+        "argsGrammarName": ["NormalStr","NormalStr","NormalStr","NormalStr","NormalStr","NormalStr"],
+        "omitted": [false,false,false,false,false,true],
+        "multi": [false,false,false,false,false,false],
+        "fieldDefault": function (keyOrIndex) {
+            return ComponentPainterFunctions.fieldDefault('drawAirBridgeOnMarks',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return ComponentPainterFunctions.xmlText('drawAirBridgeOnMarks',inputs,next,isShadow,comment,attribute);
+        }
+    },
+    "drawContinueAirBridge": {
+        "type": "statement",
+        "json": {
+            "type": "drawContinueAirBridge",
+            "message0": "drawContinueAirBridge %1 centerlines %2 cell %3 %4 layerup %5 layerdown %6 using %7 %8 args %9",
+            "args0": [
+                {
+                    "type": "input_dummy"
+                },
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "centerlines",
+                    "text": "cl_continue_(.*)"
+                }),
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "cell",
+                    "text": "ab_continue"
+                }),
+                {
+                    "type": "input_dummy"
+                },
+                Object.assign({},ComponentPainterBlocks.TryIntStr,{
+                    "name": "layerup",
+                    "text": "4_0"
+                }),
+                Object.assign({},ComponentPainterBlocks.TryIntStr,{
+                    "name": "layerdown",
+                    "text": "6_0"
+                }),
+                Object.assign({},ComponentPainterBlocks.IdsStr,{
+                    "name": "using",
+                    "text": "length_continue_$1"
+                }),
+                {
+                    "type": "input_dummy"
+                },
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "args",
+                    "text": "{\"s1\": 300000, \"s2\": 308500, \"e1\": length_continue_$1-15000, \"e2\": length_continue_$1-15000-8500, \"w1\": 20000, \"w2\": 30000, \"w3\": 40000, \"l1\": 28000, \"l2\": 22000, \"cnum\": 9, \"rounded\": 0, \"roundedNum\": 256}"
+                })
+            ],
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 300,
+            "previousStatement": "drawContinueAirBridge",
+            "nextStatement": ComponentPainterBlocks.statements
+        },
+        "generFunc": function(block) {
+            var centerlines = block.getFieldValue('centerlines');
+            if (centerlines==='') {
+                throw new OmitedError(block,'centerlines','drawContinueAirBridge');
+            }
+            centerlines = ComponentPainterFunctions.pre('NormalStr')(centerlines,block,'centerlines','drawContinueAirBridge');
+            var cell = block.getFieldValue('cell');
+            if (cell==='') {
+                throw new OmitedError(block,'cell','drawContinueAirBridge');
+            }
+            cell = ComponentPainterFunctions.pre('NormalStr')(cell,block,'cell','drawContinueAirBridge');
+            var layerup = block.getFieldValue('layerup');
+            if (layerup==='') {
+                throw new OmitedError(block,'layerup','drawContinueAirBridge');
+            }
+            layerup = ComponentPainterFunctions.pre('TryIntStr')(layerup,block,'layerup','drawContinueAirBridge');
+            var layerdown = block.getFieldValue('layerdown');
+            if (layerdown==='') {
+                throw new OmitedError(block,'layerdown','drawContinueAirBridge');
+            }
+            layerdown = ComponentPainterFunctions.pre('TryIntStr')(layerdown,block,'layerdown','drawContinueAirBridge');
+            var using = block.getFieldValue('using');
+            using = ComponentPainterFunctions.pre('IdsStr')(using,block,'using','drawContinueAirBridge');
+            var args = block.getFieldValue('args');
+            args = ComponentPainterFunctions.pre('NormalStr')(args,block,'args','drawContinueAirBridge');
+            var code = ComponentPainterFunctions.defaultCode('drawContinueAirBridge',eval('['+ComponentPainterBlocks['drawContinueAirBridge'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["centerlines","cell","layerup","layerdown","using","args"],
+        "argsType": ["field","field","field","field","field","field"],
+        "argsGrammarName": ["NormalStr","NormalStr","TryIntStr","TryIntStr","IdsStr","NormalStr"],
+        "omitted": [false,false,false,false,true,true],
+        "multi": [false,false,false,false,false,false],
+        "fieldDefault": function (keyOrIndex) {
+            return ComponentPainterFunctions.fieldDefault('drawContinueAirBridge',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return ComponentPainterFunctions.xmlText('drawContinueAirBridge',inputs,next,isShadow,comment,attribute);
+        }
+    },
+    "drawBrush": {
+        "type": "statement",
+        "json": {
+            "type": "drawBrush",
+            "message0": "drawBrush %1 as name %2",
+            "args0": [
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "brush",
+                    "text": "brush\\d+"
+                }),
+                Object.assign({},ComponentPainterBlocks.NormalStr,{
+                    "name": "name",
+                    "text": "$0"
+                })
+            ],
+            "inputsInline": true,
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 300,
+            "previousStatement": "drawBrush",
+            "nextStatement": ComponentPainterBlocks.statements
+        },
+        "generFunc": function(block) {
+            var brush = block.getFieldValue('brush');
+            if (brush==='') {
+                throw new OmitedError(block,'brush','drawBrush');
+            }
+            brush = ComponentPainterFunctions.pre('NormalStr')(brush,block,'brush','drawBrush');
+            var name = block.getFieldValue('name');
+            if (name==='') {
+                throw new OmitedError(block,'name','drawBrush');
+            }
+            name = ComponentPainterFunctions.pre('NormalStr')(name,block,'name','drawBrush');
+            var code = ComponentPainterFunctions.defaultCode('drawBrush',eval('['+ComponentPainterBlocks['drawBrush'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["brush","name"],
+        "argsType": ["field","field"],
+        "argsGrammarName": ["NormalStr","NormalStr"],
+        "omitted": [false,false],
+        "multi": [false,false],
+        "fieldDefault": function (keyOrIndex) {
+            return ComponentPainterFunctions.fieldDefault('drawBrush',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return ComponentPainterFunctions.xmlText('drawBrush',inputs,next,isShadow,comment,attribute);
+        }
+    },
     "evalStatement": {
         "type": "statement",
         "json": {
@@ -299,7 +530,7 @@ Object.assign(ComponentPainterBlocks,{
             "args0": [
                 Object.assign({},ComponentPainterBlocks.NormalStr,{
                     "name": "content",
-                    "text": "print(self.vars[\"abc\"])"
+                    "text": "print(\"readoutlength:\",self.vars[\"readoutlength\"])"
                 })
             ],
             "inputsInline": true,
@@ -666,10 +897,12 @@ var toolbox = (function(){
         "statement": [
             // 所有语句块
             ComponentPainterBlocks["componentPainter"].xmlText(),
-            ComponentPainterBlocks["collectionAction"].xmlText(),
             ComponentPainterBlocks["exportSimulation"].xmlText(),
-            ComponentPainterBlocks["drawAirBridge"].xmlText(),
             ComponentPainterBlocks["drawCollection"].xmlText(),
+            ComponentPainterBlocks["drawAirBridgeOnCenterlines"].xmlText(),
+            ComponentPainterBlocks["drawAirBridgeOnMarks"].xmlText(),
+            ComponentPainterBlocks["drawContinueAirBridge"].xmlText(),
+            ComponentPainterBlocks["drawBrush"].xmlText(),
             ComponentPainterBlocks["evalStatement"].xmlText(),
         ],
         "value": [
