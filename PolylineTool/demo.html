@@ -1,0 +1,104 @@
+<!doctype html>
+
+<head>
+    <meta charset="utf-8">
+    <title>PolylineTool</title>
+    <script src="../antlr-blockly/blockly_compressed.js"></script>
+    <script src="../antlr-blockly/blocks_compressed.js"></script>
+    <script src="../antlr-blockly/javascript_compressed.js"></script>
+    <script src="../antlr-blockly/zh-hans.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div style="clear: both;"></div>
+    <div style="float: left;">
+        <div id="blocklyDiv" style="height: 550px; width: 450px;"></div>
+    </div>
+    <div style="float: left;width:calc(95vw - 450px);margin-left: 0.3vw;">
+        <div id="svgoutput" style="transform: rotateX(180deg);"></div>
+    </div>
+    <div style="clear: both;"></div>
+    <p>Arcs are not real arc in preview. (Quadratic Bézier curve) <span class='pc0'>0</span><span
+            class='pc1'>1</span><span class='pc2'>2</span><span class='pc3'>3</span><span class='pc4'>4</span><span
+            class='pc5'>5</span><span class='pc6'>6</span><span class='pc7'>7</span><span class='pc8'>8</span><span
+            class='pc9'>9</span>
+    </p>
+    <p>
+        <button onclick="window.trigger([0,lastvalue[0]+' ']);window.buildBlocks()">import</button>
+        <input id="svgviewbox" type="text" style="width: 300px;" value="-100000 -100000 200000 200000">
+        <button onclick="window.svgsizefunc=()=>0;walker.viewbox=svgviewbox.value;window.buildBlocks()">fixed viewbox</button>
+        <button onclick='window.svgsizefunc=autoresizesvg;autoresizesvg()'>auto viewbox</button>
+    </p>
+    <textarea name="blocklyinput" id="blocklyinput" cols="60" rows="27" spellcheck="false">
+    </textarea>
+    <pre id="linesoutput"></pre>
+    <hr>
+    <p>python code:</p>
+    <pre><code>
+box=pya.Box(-1000000,-1000000,1000000,1000000)
+
+if 1:
+    import json
+    import re
+    class g:
+        brush={}
+        outregion = pya.Region(box)
+        inregion = pya.Region()
+    layers = paintlib.Collision.getLayers(layerList=[(0, 0), (0, 1)], layermod='not in')
+    for layer in layers:
+        it=top..begin_shapes_rec_touching(layer, box)
+        shapes=pya.Shapes()
+        while not it.at_end():
+            shape_=it.shape()
+            if shape_.is_text():
+                match = re.match(r'brush\(([^,]+),([^,]+),([^,]+),([^\)]+)\)', shape_.text.string)
+                if match:
+                    # brush=CavityBrush(pointc=pya.DPoint(shape_.text.x, shape_.text.y), angle=float(match.group(2)), widout=float(match.group(3)), widin=float(match.group(4)), bgn_ext=0)
+                    brushid=match.group(1).strip()
+                    g.brush[brushid]=[shape_.text.x, shape_.text.y,float(match.group(2)),float(match.group(3)),float(match.group(4))]
+            else:
+                shapes.insert(shape_)
+            it.next()
+        g.inregion.insert(shapes)
+    g.inregion.merge()
+    g.region=g.inregion & g.outregion
+    if 1:
+        brushs=[]
+        for k in g.brush:
+            brushs.append(g.brush[k])
+        g.json= {
+            "type": "polylineTool",
+            "define": [
+                {
+                    "type": "importBrushs",
+                    "value": json.dumps(brushs)
+                }
+            ],
+            "structure": [
+                {
+                    "type": "structurefrompts",
+                    "collection": "0",
+                    "scale": 1,
+                    "absolute": True,
+                    "points": ' '.join([f'{pt.x} {pt.y}' for pt in polygon.to_simple_polygon().each_point()]),
+                    "attachment": [
+                        {
+                            "type": "attachmentnone"
+                        }
+                    ]
+                }
+                for polygon in g.region
+            ]
+        }
+    print(json.dumps(g.json))
+    </code></pre>
+
+    <script src="../antlr-blockly/Converter.bundle.min.js"></script>
+    <script src="walker.js"></script>
+    <script src="page.js"></script>
+    <script src="PolylineTool.js"></script>
+</body>
+
+</html>
