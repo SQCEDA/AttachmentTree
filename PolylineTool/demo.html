@@ -20,7 +20,7 @@
         <div id="svgoutput" style="transform: rotateX(180deg);"></div>
     </div>
     <div style="clear: both;"></div>
-    <p>Arcs are not real arc in preview. (Quadratic Bézier curve) <span class='pc0'>0</span><span
+    <p><span class='pc0'>0</span><span
             class='pc1'>1</span><span class='pc2'>2</span><span class='pc3'>3</span><span class='pc4'>4</span><span
             class='pc5'>5</span><span class='pc6'>6</span><span class='pc7'>7</span><span class='pc8'>8</span><span
             class='pc9'>9</span>
@@ -35,20 +35,21 @@
     </textarea>
     <pre id="linesoutput"></pre>
     <hr>
-    <p>python code:</p>
+    <p>fetch:</p>
     <pre><code>
 box=pya.Box(-1000000,-1000000,1000000,1000000)
+layerExclude=[(0, 0), (0, 1)]
 
 if 1:
     import json
     import re
     class g:
-        brush={}
+        brushs=[]
         outregion = pya.Region(box)
         inregion = pya.Region()
-    layers = paintlib.Collision.getLayers(layerList=[(0, 0), (0, 1)], layermod='not in')
+    layers = paintlib.Collision.getLayers(layerList=layerExclude, layermod='not in')
     for layer in layers:
-        it=top..begin_shapes_rec_touching(layer, box)
+        it=top.begin_shapes_rec_touching(layer, box)
         shapes=pya.Shapes()
         while not it.at_end():
             shape_=it.shape()
@@ -57,7 +58,7 @@ if 1:
                 if match:
                     # brush=CavityBrush(pointc=pya.DPoint(shape_.text.x, shape_.text.y), angle=float(match.group(2)), widout=float(match.group(3)), widin=float(match.group(4)), bgn_ext=0)
                     brushid=match.group(1).strip()
-                    g.brush[brushid]=[shape_.text.x, shape_.text.y,float(match.group(2)),float(match.group(3)),float(match.group(4))]
+                    g.brushs.append([shape_.text.x, shape_.text.y,float(match.group(2)),float(match.group(3)),float(match.group(4)),brushid])
             else:
                 shapes.insert(shape_)
             it.next()
@@ -65,15 +66,12 @@ if 1:
     g.inregion.merge()
     g.region=g.inregion & g.outregion
     if 1:
-        brushs=[]
-        for k in g.brush:
-            brushs.append(g.brush[k])
         g.json= {
             "type": "polylineTool",
             "define": [
                 {
                     "type": "importBrushs",
-                    "value": json.dumps(brushs)
+                    "value": json.dumps(g.brushs)
                 }
             ],
             "structure": [
@@ -93,6 +91,16 @@ if 1:
             ]
         }
     print(json.dumps(g.json))
+    </code></pre>
+    <hr>
+    <p>export:</p>
+    <pre><code>
+lines=[]
+
+if 1:
+    paintlib.Interactive.extractBrushs(cell=paintlib.IO.top)
+    for line in lines[0:1]:
+        ss,brush1,brush2,spts=paintlib.Interactive.link(spts=[pya.DPoint(aa[0],aa[1]) for aa in line],direct=True,return_all=True)
     </code></pre>
 
     <script src="../antlr-blockly/Converter.bundle.min.js"></script>
