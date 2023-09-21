@@ -11,6 +11,11 @@ variables
 defaultMap : {id:'xx',value:'[0,1,2,3,5]',description:''}
 colour : 20
 */
+    |   'array action' 'id' id=IdStr value=Evalstr 'n1 n2:' n1=Evalstr n=Evalstr #arrayAction
+/* arrayAction
+defaultMap : {id:'xx',value:'2*index',n1:0,n:5}
+colour : 20
+*/
     |   'import brushs' value=Evalstr #importBrushs
 /* importBrushs
 defaultMap : {value:'[[0,100000],[100000,0]]'}
@@ -23,9 +28,9 @@ colour : 20
 ;
 
 structurelines:
-    'add lines n:' n=Evalstr BGNL pts=point+
+    'add lines n1 n2:' n1=Evalstr n=Evalstr BGNL pts=point+
 /* structurelines
-defaultMap : {n:1}
+defaultMap : {n1:0,n:5}
 colour : this.structureColor
 */;
 

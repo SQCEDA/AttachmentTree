@@ -22,7 +22,7 @@ window.trigger = function(params) {
     }
     lastvalue[0]=params[1]
     try {
-        localStorage.setItem('ComponentPainter',document.querySelector('#blocklyinput').value)
+        if(params[1])localStorage.setItem('ComponentPainter',document.querySelector('#blocklyinput').value)
     } catch (error) {
     }
 }

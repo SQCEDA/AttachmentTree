@@ -50,6 +50,15 @@ walkerType.prototype.loadvars=function (defineList) {
                 this.vars[element.id]=this.eval(element.value)
             }
         }
+        if (element.type=='arrayAction') {
+            this.vars[element.id]=this.vars[element.id]||[]
+
+            for (let index = element.n1||0; index < element.n; index++) {
+                walker.vars.index=index
+                this.vars[element.id][index]=this.eval(element.value,index)
+            }
+            
+        }
         if (element.type=='importBrushs') {
             
             let pts=this.eval(element.value)
@@ -66,18 +75,21 @@ walkerType.prototype.eval=function (number,k){
     if (k==null) {
         return eval(number.replace(/[a-zA-Z_]+\w+/g,(ii)=>ii in this.vars?this.vars[ii]:ii))
     }
-    return eval(number.replace(/[a-zA-Z_]+\w+/g,(ii)=>ii in this.vars?this.vars[ii][k]:ii))
+    return eval(number.replace(/[a-zA-Z_]+\w+/g,(ii)=>{
+        return ii in this.vars?(this.vars[ii].hasOwnProperty(k)?this.vars[ii][k]:this.vars[ii]):ii
+        // return ii in this.vars?this.vars[ii][k]:ii
+    }))
 }
 
 walkerType.prototype.line=function (p1,p2) {
-    var sstr=`<path d="M ${p1[0]} ${p1[1]} L ${p2[0]} ${p2[1]}" stroke="blue" stroke-width="1000" fill="none" />`
+    var sstr=`<path d="M ${p1[0]} ${p1[1]} L ${p2[0]} ${p2[1]}" stroke="blue" stroke-width="100" fill="none" />`
     this.addto(sstr,'line')
 }
 
 walkerType.prototype.point=function (p1) {
-    var sstr=`<circle stroke="none" pointer-events="none" cy="${p1[1]}" cx="${p1[0]}" r="3000" fill="#000"></circle>`
+    var sstr=`<circle stroke="none" pointer-events="none" cy="${p1[1]}" cx="${p1[0]}" r="300" fill="#000"></circle>`
     this.addto(sstr,'point')
-    var sstr=`<g font-size="12000" font="sans-serif" fill="black" stroke="none" text-anchor="middle"><text x="${p1[0]}" y="${p1[1]}" dy="${-2*p1[1]-6000}" style="transform: scale(1,-1);">${p1[0]},${p1[1]}</text></g>`
+    var sstr=`<g font-size="1200" font="sans-serif" fill="black" stroke="none" text-anchor="middle"><text x="${p1[0]}" y="${p1[1]}" dy="${-2*p1[1]-600}" style="transform: scale(1,-1);">${p1[0]},${p1[1]}</text></g>`
     this.addto(sstr,'text')
 }
 
@@ -131,8 +143,8 @@ walkerType.prototype.traversal = function(attachments){
                 walker.buildshape(structure.shape,width,height,structure.collection)
             } 
             if (structure.type=='structurelines') {
-                for (let index = 0; index < structure.n; index++) {
-
+                for (let index = structure.n1||0; index < structure.n; index++) {
+                    walker.vars.index=index
                     let pts=structure.pts.map(v=>[walker.eval(v.x,index),walker.eval(v.y,index)])
                     walker.point(pts[0])
                     walker.point(pts[pts.length-1])
@@ -243,3 +255,7 @@ walkerType.prototype.buildshape = function(shape,width,height,collection){
 var walker=new walkerType()
 // walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));document.body.insertAdjacentHTML('beforeend',walker.buildsvg())
 // walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg()
+
+
+// 鼠标悬停看线+坐标(坐标默认不显示):让线看清楚,颜色或透明度
+// 缩放

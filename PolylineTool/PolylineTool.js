@@ -3,6 +3,7 @@
 PolylineToolBlocks = {
     "variables": [
         "variable",
+        "arrayAction",
         "importBrushs",
         "variablenone"
     ],
@@ -178,6 +179,73 @@ Object.assign(PolylineToolBlocks,{
             return PolylineToolFunctions.xmlText('variable',inputs,next,isShadow,comment,attribute);
         }
     },
+    "arrayAction": {
+        "type": "statement",
+        "json": {
+            "type": "arrayAction",
+            "message0": "array action id %1 %2 n1 n2: %3 %4",
+            "args0": [
+                Object.assign({},PolylineToolBlocks.IdStr,{
+                    "name": "id",
+                    "text": "xx"
+                }),
+                Object.assign({},PolylineToolBlocks.Evalstr,{
+                    "name": "value",
+                    "text": "2*index"
+                }),
+                Object.assign({},PolylineToolBlocks.Evalstr,{
+                    "name": "n1",
+                    "text": 0
+                }),
+                Object.assign({},PolylineToolBlocks.Evalstr,{
+                    "name": "n",
+                    "text": 5
+                })
+            ],
+            "inputsInline": true,
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 20,
+            "previousStatement": "arrayAction",
+            "nextStatement": PolylineToolBlocks.variables
+        },
+        "generFunc": function(block) {
+            var id = block.getFieldValue('id');
+            if (id==='') {
+                throw new OmitedError(block,'id','arrayAction');
+            }
+            id = PolylineToolFunctions.pre('IdStr')(id,block,'id','arrayAction');
+            var value = block.getFieldValue('value');
+            if (value==='') {
+                throw new OmitedError(block,'value','arrayAction');
+            }
+            value = PolylineToolFunctions.pre('Evalstr')(value,block,'value','arrayAction');
+            var n1 = block.getFieldValue('n1');
+            if (n1==='') {
+                throw new OmitedError(block,'n1','arrayAction');
+            }
+            n1 = PolylineToolFunctions.pre('Evalstr')(n1,block,'n1','arrayAction');
+            var n = block.getFieldValue('n');
+            if (n==='') {
+                throw new OmitedError(block,'n','arrayAction');
+            }
+            n = PolylineToolFunctions.pre('Evalstr')(n,block,'n','arrayAction');
+            var code = PolylineToolFunctions.defaultCode('arrayAction',eval('['+PolylineToolBlocks['arrayAction'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["id","value","n1","n"],
+        "argsType": ["field","field","field","field"],
+        "argsGrammarName": ["IdStr","Evalstr","Evalstr","Evalstr"],
+        "omitted": [false,false,false,false],
+        "multi": [false,false,false,false],
+        "fieldDefault": function (keyOrIndex) {
+            return PolylineToolFunctions.fieldDefault('arrayAction',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return PolylineToolFunctions.xmlText('arrayAction',inputs,next,isShadow,comment,attribute);
+        }
+    },
     "importBrushs": {
         "type": "statement",
         "json": {
@@ -252,11 +320,15 @@ Object.assign(PolylineToolBlocks,{
         "type": "statement",
         "json": {
             "type": "structurelines",
-            "message0": "add lines n: %1 %2 %3",
+            "message0": "add lines n1 n2: %1 %2 %3 %4",
             "args0": [
                 Object.assign({},PolylineToolBlocks.Evalstr,{
+                    "name": "n1",
+                    "text": 0
+                }),
+                Object.assign({},PolylineToolBlocks.Evalstr,{
                     "name": "n",
-                    "text": 1
+                    "text": 5
                 }),
                 {
                     "type": "input_dummy"
@@ -274,6 +346,11 @@ Object.assign(PolylineToolBlocks,{
             "nextStatement": PolylineToolBlocks.structures
         },
         "generFunc": function(block) {
+            var n1 = block.getFieldValue('n1');
+            if (n1==='') {
+                throw new OmitedError(block,'n1','structurelines');
+            }
+            n1 = PolylineToolFunctions.pre('Evalstr')(n1,block,'n1','structurelines');
             var n = block.getFieldValue('n');
             if (n==='') {
                 throw new OmitedError(block,'n','structurelines');
@@ -286,11 +363,11 @@ Object.assign(PolylineToolBlocks,{
             var code = PolylineToolFunctions.defaultCode('structurelines',eval('['+PolylineToolBlocks['structurelines'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["n","pts"],
-        "argsType": ["field","statement"],
-        "argsGrammarName": ["Evalstr","point"],
-        "omitted": [false,false],
-        "multi": [false,true],
+        "args": ["n1","n","pts"],
+        "argsType": ["field","field","statement"],
+        "argsGrammarName": ["Evalstr","Evalstr","point"],
+        "omitted": [false,false,false],
+        "multi": [false,false,true],
         "fieldDefault": function (keyOrIndex) {
             return PolylineToolFunctions.fieldDefault('structurelines',keyOrIndex);
         },
@@ -1252,6 +1329,7 @@ var toolbox = (function(){
             // 所有语句块
             PolylineToolBlocks["polylineTool"].xmlText(),
             PolylineToolBlocks["variable"].xmlText(),
+            PolylineToolBlocks["arrayAction"].xmlText(),
             PolylineToolBlocks["importBrushs"].xmlText(),
             PolylineToolBlocks["variablenone"].xmlText(),
             PolylineToolBlocks["structurelines"].xmlText(),
