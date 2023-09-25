@@ -7,3 +7,5 @@ debug .g4 <https://zhaouv.github.io/antlr-blockly/playground.html>
 [Combiner](./Combiner/demo.html)
 
 [ComponentPainter](./ComponentPainter/demo.html)
+
+[PolylineTool](./PolylineTool/demo.html)

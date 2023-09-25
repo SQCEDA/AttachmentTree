@@ -82,7 +82,7 @@ Object.assign(PolylineToolBlocks,{
         "type": "statement",
         "json": {
             "type": "polylineTool",
-            "message0": "define and import %1 %2 leaves %3 %4",
+            "message0": "define and import %1 %2 leaves %3 %4 display %5 %6",
             "args0": [
                 {
                     "type": "input_dummy"
@@ -99,6 +99,14 @@ Object.assign(PolylineToolBlocks,{
                     "type": "input_statement",
                     "name": "structure",
                     "check": PolylineToolBlocks.structures
+                },
+                {
+                    "type": "input_dummy"
+                },
+                {
+                    "type": "input_statement",
+                    "name": "display",
+                    "check": "display"
                 }
             ],
             "tooltip": "",
@@ -108,14 +116,21 @@ Object.assign(PolylineToolBlocks,{
         "generFunc": function(block) {
             var define = Blockly.JavaScript.statementToCode(block, 'define');
             var structure = Blockly.JavaScript.statementToCode(block, 'structure');
+            var display = Blockly.JavaScript.statementToCode(block, 'display');
+            if(block.getInputTargetBlock('display') && 
+                block.getInputTargetBlock('display').getNextBlock())
+                throw new MultiStatementError(block,'display','polylineTool');
+            if (display==='') {
+                throw new OmitedError(block,'display','polylineTool');
+            }
             var code = PolylineToolFunctions.defaultCode('polylineTool',eval('['+PolylineToolBlocks['polylineTool'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["define","structure"],
-        "argsType": ["statement","statement"],
-        "argsGrammarName": ["variables","structures"],
-        "omitted": [true,true],
-        "multi": [true,true],
+        "args": ["define","structure","display"],
+        "argsType": ["statement","statement","statement"],
+        "argsGrammarName": ["variables","structures","display"],
+        "omitted": [true,true,false],
+        "multi": [true,true,false],
         "fieldDefault": function (keyOrIndex) {
             return PolylineToolFunctions.fieldDefault('polylineTool',keyOrIndex);
         },
@@ -498,6 +513,55 @@ Object.assign(PolylineToolBlocks,{
         "menu": [],
         "xmlText": function (inputs,next,isShadow,comment,attribute) {
             return PolylineToolFunctions.xmlText('structurefrompts',inputs,next,isShadow,comment,attribute);
+        }
+    },
+    "display": {
+        "type": "statement",
+        "json": {
+            "type": "display",
+            "message0": "line width %1 point size %2 text size %3",
+            "args0": [
+                Object.assign({},PolylineToolBlocks.Int,{
+                    "name": "line",
+                    "value": 100
+                }),
+                Object.assign({},PolylineToolBlocks.Int,{
+                    "name": "point",
+                    "value": 300
+                }),
+                Object.assign({},PolylineToolBlocks.Int,{
+                    "name": "text",
+                    "value": 1200
+                })
+            ],
+            "inputsInline": true,
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 110,
+            "previousStatement": "display",
+            "nextStatement": "display"
+        },
+        "generFunc": function(block) {
+            var line = block.getFieldValue('line');
+            line = PolylineToolFunctions.pre('Int')(line,block,'line','display');
+            var point = block.getFieldValue('point');
+            point = PolylineToolFunctions.pre('Int')(point,block,'point','display');
+            var text = block.getFieldValue('text');
+            text = PolylineToolFunctions.pre('Int')(text,block,'text','display');
+            var code = PolylineToolFunctions.defaultCode('display',eval('['+PolylineToolBlocks['display'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["line","point","text"],
+        "argsType": ["field","field","field"],
+        "argsGrammarName": ["Int","Int","Int"],
+        "omitted": [false,false,false],
+        "multi": [false,false,false],
+        "fieldDefault": function (keyOrIndex) {
+            return PolylineToolFunctions.fieldDefault('display',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return PolylineToolFunctions.xmlText('display',inputs,next,isShadow,comment,attribute);
         }
     },
     "attachment": {
@@ -1335,6 +1399,7 @@ var toolbox = (function(){
             PolylineToolBlocks["structurelines"].xmlText(),
             PolylineToolBlocks["point"].xmlText(),
             PolylineToolBlocks["structurefrompts"].xmlText(),
+            PolylineToolBlocks["display"].xmlText(),
             PolylineToolBlocks["attachment"].xmlText(),
             PolylineToolBlocks["attachmentnone"].xmlText(),
             PolylineToolBlocks["structure"].xmlText(),

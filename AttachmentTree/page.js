@@ -9,7 +9,7 @@ window.buildBlocks=function(params) {
     // console.log('buildBlocks')
     try {
         AttachmentTreeFunctions.parse(eval('('+document.querySelector('#blocklyinput').value+')'))
-        walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg();svgsizefunc();
+        walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg();svgsizefunc();listensvg();
     } catch (error) {
         if(error.message!=='AttachmentTreeFunctions is not defined')console.error(error)
     }
@@ -27,7 +27,7 @@ window.trigger = function(params) {
     } catch (error) {
     }
     // console.log(params[1])
-    walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg();svgsizefunc();
+    walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg();svgsizefunc();listensvg();
 }
 
 function autoresizesvg(params) {
@@ -45,3 +45,36 @@ window.svgsizefunc=autoresizesvg
 //     workspace.scrollbar[hvScroll].onScroll_();
 //     workspace.setScale(workspace.scale);
 // }
+
+function listensvg() {
+    let svg = document.getElementById("svgoutput").children[0];
+
+    svg.addEventListener("wheel", function(event) {
+        event.preventDefault();
+
+        const scaleFactor = 1.1;
+        let direction = (event.deltaY > 0) ? 1 : -1; // 1 means zoom out, -1 means zoom in
+
+        let rect = svg.getBoundingClientRect();
+        let x = event.clientX - rect.left;
+        let correctedY = rect.height - (event.clientY - rect.top); // Corrected Y coordinate
+
+        let viewBox = svg.viewBox.baseVal;
+
+        // Compute new width and height based on the zoom direction
+        let newWidth = (direction > 0) ? viewBox.width * scaleFactor : viewBox.width / scaleFactor;
+        let newHeight = (direction > 0) ? viewBox.height * scaleFactor : viewBox.height / scaleFactor;
+
+        // Compute the new x and y based on the mouse position and the change in size
+        viewBox.x += (x / svg.clientWidth) * (viewBox.width - newWidth);
+        viewBox.y += (correctedY / svg.clientHeight) * (viewBox.height - newHeight); // Use corrected Y
+
+        // Assign the new width and height
+        viewBox.width = newWidth;
+        viewBox.height = newHeight;
+
+        svg.setAttribute("viewBox", `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`);
+
+        window.svgsizefunc=()=>0;walker.viewbox=svgviewbox.value=`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`;
+    });
+}

@@ -3,6 +3,7 @@ grammar PolylineTool;
 polylineTool:   
     'define and import' BGNL define=variables* 
     'leaves' BGNL structure=structures* 
+    'display' BGNL display=display 
 ;
 
 variables
@@ -50,6 +51,13 @@ structurefrompts:
 /* structurefrompts
 defaultMap : {absolute:true,collection:"10_0",scale:1000,points:"0 0 100 0 200 200"}
 colour : this.structureColor
+*/;
+
+display:
+    'line width' line=Int 'point size' point=Int 'text size' text=Int
+/* display
+defaultMap : {line:100,point:300,text:1200}
+colour : 110
 */;
 
 attachments

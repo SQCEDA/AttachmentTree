@@ -2,12 +2,18 @@
  * @class
  */
 function walkerType(params) {
-    
+    this.display={
+        "type": "display",
+        "line": 100,
+        "point": 300,
+        "text": 1200
+    }
 }
 
 walkerType.prototype.viewbox='-100000 -100000 200000 200000'
 
 walkerType.prototype.import=function (root) {
+    this.display=root.display
     this.loadvars(root.define)
     this.walk(root.structure)
     return this
@@ -81,15 +87,15 @@ walkerType.prototype.eval=function (number,k){
     }))
 }
 
-walkerType.prototype.line=function (p1,p2) {
-    var sstr=`<path d="M ${p1[0]} ${p1[1]} L ${p2[0]} ${p2[1]}" stroke="blue" stroke-width="100" fill="none" />`
+walkerType.prototype.line=function (p1,p2,group) {
+    var sstr=`<path d="M ${p1[0]} ${p1[1]} L ${p2[0]} ${p2[1]}" stroke="blue" stroke-width="${this.display.line}" fill="none" class="g${group}" />`
     this.addto(sstr,'line')
 }
 
-walkerType.prototype.point=function (p1) {
-    var sstr=`<circle stroke="none" pointer-events="none" cy="${p1[1]}" cx="${p1[0]}" r="300" fill="#000"></circle>`
+walkerType.prototype.point=function (p1,group) {
+    var sstr=`<circle stroke="none" pointer-events="none" cy="${p1[1]}" cx="${p1[0]}" r="${this.display.point}" fill="#000" class="g${group}" ></circle>`
     this.addto(sstr,'point')
-    var sstr=`<g font-size="1200" font="sans-serif" fill="black" stroke="none" text-anchor="middle"><text x="${p1[0]}" y="${p1[1]}" dy="${-2*p1[1]-600}" style="transform: scale(1,-1);">${p1[0]},${p1[1]}</text></g>`
+    var sstr=`<g font-size="${this.display.text}" font="sans-serif" fill="black" stroke="none" text-anchor="middle" class="g${group}" ><text x="${p1[0]}" y="${p1[1]}" dy="${-2*p1[1]-this.display.text/2}" style="transform: scale(1,-1)">${p1[0]},${p1[1]}</text></g>`
     this.addto(sstr,'text')
 }
 
@@ -146,11 +152,11 @@ walkerType.prototype.traversal = function(attachments){
                 for (let index = structure.n1||0; index < structure.n; index++) {
                     walker.vars.index=index
                     let pts=structure.pts.map(v=>[walker.eval(v.x,index),walker.eval(v.y,index)])
-                    walker.point(pts[0])
-                    walker.point(pts[pts.length-1])
+                    walker.point(pts[0],index)
+                    walker.point(pts[pts.length-1],index)
                     pts.forEach((v,i)=>{
                         if (i==0) return;
-                        walker.line(pts[i-1],v)
+                        walker.line(pts[i-1],v,index)
                     })
                     walker.lines.push(pts)
                 }

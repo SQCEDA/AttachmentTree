@@ -8,6 +8,7 @@
     <script src="../antlr-blockly/javascript_compressed.js"></script>
     <script src="../antlr-blockly/zh-hans.js"></script>
     <link rel="stylesheet" href="style.css">
+    <style id="svgcss"></style>
 </head>
 
 <body>
@@ -41,6 +42,7 @@ box=pya.Box(-1000000,-1000000,1000000,1000000)
 layerExclude=[(0, 0), (0, 1)]
 
 if 1:
+    scale=0.001
     import json
     import re
     class g:
@@ -58,7 +60,7 @@ if 1:
                 if match:
                     # brush=CavityBrush(pointc=pya.DPoint(shape_.text.x, shape_.text.y), angle=float(match.group(2)), widout=float(match.group(3)), widin=float(match.group(4)), bgn_ext=0)
                     brushid=match.group(1).strip()
-                    g.brushs.append([shape_.text.x, shape_.text.y,float(match.group(2)),float(match.group(3)),float(match.group(4)),brushid])
+                    g.brushs.append([shape_.text.x*scale, shape_.text.y*scale,float(match.group(2)),float(match.group(3)),float(match.group(4)),brushid])
             else:
                 shapes.insert(shape_)
             it.next()
@@ -78,7 +80,7 @@ if 1:
                 {
                     "type": "structurefrompts",
                     "collection": "0",
-                    "scale": 1,
+                    "scale": scale,
                     "absolute": True,
                     "points": ' '.join([f'{pt.x} {pt.y}' for pt in polygon.to_simple_polygon().each_point()]),
                     "attachment": [
@@ -88,7 +90,13 @@ if 1:
                     ]
                 }
                 for polygon in g.region
-            ]
+            ],
+            "display": {
+                "type": "display",
+                "line": 100,
+                "point": 300,
+                "text": 1200
+            }
         }
     print(json.dumps(g.json))
     </code></pre>
