@@ -4,6 +4,7 @@ PolylineToolBlocks = {
     "variables": [
         "variable",
         "arrayAction",
+        "evalAction",
         "importBrushs",
         "variablenone"
     ],
@@ -47,6 +48,10 @@ Object.assign(PolylineToolBlocks,{
     "NormalStr": {
         "type": "field_input",
         "text": "NormalStr_default"
+    },
+    "NormalStr_Multi": {
+        "type": "field_multilinetext",
+        "text": "NormalStr_Multi_default"
     },
     "TryIntStr": {
         "type": "field_input",
@@ -259,6 +264,46 @@ Object.assign(PolylineToolBlocks,{
         "menu": [],
         "xmlText": function (inputs,next,isShadow,comment,attribute) {
             return PolylineToolFunctions.xmlText('arrayAction',inputs,next,isShadow,comment,attribute);
+        }
+    },
+    "evalAction": {
+        "type": "statement",
+        "json": {
+            "type": "evalAction",
+            "message0": "eval %1",
+            "args0": [
+                Object.assign({},PolylineToolBlocks.NormalStr_Multi,{
+                    "name": "value",
+                    "text": "console.log(walker.vars.xx)"
+                })
+            ],
+            "inputsInline": true,
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 20,
+            "previousStatement": "evalAction",
+            "nextStatement": PolylineToolBlocks.variables
+        },
+        "generFunc": function(block) {
+            var value = block.getFieldValue('value');
+            if (value==='') {
+                throw new OmitedError(block,'value','evalAction');
+            }
+            value = PolylineToolFunctions.pre('NormalStr_Multi')(value,block,'value','evalAction');
+            var code = PolylineToolFunctions.defaultCode('evalAction',eval('['+PolylineToolBlocks['evalAction'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["value"],
+        "argsType": ["field"],
+        "argsGrammarName": ["NormalStr_Multi"],
+        "omitted": [false],
+        "multi": [false],
+        "fieldDefault": function (keyOrIndex) {
+            return PolylineToolFunctions.fieldDefault('evalAction',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return PolylineToolFunctions.xmlText('evalAction',inputs,next,isShadow,comment,attribute);
         }
     },
     "importBrushs": {
@@ -1394,6 +1439,7 @@ var toolbox = (function(){
             PolylineToolBlocks["polylineTool"].xmlText(),
             PolylineToolBlocks["variable"].xmlText(),
             PolylineToolBlocks["arrayAction"].xmlText(),
+            PolylineToolBlocks["evalAction"].xmlText(),
             PolylineToolBlocks["importBrushs"].xmlText(),
             PolylineToolBlocks["variablenone"].xmlText(),
             PolylineToolBlocks["structurelines"].xmlText(),

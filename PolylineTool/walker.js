@@ -65,6 +65,9 @@ walkerType.prototype.loadvars=function (defineList) {
             }
             
         }
+        if (element.type=='evalAction') {
+            eval(element.value)
+        }
         if (element.type=='importBrushs') {
             
             let pts=this.eval(element.value)

@@ -17,6 +17,11 @@ colour : 20
 defaultMap : {id:'xx',value:'2*index',n1:0,n:5}
 colour : 20
 */
+    |   'eval' value=NormalStr_Multi #evalAction
+/* evalAction
+defaultMap : {value:'console.log(walker.vars.xx)'}
+colour : 20
+*/
     |   'import brushs' value=Evalstr #importBrushs
 /* importBrushs
 defaultMap : {value:'[[0,100000],[100000,0]]'}
@@ -144,6 +149,8 @@ Side_List : '⇖'|'⇗'|'⇘'|'⇙' /*Side_List ['ul','ur','dr','dl']*/ ;
 IdStr
     :   'varfas'+ ;
 NormalStr
+    :   'varfass'+ ;
+NormalStr_Multi
     :   'varfass'+ ;
 TryIntStr
     :   'varfass'+ ;
