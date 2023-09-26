@@ -68,6 +68,15 @@ walkerType.prototype.loadvars=function (defineList) {
         if (element.type=='evalAction') {
             eval(element.value)
         }
+        if (element.type=='pyAction') {
+            if (window.pyodide==null) {
+                console.log('numpy has not loaded')
+                return
+            }
+            window.vars=JSON.stringify(this.vars)
+            window.pyodide.runPython('vars=json.loads(js.vars)\nfor k in vars:vars[k]=np.array(vars[k])\n'+element.value+'\nfor k in vars:vars[k]=np.array(vars[k]).tolist()\njs.vars=json.dumps(vars)')
+            this.vars=JSON.parse(window.vars)
+        }
         if (element.type=='importBrushs') {
             
             let pts=this.eval(element.value)

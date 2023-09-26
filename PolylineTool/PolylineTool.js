@@ -5,6 +5,7 @@ PolylineToolBlocks = {
         "variable",
         "arrayAction",
         "evalAction",
+        "pyAction",
         "importBrushs",
         "variablenone"
     ],
@@ -304,6 +305,46 @@ Object.assign(PolylineToolBlocks,{
         "menu": [],
         "xmlText": function (inputs,next,isShadow,comment,attribute) {
             return PolylineToolFunctions.xmlText('evalAction',inputs,next,isShadow,comment,attribute);
+        }
+    },
+    "pyAction": {
+        "type": "statement",
+        "json": {
+            "type": "pyAction",
+            "message0": "py %1",
+            "args0": [
+                Object.assign({},PolylineToolBlocks.NormalStr_Multi,{
+                    "name": "value",
+                    "text": "vars[\"aa\"]=np.linspace(-5000,5000,11)"
+                })
+            ],
+            "inputsInline": true,
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 20,
+            "previousStatement": "pyAction",
+            "nextStatement": PolylineToolBlocks.variables
+        },
+        "generFunc": function(block) {
+            var value = block.getFieldValue('value');
+            if (value==='') {
+                throw new OmitedError(block,'value','pyAction');
+            }
+            value = PolylineToolFunctions.pre('NormalStr_Multi')(value,block,'value','pyAction');
+            var code = PolylineToolFunctions.defaultCode('pyAction',eval('['+PolylineToolBlocks['pyAction'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["value"],
+        "argsType": ["field"],
+        "argsGrammarName": ["NormalStr_Multi"],
+        "omitted": [false],
+        "multi": [false],
+        "fieldDefault": function (keyOrIndex) {
+            return PolylineToolFunctions.fieldDefault('pyAction',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return PolylineToolFunctions.xmlText('pyAction',inputs,next,isShadow,comment,attribute);
         }
     },
     "importBrushs": {
@@ -1440,6 +1481,7 @@ var toolbox = (function(){
             PolylineToolBlocks["variable"].xmlText(),
             PolylineToolBlocks["arrayAction"].xmlText(),
             PolylineToolBlocks["evalAction"].xmlText(),
+            PolylineToolBlocks["pyAction"].xmlText(),
             PolylineToolBlocks["importBrushs"].xmlText(),
             PolylineToolBlocks["variablenone"].xmlText(),
             PolylineToolBlocks["structurelines"].xmlText(),

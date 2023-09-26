@@ -115,6 +115,18 @@ if 1:
     <script src="walker.js"></script>
     <script src="page.js"></script>
     <script src="PolylineTool.js"></script>
+
+    <script src="../pyodide_numpy/pyodide.js"></script>
+    <script type="text/javascript">
+        async function main(){
+            let pyodide = await loadPyodide();
+            await pyodide.loadPackage("numpy")
+            globalThis.pyodide=pyodide;
+            pyodide.runPython("import numpy as np\nimport json\nimport js");
+        }
+        main();
+    </script>
+
 </body>
 
 </html>

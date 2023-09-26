@@ -22,6 +22,11 @@ colour : 20
 defaultMap : {value:'console.log(walker.vars.xx)'}
 colour : 20
 */
+    |   'py' value=NormalStr_Multi #pyAction
+/* pyAction
+defaultMap : {value:'vars["aa"]=np.linspace(-5000,5000,11)'}
+colour : 20
+*/
     |   'import brushs' value=Evalstr #importBrushs
 /* importBrushs
 defaultMap : {value:'[[0,100000],[100000,0]]'}
