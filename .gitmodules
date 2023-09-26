@@ -1,3 +1,6 @@
 [submodule "antlr-blockly"]
 	path = antlr-blockly
 	url = https://github.com/zhaouv/antlr-blockly.git
+[submodule "pyodide_numpy"]
+	path = pyodide_numpy
+	url = https://github.com/SQCEDA/pyodide_numpy
