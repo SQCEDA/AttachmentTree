@@ -301,14 +301,14 @@ Object.assign(CombinerBlocks,{
                 }),
                 Object.assign({},CombinerBlocks.Evalstr,{
                     "name": "value",
-                    "text": "s x r y,z trace1 s x"
+                    "text": "s xx r yy,zz trace1 s xx"
                 }),
                 {
                     "type": "input_dummy"
                 },
                 Object.assign({},CombinerBlocks.IdsStr,{
                     "name": "using",
-                    "text": "x,y,z,trace1"
+                    "text": "xx,yy,zz,trace1"
                 }),
                 Object.assign({},CombinerBlocks.Bool,{
                     "name": "reverse",
@@ -714,7 +714,7 @@ Object.assign(CombinerBlocks,{
                 },
                 Object.assign({},CombinerBlocks.IdsStr,{
                     "name": "outputid",
-                    "text": "trace1,10_0_1,10_0_2,cl_50,marks_ab,tlength1"
+                    "text": "trace1,10_0_1,10_0_2,ab_50,ab,tlength1"
                 })
             ],
             "tooltip": "",
@@ -786,7 +786,7 @@ Object.assign(CombinerBlocks,{
                 },
                 Object.assign({},CombinerBlocks.IdsStr,{
                     "name": "outputid",
-                    "text": "brush2,10_0_1,10_0_2,cl_50,marks_ab,tlength1"
+                    "text": "brush2,10_0_1,10_0_2,ab_50,ab,tlength1"
                 })
             ],
             "tooltip": "",
@@ -848,14 +848,14 @@ Object.assign(CombinerBlocks,{
                 },
                 Object.assign({},CombinerBlocks.Evalstr,{
                     "name": "args",
-                    "text": "{\"x\":x,\"y\":x+y,\"z\":x+y+z}"
+                    "text": "{\"x\":xx,\"y\":xx+yy,\"z\":xx+yy+zz}"
                 }),
                 {
                     "type": "input_dummy"
                 },
                 Object.assign({},CombinerBlocks.IdsStr,{
                     "name": "using",
-                    "text": "x,y,z"
+                    "text": "xx,yy,zz"
                 })
             ],
             "tooltip": "",

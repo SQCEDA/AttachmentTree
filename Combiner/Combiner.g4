@@ -33,7 +33,7 @@ traceDefine
     :   'trace define id' id=IdStr 'default' value=Evalstr BGNL
         'using' using=IdsStr? 'reverse' reverse=Bool 'mirror' mirror=Bool 'description' description=NormalStr? 
 /* traceDefine
-defaultMap : {id:'trace2',value:'s x r y,z trace1 s x',using:'x,y,z,trace1',reverse:false,mirror:false,description:''}
+defaultMap : {id:'trace2',value:'s xx r yy,zz trace1 s xx',using:'xx,yy,zz,trace1',reverse:false,mirror:false,description:''}
 */
 ;
 
@@ -95,7 +95,7 @@ linkBrush:
     'centerlines, marks, length)' BGNL
     outputid=IdsStr
 /* linkBrush
-defaultMap : {id:'brush2',reverse:false,outputid:'trace1,10_0_1,10_0_2,cl_50,marks_ab,tlength1'}
+defaultMap : {id:'brush2',reverse:false,outputid:'trace1,10_0_1,10_0_2,ab_50,ab,tlength1'}
 */;
 
 trace:
@@ -105,13 +105,13 @@ trace:
     'centerlines, marks, length)' BGNL
     outputid=IdsStr
 /* trace
-defaultMap : {traceid:'trace1',reverse:false,mirror:false,outputid:'brush2,10_0_1,10_0_2,cl_50,marks_ab,tlength1'}
+defaultMap : {traceid:'trace1',reverse:false,mirror:false,outputid:'brush2,10_0_1,10_0_2,ab_50,ab,tlength1'}
 */;
 
 component:
     componentType=Component_List 'output id' outputid=IdsStr? 'collection' collection=NormalStr BGNL 'args' args=Evalstr? BGNL 'using' using=IdsStr?
 /* component
-defaultMap : {collection:"10_0",outputid:'brush1,brush2',args:'{"x":x,"y":x+y,"z":x+y+z}',using:'x,y,z'}
+defaultMap : {collection:"10_0",outputid:'brush1,brush2',args:'{"x":xx,"y":xx+yy,"z":xx+yy+zz}',using:'xx,yy,zz'}
 */;
 
 
