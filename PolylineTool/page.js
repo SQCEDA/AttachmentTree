@@ -110,5 +110,20 @@ function listensvg() {
         }
         `
     
+        // Get mouse coordinates within the SVG
+        let pt = svg.createSVGPoint();
+        pt.x = event.clientX;
+        pt.y = event.clientY;
+        let svgCoords = pt.matrixTransform(svg.getScreenCTM().inverse());
+        mousepos.innerHTML=`(${svgCoords.x.toFixed(3)},${svgCoords.y.toFixed(3)})`
+    });
+
+    svg.addEventListener("click", function(event) {
+        // Get mouse coordinates within the SVG
+        let pt = svg.createSVGPoint();
+        pt.x = event.clientX;
+        pt.y = event.clientY;
+        let svgCoords = pt.matrixTransform(svg.getScreenCTM().inverse());
+        mouseposhistory.innerHTML=`(${svgCoords.x.toFixed(3)},${svgCoords.y.toFixed(3)})`+mouseposhistory.innerHTML
     });
 }
