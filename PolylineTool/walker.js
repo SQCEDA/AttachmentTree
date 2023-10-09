@@ -175,6 +175,23 @@ walkerType.prototype.traversal = function(attachments){
                 }
                 return
             }
+            if (structure.type=='structure2darraylines') {
+                let xx=walker.vars[structure.x]
+                let yy=walker.vars[structure.y]
+                for (let index = 0; index < xx[0].length; index++) {
+                    walker.vars.index=index
+                    let pts=xx.map((v,i)=>[xx[i][index],yy[i][index]])
+                    pts=pts.filter(v=>v[0]!=null&&v[1]!=null)
+                    walker.point(pts[0],index)
+                    walker.point(pts[pts.length-1],index)
+                    pts.forEach((v,i)=>{
+                        if (i==0) return;
+                        walker.line(pts[i-1],v,index)
+                    })
+                    walker.lines.push(pts)
+                }
+                return
+            }
             if (structure.type=='structurefrompts') {  
                 let ptsstr=structure.points.split(/[\s,]+/g)
                 let pts=[]

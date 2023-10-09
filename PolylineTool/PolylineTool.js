@@ -17,6 +17,7 @@ PolylineToolBlocks = {
         "structure",
         "structurefrompts",
         "structurelines",
+        "structure2darraylines",
         "structurenone"
     ],
     "shapes": [
@@ -524,6 +525,55 @@ Object.assign(PolylineToolBlocks,{
         "menu": [],
         "xmlText": function (inputs,next,isShadow,comment,attribute) {
             return PolylineToolFunctions.xmlText('point',inputs,next,isShadow,comment,attribute);
+        }
+    },
+    "structure2darraylines": {
+        "type": "statement",
+        "json": {
+            "type": "structure2darraylines",
+            "message0": "add lines from 2d array x y: %1 %2",
+            "args0": [
+                Object.assign({},PolylineToolBlocks.IdStr,{
+                    "name": "x",
+                    "text": "xx2d"
+                }),
+                Object.assign({},PolylineToolBlocks.IdStr,{
+                    "name": "y",
+                    "text": "yy2d"
+                })
+            ],
+            "inputsInline": true,
+            "tooltip": "",
+            "helpUrl": "",
+            "colour": 70,
+            "previousStatement": "structure2darraylines",
+            "nextStatement": PolylineToolBlocks.structures
+        },
+        "generFunc": function(block) {
+            var x = block.getFieldValue('x');
+            if (x==='') {
+                throw new OmitedError(block,'x','structure2darraylines');
+            }
+            x = PolylineToolFunctions.pre('IdStr')(x,block,'x','structure2darraylines');
+            var y = block.getFieldValue('y');
+            if (y==='') {
+                throw new OmitedError(block,'y','structure2darraylines');
+            }
+            y = PolylineToolFunctions.pre('IdStr')(y,block,'y','structure2darraylines');
+            var code = PolylineToolFunctions.defaultCode('structure2darraylines',eval('['+PolylineToolBlocks['structure2darraylines'].args.join(',')+']'),block);
+            return code;
+        },
+        "args": ["x","y"],
+        "argsType": ["field","field"],
+        "argsGrammarName": ["IdStr","IdStr"],
+        "omitted": [false,false],
+        "multi": [false,false],
+        "fieldDefault": function (keyOrIndex) {
+            return PolylineToolFunctions.fieldDefault('structure2darraylines',keyOrIndex);
+        },
+        "menu": [],
+        "xmlText": function (inputs,next,isShadow,comment,attribute) {
+            return PolylineToolFunctions.xmlText('structure2darraylines',inputs,next,isShadow,comment,attribute);
         }
     },
     "structurefrompts": {
@@ -1486,6 +1536,7 @@ var toolbox = (function(){
             PolylineToolBlocks["variablenone"].xmlText(),
             PolylineToolBlocks["structurelines"].xmlText(),
             PolylineToolBlocks["point"].xmlText(),
+            PolylineToolBlocks["structure2darraylines"].xmlText(),
             PolylineToolBlocks["structurefrompts"].xmlText(),
             PolylineToolBlocks["display"].xmlText(),
             PolylineToolBlocks["attachment"].xmlText(),

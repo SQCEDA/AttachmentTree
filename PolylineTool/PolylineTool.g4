@@ -52,6 +52,13 @@ defaultMap : {x:'xx',y:'0'}
 colour : 40
 */;
 
+structure2darraylines:
+    'add lines from 2d array x y:' x=IdStr y=IdStr
+/* structure2darraylines
+defaultMap : {x:'xx2d',y:'yy2d'}
+colour : this.structureColor
+*/;
+
 structurefrompts:  
     'collection' collection=NormalStr
     'scale' scale=Evalstr
@@ -79,6 +86,7 @@ structures
     :   structure
     |   structurefrompts
     |   structurelines
+    |   structure2darraylines
     |   structurenone
     ;
 
