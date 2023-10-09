@@ -74,7 +74,7 @@ walkerType.prototype.loadvars=function (defineList) {
                 return
             }
             window.vars=JSON.stringify(this.vars)
-            window.pyodide.runPython('vars=json.loads(js.vars)\nfor k in vars:vars[k]=np.array(vars[k])\n'+element.value+'\nfor k in vars:vars[k]=np.array(vars[k]).tolist()\njs.vars=json.dumps(vars)')
+            window.pyodide.runPython('vars=json.loads(js.vars.replace("null","NaN"))\nfor k in vars:vars[k]=np.array(vars[k])\n'+element.value+'\nfor k in vars:vars[k]=np.array(vars[k]).tolist()\njs.vars=json.dumps(vars).replace("NaN","null")')
             this.vars=JSON.parse(window.vars)
         }
         if (element.type=='importBrushs') {
@@ -164,6 +164,7 @@ walkerType.prototype.traversal = function(attachments){
                 for (let index = structure.n1||0; index < structure.n; index++) {
                     walker.vars.index=index
                     let pts=structure.pts.map(v=>[walker.eval(v.x,index),walker.eval(v.y,index)])
+                    pts=pts.filter(v=>v[0]!=null&&v[1]!=null)
                     walker.point(pts[0],index)
                     walker.point(pts[pts.length-1],index)
                     pts.forEach((v,i)=>{
