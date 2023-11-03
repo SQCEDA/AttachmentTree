@@ -1595,7 +1595,18 @@ var toolbox = (function(){
     });
     PolylineToolFunctions.workspace = function(){return workspace}
     
+    var doubleClickCheck=[[0,'xxxxxxx_blockid']];
     function omitedcheckUpdateFunction(event) {
+        if(event.type==='ui' && event.element == 'click'){
+            var newClick = [new Date().getTime(),event.blockId];
+            var lastClick = doubleClickCheck.shift();
+            doubleClickCheck.push(newClick);
+            if(newClick[0]-lastClick[0]<500){
+                if(newClick[1]===lastClick[1]){
+                    window?.blocklyDoubleClickBlock?.call(null,newClick[1]);
+                }
+            }
+        }
         var codeAreaFunc = function(err,data){blocklyinput.value=err?String(err):data;window?.trigger?.call(null,[err,data])}
         try {
             if (["delete","create","move","finished_loading"].indexOf(event.type)!==-1) return;

@@ -36,3 +36,23 @@
 #svgoutput path:hover{
     fill:red;
 }
+
+#left7 {
+    /* height: 440px; width: 375px;float:left; */
+    left: 5px;
+    top: 5px;
+    z-index: 200;
+    position: fixed;
+    /* width: 100%; */
+    width: 450px;
+    height: 100%;
+    background-color: white;
+}
+
+#left7 .CodeMirror {
+    /* border-top: 1px solid black;
+    border-bottom: 1px solid black; */
+    font-size: 14px;
+    height: 95%;
+    width: 95%;
+}

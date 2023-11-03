@@ -127,3 +127,16 @@ function listensvg() {
         mouseposhistory.innerHTML=`(${svgCoords.x.toFixed(3)},${svgCoords.y.toFixed(3)})`+mouseposhistory.innerHTML
     });
 }
+
+window.blocklyDoubleClickBlock = function (blockId) {
+    var b = PolylineToolFunctions.workspace().getBlockById(blockId);
+    var f = 'value'
+    var value = b.getFieldValue(f);
+    //多行编辑
+    editor_multi.multiLineEdit(value, b, f, { 'lint': false }, function (newvalue, b, f) {
+        if (false) {
+            newvalue = newvalue.split('\n').join('\\n');
+        }
+        b.setFieldValue(newvalue, f);
+    });
+}

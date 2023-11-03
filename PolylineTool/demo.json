@@ -89,5 +89,11 @@
                 }
             ]
         }
-    ]
+    ],
+    "display": {
+        "type": "display",
+        "line": 50,
+        "point": 300,
+        "text": 1200
+    }
 }
