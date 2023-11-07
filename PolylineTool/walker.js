@@ -44,8 +44,7 @@ walkerType.prototype.buildsvg=function (params) {
 }
 
 walkerType.prototype.loadvars=function (defineList) {
-    this.vars={}
-    this.points=[]
+    this.vars={points:[]}
     this.lines=[]
     defineList.forEach(element => {
         if (element.type=='variable') {
@@ -80,7 +79,7 @@ walkerType.prototype.loadvars=function (defineList) {
         if (element.type=='importBrushs') {
             
             let pts=this.eval(element.value)
-            this.points=this.points.concat(pts)
+            this.vars.points=this.vars.points.concat(pts)
             
         }
     });
@@ -124,7 +123,7 @@ walkerType.prototype.walk = function(structures){
     this.x2=0
     this.y2=0
     this.collection={}
-    this.points.forEach(v=>this.point(v))
+    this.vars.points.forEach(v=>this.point(v))
     this.traversal([
         {
             "type": "attachment",
@@ -178,9 +177,16 @@ walkerType.prototype.traversal = function(attachments){
             if (structure.type=='structure2darraylines') {
                 let xx=walker.vars[structure.x]
                 let yy=walker.vars[structure.y]
-                for (let index = 0; index < xx[0].length; index++) {
+               
+                let loopLength=!structure.line?xx[0].length:xx.length
+                for (let index = 0; index < loopLength; index++) {
                     walker.vars.index=index
-                    let pts=xx.map((v,i)=>[xx[i][index],yy[i][index]])
+                    let pts;
+                    if (!structure.line) {
+                        pts=xx.map((v,i)=>[xx[i][index],yy[i][index]])
+                    } else {
+                        pts=xx[index].map((v,i)=>[xx[index][i],yy[index][i]])
+                    }
                     pts=pts.filter(v=>v[0]!=null&&v[1]!=null)
                     walker.point(pts[0],index)
                     walker.point(pts[pts.length-1],index)

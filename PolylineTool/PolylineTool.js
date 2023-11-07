@@ -531,7 +531,7 @@ Object.assign(PolylineToolBlocks,{
         "type": "statement",
         "json": {
             "type": "structure2darraylines",
-            "message0": "add lines from 2d array x y: %1 %2",
+            "message0": "add lines from 2d array x y: %1 %2 line/layer first (☑/☐) %3",
             "args0": [
                 Object.assign({},PolylineToolBlocks.IdStr,{
                     "name": "x",
@@ -540,6 +540,10 @@ Object.assign(PolylineToolBlocks,{
                 Object.assign({},PolylineToolBlocks.IdStr,{
                     "name": "y",
                     "text": "yy2d"
+                }),
+                Object.assign({},PolylineToolBlocks.Bool,{
+                    "name": "line",
+                    "checked": false
                 })
             ],
             "inputsInline": true,
@@ -560,14 +564,16 @@ Object.assign(PolylineToolBlocks,{
                 throw new OmitedError(block,'y','structure2darraylines');
             }
             y = PolylineToolFunctions.pre('IdStr')(y,block,'y','structure2darraylines');
+            var line = block.getFieldValue('line') === 'TRUE';
+            line = PolylineToolFunctions.pre('Bool')(line,block,'line','structure2darraylines');
             var code = PolylineToolFunctions.defaultCode('structure2darraylines',eval('['+PolylineToolBlocks['structure2darraylines'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["x","y"],
-        "argsType": ["field","field"],
-        "argsGrammarName": ["IdStr","IdStr"],
-        "omitted": [false,false],
-        "multi": [false,false],
+        "args": ["x","y","line"],
+        "argsType": ["field","field","field"],
+        "argsGrammarName": ["IdStr","IdStr","Bool"],
+        "omitted": [false,false,false],
+        "multi": [false,false,false],
         "fieldDefault": function (keyOrIndex) {
             return PolylineToolFunctions.fieldDefault('structure2darraylines',keyOrIndex);
         },
