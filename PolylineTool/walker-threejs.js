@@ -85,6 +85,22 @@ walkerType.prototype.line=function (p1,p2,group) {
 }
 
 walkerType.prototype.point=function (p1,group) {
+    const pnum = 8;
+    const shape = new THREE.Shape();
+    for (let index = 0; index < pnum; index++) {
+        let px = p1[0]+walker.display.point * Math.cos(2*Math.PI/pnum*index)
+        let py = p1[1]+walker.display.point * Math.sin(2*Math.PI/pnum*index)
+        if (index==0) {
+            shape.moveTo(px,py);
+        } else {
+            shape.lineTo(px,py);
+        }
+    }
+    const geometry = new THREE.ShapeGeometry(shape);
+    const material = new THREE.MeshBasicMaterial({ color: 0xFFFF00 });
+    scene.add(new THREE.Mesh(geometry, material));
+
+    return
     var sstr=`<circle stroke="none" pointer-events="none" cy="${p1[1]}" cx="${p1[0]}" r="${this.display.point}" fill="#000" class="g${group}" ></circle>`
     this.addto(sstr,'point')
     var sstr=`<g font-size="${this.display.text}" font="sans-serif" fill="black" stroke="none" text-anchor="middle" class="g${group}" ><text x="${p1[0]}" y="${p1[1]}" dy="${-2*p1[1]-this.display.text/2}" style="transform: scale(1,-1)">${p1[0]},${p1[1]}</text></g>`
@@ -174,8 +190,8 @@ walkerType.prototype.traversal = function(attachments){
                     walker.lines.push(pts)
                     pts=pts.map(v=>new THREE.Vector2( v[0], v[1] ))
                     const material = new THREE.LineBasicMaterial( { 
-                        color: 0x0000ff ,
-                        linewidth: 100,
+                        color: 0x00FF00 ,
+                        linewidth: walker.display.line,
                     } );
                     const geometry = new THREE.BufferGeometry().setFromPoints( pts );
                     const line = new THREE.Line( geometry, material );
