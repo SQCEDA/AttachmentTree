@@ -13,34 +13,15 @@ function walkerType(params) {
 walkerType.prototype.viewbox='-100000 -100000 200000 200000'
 
 walkerType.prototype.import=function (root) {
+
+    while (scene.children.length > 0) {
+        scene.remove(scene.children[0]);
+    }
+
     this.display=root.display
     this.loadvars(root.define)
     this.walk(root.structure)
     return this
-}
-
-walkerType.prototype.buildsvg=function (params) {
-    let ret=[]
-    let cnum=[0]
-    // //test
-    // this.line([0,0],[100000,100000])
-    // this.point([0,0])
-    // this.point([100000,100000])
-    // //test
-    for (const key in this.collection) {
-        if (Object.hasOwnProperty.call(this.collection, key)) {
-            const element = this.collection[key];
-            ret.push(`<g class='c${cnum[0]} cn${key}'>`)
-            cnum[0]+=1
-            ret.push(element.join('\n'))
-            ret.push('</g>')
-        }
-    }
-    let svgstr=`<svg font-family="sans-serif" viewBox="${this.viewbox}" xmlns:xlink="http://www.w3.org/1999/xlink" text-decoration="none"
-    font-style="normal" width="100%" xmlns="http://www.w3.org/2000/svg" font-size="1vw" version="1.1"
-    font-weight="normal"><g>${ret.join('\n')}</g></svg>`
-    this.svgstr=svgstr
-    return svgstr
 }
 
 walkerType.prototype.loadvars=function (defineList) {
@@ -190,11 +171,15 @@ walkerType.prototype.traversal = function(attachments){
                     pts=pts.filter(v=>v[0]!=null&&v[1]!=null)
                     walker.point(pts[0],index)
                     walker.point(pts[pts.length-1],index)
-                    pts.forEach((v,i)=>{
-                        if (i==0) return;
-                        walker.line(pts[i-1],v,index)
-                    })
                     walker.lines.push(pts)
+                    pts=pts.map(v=>new THREE.Vector2( v[0], v[1] ))
+                    const material = new THREE.LineBasicMaterial( { 
+                        color: 0x0000ff ,
+                        linewidth: 100,
+                    } );
+                    const geometry = new THREE.BufferGeometry().setFromPoints( pts );
+                    const line = new THREE.Line( geometry, material );
+                    scene.add( line );
                 }
                 return
             }
@@ -295,9 +280,3 @@ walkerType.prototype.buildshape = function(shape,width,height,collection){
 }
 
 var walker=new walkerType()
-// walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));document.body.insertAdjacentHTML('beforeend',walker.buildsvg())
-// walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg()
-
-
-// 鼠标悬停看线+坐标(坐标默认不显示):让线看清楚,颜色或透明度
-// 缩放

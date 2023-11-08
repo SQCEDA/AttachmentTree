@@ -1,0 +1,165 @@
+<!doctype html>
+
+<head>
+    <meta charset="utf-8">
+    <title>PolylineTool</title>
+    <script src="../antlr-blockly/blockly_compressed.js"></script>
+    <script src="../antlr-blockly/blocks_compressed.js"></script>
+    <script src="../antlr-blockly/javascript_compressed.js"></script>
+    <script src="../antlr-blockly/zh-hans.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../codemirror5/codemirror.css">
+    <style id="svgcss"></style>
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "./three.module.js"
+          }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        globalThis.THREE=THREE
+        globalThis?.threedone.call(null,[])
+    </script>
+</head>
+
+<body>
+
+    <div style="clear: both;"></div>
+    <div style="float: left;">
+        <div id="blocklyDiv" style="height: 550px; width: 450px;"></div>
+    </div>
+    <div style="float: left;width:calc(95vw - 450px);margin-left: 0.3vw;">
+        <div id="svgoutput" style="/* transform: rotateX(180deg); */width: 100%;"></div>
+    </div>
+    <div style="float: left;width:calc(95vw - 450px);margin-left: 0.3vw;"><p><span id="mousepos">(0,0)</span><br><span id="mouseposhistory"></span></p></div>
+    <div style="clear: both;"></div>
+    <p><span class='pc0'>0</span><span
+            class='pc1'>1</span><span class='pc2'>2</span><span class='pc3'>3</span><span class='pc4'>4</span><span
+            class='pc5'>5</span><span class='pc6'>6</span><span class='pc7'>7</span><span class='pc8'>8</span><span
+            class='pc9'>9</span>
+    </p>
+    <p>
+        <button onclick="window.trigger([0,lastvalue[0]+' ']);window.buildBlocks()">import</button>
+        <input id="svgviewbox" type="text" style="width: 300px;" value="-100000 -100000 200000 200000">
+        <button onclick="window.svgsizefunc=()=>0;walker.viewbox=svgviewbox.value;window.buildBlocks()">fixed viewbox</button>
+        <button onclick='window.svgsizefunc=autoresizesvg;autoresizesvg()'>auto viewbox</button>
+    </p>
+    <textarea name="blocklyinput" id="blocklyinput" cols="60" rows="27" spellcheck="false">
+    </textarea>
+    <pre id="linesoutput"></pre>
+    <hr>
+    <p>fetch:</p>
+    <pre><code>
+box=pya.Box(-1000000,-1000000,1000000,1000000)
+layerExclude=[(0, 0), (0, 1)]
+
+if 1:
+    scale=0.001
+    import json
+    import re
+    class g:
+        brushs=[]
+        outregion = pya.Region(box)
+        inregion = pya.Region()
+    layers = paintlib.Collision.getLayers(layerList=layerExclude, layermod='not in')
+    for layer in layers:
+        it=top.begin_shapes_rec_touching(layer, box)
+        shapes=pya.Shapes()
+        while not it.at_end():
+            shape_=it.shape()
+            if shape_.is_text():
+                match = re.match(r'brush\(([^,]+),([^,]+),([^,]+),([^\)]+)\)', shape_.text.string)
+                if match:
+                    # brush=CavityBrush(pointc=pya.DPoint(shape_.text.x, shape_.text.y), angle=float(match.group(2)), widout=float(match.group(3)), widin=float(match.group(4)), bgn_ext=0)
+                    brushid=match.group(1).strip()
+                    g.brushs.append([shape_.text.x*scale, shape_.text.y*scale,float(match.group(2)),float(match.group(3)),float(match.group(4)),brushid])
+            else:
+                shapes.insert(shape_)
+            it.next()
+        g.inregion.insert(shapes)
+    g.inregion.merge()
+    g.region=g.inregion & g.outregion
+    if 1:
+        g.json= {
+            "type": "polylineTool",
+            "define": [
+                {
+                    "type": "importBrushs",
+                    "value": json.dumps(g.brushs)
+                }
+            ],
+            "structure": [
+                {
+                    "type": "structurefrompts",
+                    "collection": "0",
+                    "scale": scale,
+                    "absolute": True,
+                    "points": ' '.join([f'{pt.x} {pt.y}' for pt in polygon.to_simple_polygon().each_point()]),
+                    "attachment": [
+                        {
+                            "type": "attachmentnone"
+                        }
+                    ]
+                }
+                for polygon in g.region
+            ],
+            "display": {
+                "type": "display",
+                "line": 100,
+                "point": 300,
+                "text": 1200
+            }
+        }
+    print(json.dumps(g.json))
+    </code></pre>
+    <hr>
+    <p>export:</p>
+    <pre><code>
+lines=[]
+
+if 1:
+    paintlib.Interactive.extractBrushs(cell=paintlib.IO.top)
+    for line in lines[0:1]:
+        ss,brush1,brush2,spts=paintlib.Interactive.link(spts=[pya.DPoint(aa[0],aa[1]) for aa in line],direct=True,return_all=True)
+    </code></pre>
+
+    <script src="../antlr-blockly/Converter.bundle.min.js"></script>
+    <script src="walker-threejs.js"></script>
+    <script src="page-threejs.js"></script>
+    <script src="PolylineTool.js"></script>
+
+    <script src="../pyodide_numpy/pyodide.js"></script>
+    <script type="text/javascript">
+        async function main(){
+            let pyodide = await loadPyodide();
+            await pyodide.loadPackage("numpy")
+            globalThis.pyodide=pyodide;
+            pyodide.runPython("import numpy as np\nimport json\nimport time\nimport js");
+            globalThis?.pydone.call(null,[])
+        }
+        main();
+    </script>
+
+    <div id="left7" style="z-index:-1;opacity: 0;"><!-- 多行文本编辑器 -->
+        <div>
+            <button onclick="editor_multi.confirm()">确认</button>
+            <button onclick="editor_multi.cancel()">取消</button>
+            <button onclick="editor_multi.confirm(true)">应用</button>
+            <span>字体大小</span>
+            <input style="width: 40px" type="number" onchange="editor_multi.setFontSize()" id="editor_multi_fontsize" />
+            <span>字体加粗</span>
+            <input style="width: 40px" type="checkbox" onchange="editor_multi.setFontSize()" id="editor_multi_fontweight" />
+        </div>
+        <textarea id="multiLineCode" name="multiLineCode"></textarea>
+    </div>
+    <script src="../codemirror5/codemirror.js"></script>
+    <script src="../codemirror5/codemirror-plugin.js"></script>
+    <script src="../codemirror5/editor_multi.js"></script>
+    <script>editor_multi=editor_multi();</script>
+    
+    
+</body>
+
+</html>
