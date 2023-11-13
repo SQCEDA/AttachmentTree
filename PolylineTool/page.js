@@ -8,7 +8,9 @@ if (localStorage.getItem('PolylineTool')!=null) {
 window.buildBlocks=function(params) {
     // console.log('buildBlocks')
     try {
-        PolylineToolFunctions.parse(eval('('+document.querySelector('#blocklyinput').value+')'))
+        PolylineToolFunctions.parse(eval('('+document.querySelector('#blocklyinput').value.replace(/[<>&]/g, function (c) {
+            return {'<': '&lt;', '>': '&gt;', '&': '&amp;'}[c];
+        })+')'))
         walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg();svgsizefunc();showlinescontent();listensvg();
     } catch (error) {
         if(error.message!=='PolylineToolFunctions is not defined')console.error(error)
