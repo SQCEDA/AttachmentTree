@@ -53,9 +53,9 @@ colour : 40
 */;
 
 structure2darraylines:
-    'add lines from 2d array x y:' x=IdStr y=IdStr 'line/layer first (☑/☐)' line=Bool
+    'add lines from 2d array x y:' x=IdStr y=IdStr 'line/layer first (☑/☐)' line=Bool 'no point' nopoint=Bool linecolor=Colour
 /* structure2darraylines
-defaultMap : {x:'xx2d',y:'yy2d',line:false}
+defaultMap : {x:'xx2d',y:'yy2d',line:false,nopoint:false,linecolor:'#00ff00'}
 colour : this.structureColor
 */;
 

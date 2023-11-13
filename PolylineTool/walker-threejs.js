@@ -185,12 +185,18 @@ walkerType.prototype.traversal = function(attachments){
                         pts=xx[index].map((v,i)=>[xx[index][i],yy[index][i]])
                     }
                     pts=pts.filter(v=>v[0]!=null&&v[1]!=null)
-                    walker.point(pts[0],index)
-                    walker.point(pts[pts.length-1],index)
+                    if (!structure.nopoint) {
+                        walker.point(pts[0],index)
+                        walker.point(pts[pts.length-1],index)
+                    }
                     walker.lines.push(pts)
                     pts=pts.map(v=>new THREE.Vector2( v[0], v[1] ))
+                    let linecolor=0x00FF00
+                    if (structure.linecolor) {
+                        linecolor=eval('0x'+structure.linecolor.slice(1))
+                    }
                     const material = new THREE.LineBasicMaterial( { 
-                        color: 0x00FF00 ,
+                        color: linecolor ,
                         linewidth: walker.display.line,
                     } );
                     const geometry = new THREE.BufferGeometry().setFromPoints( pts );

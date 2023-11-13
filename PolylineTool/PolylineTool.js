@@ -531,7 +531,7 @@ Object.assign(PolylineToolBlocks,{
         "type": "statement",
         "json": {
             "type": "structure2darraylines",
-            "message0": "add lines from 2d array x y: %1 %2 line/layer first (☑/☐) %3",
+            "message0": "add lines from 2d array x y: %1 %2 line/layer first (☑/☐) %3 no point %4 %5",
             "args0": [
                 Object.assign({},PolylineToolBlocks.IdStr,{
                     "name": "x",
@@ -544,6 +544,14 @@ Object.assign(PolylineToolBlocks,{
                 Object.assign({},PolylineToolBlocks.Bool,{
                     "name": "line",
                     "checked": false
+                }),
+                Object.assign({},PolylineToolBlocks.Bool,{
+                    "name": "nopoint",
+                    "checked": false
+                }),
+                Object.assign({},PolylineToolBlocks.Colour,{
+                    "name": "linecolor",
+                    "colour": "#00ff00"
                 })
             ],
             "inputsInline": true,
@@ -566,14 +574,18 @@ Object.assign(PolylineToolBlocks,{
             y = PolylineToolFunctions.pre('IdStr')(y,block,'y','structure2darraylines');
             var line = block.getFieldValue('line') === 'TRUE';
             line = PolylineToolFunctions.pre('Bool')(line,block,'line','structure2darraylines');
+            var nopoint = block.getFieldValue('nopoint') === 'TRUE';
+            nopoint = PolylineToolFunctions.pre('Bool')(nopoint,block,'nopoint','structure2darraylines');
+            var linecolor = block.getFieldValue('linecolor');
+            linecolor = PolylineToolFunctions.pre('Colour')(linecolor,block,'linecolor','structure2darraylines');
             var code = PolylineToolFunctions.defaultCode('structure2darraylines',eval('['+PolylineToolBlocks['structure2darraylines'].args.join(',')+']'),block);
             return code;
         },
-        "args": ["x","y","line"],
-        "argsType": ["field","field","field"],
-        "argsGrammarName": ["IdStr","IdStr","Bool"],
-        "omitted": [false,false,false],
-        "multi": [false,false,false],
+        "args": ["x","y","line","nopoint","linecolor"],
+        "argsType": ["field","field","field","field","field"],
+        "argsGrammarName": ["IdStr","IdStr","Bool","Bool","Colour"],
+        "omitted": [false,false,false,false,false],
+        "multi": [false,false,false,false,false],
         "fieldDefault": function (keyOrIndex) {
             return PolylineToolFunctions.fieldDefault('structure2darraylines',keyOrIndex);
         },
