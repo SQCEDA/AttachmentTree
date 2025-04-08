@@ -20,16 +20,15 @@
         <div id="svgoutput" style="transform: rotateX(180deg);"></div>
     </div>
     <div style="clear: both;"></div>
-    <p>Arcs are not real arc in preview. (Quadratic Bézier curve) <span class='pc0'>0</span><span
-            class='pc1'>1</span><span class='pc2'>2</span><span class='pc3'>3</span><span class='pc4'>4</span><span
-            class='pc5'>5</span><span class='pc6'>6</span><span class='pc7'>7</span><span class='pc8'>8</span><span
-            class='pc9'>9</span>
-    </p>
     <p>
         <button onclick="window.trigger([0,lastvalue[0]+' ']);window.buildBlocks()">import</button>
         <input id="svgviewbox" type="text" style="width: 300px;" value="-100000 -100000 200000 200000">
         <button onclick="window.svgsizefunc=()=>0;walker.viewbox=svgviewbox.value;window.buildBlocks()">fixed viewbox</button>
         <button onclick='window.svgsizefunc=autoresizesvg;autoresizesvg()'>auto viewbox</button>
+        <span class='pc0'>0</span><span
+            class='pc1'>1</span><span class='pc2'>2</span><span class='pc3'>3</span><span class='pc4'>4</span><span
+            class='pc5'>5</span><span class='pc6'>6</span><span class='pc7'>7</span><span class='pc8'>8</span><span
+            class='pc9'>9</span>
     </p>
     <textarea name="blocklyinput" id="blocklyinput" cols="60" rows="27" spellcheck="false">
     </textarea>
