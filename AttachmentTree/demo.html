@@ -22,6 +22,7 @@
     <div style="clear: both;"></div>
     <p>
         <button onclick="window.trigger([0,lastvalue[0]+' ']);window.buildBlocks()">import</button>
+        <button onclick="window.copybutton()">copy</button>
         <input id="svgviewbox" type="text" style="width: 300px;" value="-100000 -100000 200000 200000">
         <button onclick="window.svgsizefunc=()=>0;walker.viewbox=svgviewbox.value;window.buildBlocks()">fixed viewbox</button>
         <button onclick='window.svgsizefunc=autoresizesvg;autoresizesvg()'>auto viewbox</button>

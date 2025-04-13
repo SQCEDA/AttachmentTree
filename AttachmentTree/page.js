@@ -1,5 +1,6 @@
 var stoi=s=>'s'+new TextEncoder().encode(s).reduce((acc, val) => acc + val.toString(16).padStart(2, '0'), '')
 var itos=i=>new TextDecoder().decode(new Uint8Array(i.slice(1).match(/[\da-fA-F]{2}/gi).map(hex => parseInt(hex, 16))))
+
 if (localStorage.getItem('AttachmentTree')!=null) {
     try {
         document.querySelector('#blocklyinput').value=localStorage.getItem('AttachmentTree')
@@ -68,9 +69,14 @@ window.buildBlocks=function(params) {
             function clickhighlight(event) {
                 try {
                     if (event.type!=='ui' || event.element!=='click') return;
-                    // console.log('clickhighlight')
+                    // console.log(event)
                     // console.log(event.blockId)
                     var svgcid=document.querySelector('#'+stoi(event.blockId))
+                    if(AttachmentTreeFunctions.workspace().getBlockById(event.blockId).type=='structure'){
+                        svgcid=document.querySelector('#'+stoi(
+                            eval('('+Blockly.JavaScript.statementToCode(AttachmentTreeFunctions.workspace().getBlockById(event.blockId),'shape')+'._blockid)')
+                        ))
+                    }
                     if (svgcid) {
                         svgcid.children[0].style.fill='black'
                         svgcid.children[0].style.stroke = 'red'; // 设置边框颜色为红色
@@ -85,8 +91,13 @@ window.buildBlocks=function(params) {
             
             AttachmentTreeFunctions.workspace().addChangeListener(clickhighlight);
         }
-        AttachmentTreeFunctions.parse(eval('('+document.querySelector('#blocklyinput').value+')'))
-        walker.import(eval('('+document.querySelector('#blocklyinput').value+')'));svgoutput.innerHTML=walker.buildsvg();svgsizefunc();listensvg();
+        var obj=eval('('+document.querySelector('#blocklyinput').value+')')
+        AttachmentTreeFunctions.parse(obj)
+        if (!obj._blockid) {
+            var code = Blockly.JavaScript.workspaceToCode(AttachmentTreeFunctions.workspace());
+            obj=eval('('+code+')')
+        }
+        walker.import(obj);svgoutput.innerHTML=walker.buildsvg();svgsizefunc();listensvg();
     } catch (error) {
         if(error.message!=='AttachmentTreeFunctions is not defined')console.error(error)
     }
@@ -100,7 +111,12 @@ window.trigger = function(params) {
     }
     lastvalue[0]=params[1]
     try {
-        if(params[1])localStorage.setItem('AttachmentTree',document.querySelector('#blocklyinput').value)
+        if(params[1])localStorage.setItem('AttachmentTree',JSON.stringify( JSON.parse(document.querySelector('#blocklyinput').value),(k, v) => {
+            if (k === "_blockid") {
+              return undefined;
+            }
+            return v
+          },4))
     } catch (error) {
     }
     // console.log(params[1])
@@ -161,4 +177,19 @@ function listensvg() {
             highlightblock(itos(v.id))
         })
     })
+}
+
+window.copybutton=function(){
+    document.querySelector('#blocklyinput').value=JSON.stringify( JSON.parse(document.querySelector('#blocklyinput').value),(k, v) => {
+        if (k === "_blockid") {
+          return undefined;
+        }
+        return v
+    },4)
+    try {
+        document.querySelector('#blocklyinput').focus();
+        document.querySelector('#blocklyinput').setSelectionRange(0, document.querySelector('#blocklyinput').value.length);
+        var msg = document.execCommand('copy', false, null) ? 'copy succeed' : 'copy faild';
+    } catch (err) {
+    }
 }
