@@ -219,8 +219,7 @@ function replaceInputSelection() {
             info.input.setSelectionRange(info.start + newText.length, info.start + newText.length);
         }else{
             
-            // 触发事件
-            insertVarBlock(info.input.value.slice(info.start,info.input.value.length-info.start),info.value.slice(info.start,info.end))
+            insertVarBlock(info.input.value.slice(info.start,info.start+info.input.value.length-(info.value.length-info.end+info.start)),info.value.slice(info.start,info.end))
             
             const event = new Event('input', { bubbles: true, cancelable: true });
             info.input.dispatchEvent(event);
