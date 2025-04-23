@@ -42,7 +42,7 @@ structure:
     shape=shapes
     'leaves' BGNL attachment=attachments* 
 /* structure
-defaultMap : {width:50000,height:50000,collection:"10_0"}
+defaultMap : {width:50000,height:50000,collection:"0"}
 colour : this.structureColor
 */;
 
@@ -53,7 +53,7 @@ structurefrompts:
     'points' points=NormalStr 
     'leaves' BGNL attachment=attachments* 
 /* structurefrompts
-defaultMap : {absolute:true,collection:"10_0",scale:1000,points:"0 0 100 0 200 200"}
+defaultMap : {absolute:true,collection:"0",scale:1000,points:"0 0 100 0 200 200"}
 colour : this.structureColor
 */;
 
