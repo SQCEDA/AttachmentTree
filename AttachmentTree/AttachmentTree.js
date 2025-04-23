@@ -628,7 +628,7 @@ Object.assign(AttachmentTreeBlocks,{
         "type": "statement",
         "json": {
             "type": "quadrilateral",
-            "message0": "▱ (→,↓,←,↑) %1 %2 %3 %4",
+            "message0": "▱ (t→,r↓,d←,l↑) %1 %2 %3 %4",
             "args0": [
                 Object.assign({},AttachmentTreeBlocks.Evalstr,{
                     "name": "ul",
@@ -695,7 +695,7 @@ Object.assign(AttachmentTreeBlocks,{
         "type": "statement",
         "json": {
             "type": "quadrilateraldagger",
-            "message0": "▱ (←,↑,→,↓) %1 %2 %3 %4",
+            "message0": "▱ (t←,r↑,d→,l↓) %1 %2 %3 %4",
             "args0": [
                 Object.assign({},AttachmentTreeBlocks.Evalstr,{
                     "name": "ur",

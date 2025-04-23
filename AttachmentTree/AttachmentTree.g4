@@ -82,13 +82,13 @@ arc: '◔' side=Side_List
 colour : this.shapeColor
 */;
 
-quadrilateral: '▱ (→,↓,←,↑)' ul=Evalstr ur=Evalstr dr=Evalstr dl=Evalstr 
+quadrilateral: '▱ (t→,r↓,d←,l↑)' ul=Evalstr ur=Evalstr dr=Evalstr dl=Evalstr 
 /* quadrilateral
 default : [0,0,0,0]
 colour : this.shapeColor
 */;
 
-quadrilateraldagger: '▱ (←,↑,→,↓)' ur=Evalstr dr=Evalstr dl=Evalstr ul=Evalstr  
+quadrilateraldagger: '▱ (t←,r↑,d→,l↓)' ur=Evalstr dr=Evalstr dl=Evalstr ul=Evalstr  
 /* quadrilateraldagger
 default : [0,0,0,0]
 colour : this.shapeColor
