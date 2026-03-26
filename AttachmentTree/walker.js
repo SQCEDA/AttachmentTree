@@ -54,7 +54,7 @@ walkerType.prototype.eval=function (number){
     if (typeof number==='number') {
         return number
     }
-    return eval(number.replace(/[a-zA-Z_]+\w+/g,(ii)=>this.vars[ii]))
+    return eval(number.replace(/[a-zA-Z_]+\w*/g,(ii)=>this.vars[ii]))
 }
 
 walkerType.prototype.addto=function (shape,collection) {
