@@ -158,8 +158,7 @@ corner is the RIGHT-ANGLE vertex (the "missing" corner).
 ```json
 {"type": "arc", "side": "dl"}
 ```
-A quarter-circle-like arc filling the bounding box. The `side` specifies
-which corner the arc's curve touches (the convex corner).
+A quarter-circle-like arc filling the bounding box. The `side` parameter specifies which direction the center of the arc is in.
 
 ### quadrilateral
 ```json
